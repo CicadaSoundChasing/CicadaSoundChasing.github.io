@@ -4,12 +4,13 @@
 
 // !!! 請將此處的設定換成您在步驟一取得的 Firebase 專案設定 !!!
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyAXcbzll6Fze1pQ9leQnQOH3YyTDFPhsfE",
+    authDomain: "cicadasoundchasing-30781.firebaseapp.com",
+    projectId: "cicadasoundchasing-30781",
+    storageBucket: "cicadasoundchasing-30781.firebasestorage.app",
+    messagingSenderId: "346235930686",
+    appId: "1:346235930686:web:8a114ef129f385ab93a96f",
+    measurementId: "G-7M59PW5QR2"
 };
 
 // 台灣行政區資料
