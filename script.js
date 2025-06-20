@@ -4,13 +4,12 @@
 
 // !!! 請將此處的設定換成您在步驟一取得的 Firebase 專案設定 !!!
 const firebaseConfig = {
-    apiKey: "AIzaSyAXcbzll6Fze1pQ9leQnQOH3YyTDFPhsfE",
-    authDomain: "cicadasoundchasing-30781.firebaseapp.com",
-    projectId: "cicadasoundchasing-30781",
-    storageBucket: "cicadasoundchasing-30781.firebasestorage.app",
-    messagingSenderId: "346235930686",
-    appId: "1:346235930686:web:8a114ef129f385ab93a96f",
-    measurementId: "G-7M59PW5QR2"
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
 };
 
 // 台灣行政區資料
@@ -230,25 +229,40 @@ uploadForm.addEventListener('submit', async (e) => {
 
     try {
         // --- 1. Get Form Data ---
-        const audioFile = document.getElementById('cicada-sound').files[0];
+        // 使用新的 ID 'cicada-file'
+        const inputFile = document.getElementById('cicada-file').files[0];
         const lat = parseFloat(document.getElementById('latitude').value);
         const lng = parseFloat(document.getElementById('longitude').value);
 
-        if (!audioFile || isNaN(lat) || isNaN(lng)) {
-            throw new Error("請確認已選擇錄音檔並設定好位置。");
+        if (!inputFile || isNaN(lat) || isNaN(lng)) {
+            throw new Error("請確認已選擇錄音/錄影檔並設定好位置。");
         }
 
-        // --- 2. Upload File to Cloud Storage ---
+        // --- 2. Determine File Type and Storage Path ---
+        let uploadType = '';
+        let storagePath = '';
+        if (inputFile.type.startsWith('audio/')) {
+            uploadType = 'audio';
+            storagePath = 'cicada-sounds/';
+        } else if (inputFile.type.startsWith('video/')) {
+            uploadType = 'video';
+            storagePath = 'cicada-videos/'; // 將影片存在不同的資料夾
+        } else {
+            throw new Error("不支援的檔案類型。請上傳音訊或影片檔。");
+        }
+
+        // --- 3. Upload File to Cloud Storage ---
         const timestamp = Date.now();
-        const uniqueFileName = `${currentUser.uid}_${timestamp}_${audioFile.name}`;
-        const storagePath = `cicada-sounds/${uniqueFileName}`;
+        const uniqueFileName = `${currentUser.uid}_${timestamp}_${inputFile.name}`;
+        const fullStoragePath = `${storagePath}${uniqueFileName}`;
         
-        const storageRef = storage.ref(storagePath);
-        const uploadTask = await storageRef.put(audioFile);
+        const storageRef = storage.ref(fullStoragePath);
+        const uploadTask = await storageRef.put(inputFile);
         const downloadURL = await uploadTask.ref.getDownloadURL();
 
-        // --- 3. Prepare Metadata for Firestore ---
+        // --- 4. Prepare Metadata for Firestore ---
         const recordingData = {
+            uploadType: uploadType, // 新增的欄位
             userId: currentUser.uid,
             location: new firebase.firestore.GeoPoint(lat, lng),
             county: document.getElementById('county-select').value,
@@ -257,17 +271,17 @@ uploadForm.addEventListener('submit', async (e) => {
             recordingTime: document.getElementById('recording-time').value,
             weather: document.getElementById('weather').value,
             notes: document.getElementById('notes').value,
-            audioURL: downloadURL,
-            fileName: audioFile.name,
-            fileSize: audioFile.size,
-            fileType: audioFile.type,
+            fileURL: downloadURL, // 使用更通用的名稱 fileURL
+            fileName: inputFile.name,
+            fileSize: inputFile.size,
+            fileType: inputFile.type,
             uploadedAt: firebase.firestore.FieldValue.serverTimestamp(),
         };
 
-        // --- 4. Write Metadata to Firestore ---
+        // --- 5. Write Metadata to Firestore ---
         await db.collection("recordings").add(recordingData);
 
-        // --- 5. Provide User Feedback ---
+        // --- 6. Provide User Feedback ---
         showAlert("上傳成功！感謝您的貢獻。", "success");
         uploadForm.reset(); // Clear the form
         updateDistricts();  // Reset district dropdown to disabled state
@@ -276,7 +290,7 @@ uploadForm.addEventListener('submit', async (e) => {
         console.error("Upload failed:", error);
         showAlert(`上傳失敗: ${error.message}`, "danger");
     } finally {
-        // --- 6. Reset Button State ---
+        // --- 7. Reset Button State ---
         submitBtn.disabled = false;
         spinner.style.display = 'none';
         submitBtn.querySelector('.spinner-border + span, span + span').textContent = ' 上傳紀錄';
