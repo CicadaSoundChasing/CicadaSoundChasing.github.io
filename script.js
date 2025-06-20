@@ -2,14 +2,30 @@
 // SECTION 1: CONFIGURATION & INITIALIZATION
 // =================================================================
 
-// !!! 請將此處的設定換成您在步驟一取得的 Firebase 專案設定 !!!
+// !!! !!! !!! 關鍵步驟 !!! !!! !!!
+// 請將下面整個 firebaseConfig 物件，換成您在 Firebase 控制台複製的那一個！
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    //apiKey: "YOUR_API_KEY", // <--- 這裡必須換掉
+    //authDomain: "YOUR_PROJECT_ID.firebaseapp.com", // <--- 這裡必須換掉
+    //projectId: "YOUR_PROJECT_ID", // <--- 這裡必須換掉
+    //storageBucket: "YOUR_PROJECT_ID.appspot.com", // <--- 這裡必須換掉
+    //messagingSenderId: "YOUR_SENDER_ID", // <--- 這裡必須換掉
+    //appId: "YOUR_APP_ID" // <--- 這裡必須換掉
+    apiKey: "AIzaSyAXcbzll6Fze1pQ9leQnQOH3YyTDFPhsfE",
+
+    authDomain: "cicadasoundchasing-30781.firebaseapp.com",
+
+    projectId: "cicadasoundchasing-30781",
+
+    storageBucket: "cicadasoundchasing-30781.firebasestorage.app",
+
+    messagingSenderId: "346235930686",
+
+    appId: "1:346235930686:web:8a114ef129f385ab93a96f",
+
+    measurementId: "G-7M59PW5QR2"
+
+
 };
 
 // 台灣行政區資料
@@ -71,8 +87,6 @@ function initMap() {
         streetViewControl: false
     });
 
-    // Google Maps 提醒：舊的 Marker 已棄用，但目前仍可運作。
-    // 未來若要升級，可改用 google.maps.marker.AdvancedMarkerElement。
     marker = new google.maps.Marker({
         position: defaultLocation,
         map: map,
@@ -134,8 +148,9 @@ function signInAndGetLocation() {
         })
         .catch((error) => {
             console.error("Anonymous sign-in failed:", error);
-            showAlert("無法驗證您的身份，某些功能可能無法使用。", "danger");
-            getUserLocation();
+            // 顯示錯誤給使用者
+            showAlert("無法驗證您的身分，某些功能可能無法使用。", "danger");
+            getUserLocation(); // 即使登入失敗，還是嘗試取得地理位置
         });
 }
 
@@ -208,7 +223,7 @@ uploadForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     if (!currentUser) {
-        showAlert("使用者尚未驗證，請稍後再試或重新整理頁面。", "warning");
+        showAlert("使用者驗證失敗，無法上傳。請重新整理頁面再試一次。", "warning");
         return;
     }
 
