@@ -62,7 +62,6 @@ const districtSelect = document.getElementById('district-select');
  * Main initialization function called by Google Maps API script
  */
 function initMap() {
-    // Default location (Taipei Main Station)
     const defaultLocation = { lat: 25.0479, lng: 121.5171 };
 
     map = new google.maps.Map(document.getElementById("map"), {
@@ -72,6 +71,8 @@ function initMap() {
         streetViewControl: false
     });
 
+    // Google Maps 提醒：舊的 Marker 已棄用，但目前仍可運作。
+    // 未來若要升級，可改用 google.maps.marker.AdvancedMarkerElement。
     marker = new google.maps.Marker({
         position: defaultLocation,
         map: map,
@@ -79,12 +80,10 @@ function initMap() {
         title: "拖動以設定位置"
     });
 
-    // Add listener for marker drag event
     google.maps.event.addListener(marker, 'dragend', (event) => {
         updateLocationFields(event.latLng.lat(), event.latLng.lng());
     });
     
-    // Populate dropdowns and get user location
     populateCounties();
     signInAndGetLocation();
 }
@@ -136,7 +135,7 @@ function signInAndGetLocation() {
         .catch((error) => {
             console.error("Anonymous sign-in failed:", error);
             showAlert("無法驗證您的身份，某些功能可能無法使用。", "danger");
-            getUserLocation(); // Still try to get location even if sign-in fails
+            getUserLocation();
         });
 }
 
@@ -160,25 +159,23 @@ function getUserLocation() {
 
                 locationStatus.textContent = "成功取得您的位置！您可以在地圖上微調。";
                 locationStatus.className = "form-text text-success mt-2 fw-bold";
-                submitBtn.disabled = false; // Enable submit button after getting location
+                submitBtn.disabled = false;
             },
             () => {
                 locationStatus.textContent = "無法取得您的位置。請允許位置存取，或手動在地圖上標記。";
                 locationStatus.className = "form-text text-warning mt-2";
-                submitBtn.disabled = false; // Also enable if failed, user can mark manually
+                submitBtn.disabled = false;
             }
         );
     } else {
         locationStatus.textContent = "您的瀏覽器不支援地理定位。請手動在地圖上標記。";
         locationStatus.className = "form-text text-danger mt-2";
-        submitBtn.disabled = false; // Enable for manual marking
+        submitBtn.disabled = false;
     }
 }
 
 /**
  * Updates the hidden latitude and longitude form fields.
- * @param {number} lat - The latitude.
- * @param {number} lng - The longitude.
  */
 function updateLocationFields(lat, lng) {
     document.getElementById("latitude").value = lat;
@@ -187,8 +184,6 @@ function updateLocationFields(lat, lng) {
 
 /**
  * Displays an alert message to the user.
- * @param {string} message - The message to display.
- * @param {string} type - The Bootstrap alert type (e.g., 'success', 'danger', 'warning').
  */
 function showAlert(message, type = 'info') {
     const alertContainer = document.getElementById('alert-container');
@@ -199,7 +194,7 @@ function showAlert(message, type = 'info') {
         ${message}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     `;
-    alertContainer.innerHTML = ''; // Clear previous alerts
+    alertContainer.innerHTML = '';
     alertContainer.appendChild(alertDiv);
 }
 
@@ -207,12 +202,10 @@ function showAlert(message, type = 'info') {
 // SECTION 3: EVENT LISTENERS
 // =================================================================
 
-// Listen for changes on the county dropdown
 countySelect.addEventListener('change', updateDistricts);
 
-// Listen for the form submission
 uploadForm.addEventListener('submit', async (e) => {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
 
     if (!currentUser) {
         showAlert("使用者尚未驗證，請稍後再試或重新整理頁面。", "warning");
@@ -221,15 +214,13 @@ uploadForm.addEventListener('submit', async (e) => {
 
     const submitBtn = document.getElementById('submit-btn');
     const spinner = document.getElementById('submit-spinner');
+    const buttonText = document.querySelector('.button-text');
     
-    // Disable button and show spinner for feedback
     submitBtn.disabled = true;
     spinner.style.display = 'inline-block';
-    submitBtn.querySelector('.spinner-border + span, span + span').textContent = ' 上傳中...';
+    buttonText.textContent = ' 上傳中...';
 
     try {
-        // --- 1. Get Form Data ---
-        // 使用新的 ID 'cicada-file'
         const inputFile = document.getElementById('cicada-file').files[0];
         const lat = parseFloat(document.getElementById('latitude').value);
         const lng = parseFloat(document.getElementById('longitude').value);
@@ -238,7 +229,6 @@ uploadForm.addEventListener('submit', async (e) => {
             throw new Error("請確認已選擇錄音/錄影檔並設定好位置。");
         }
 
-        // --- 2. Determine File Type and Storage Path ---
         let uploadType = '';
         let storagePath = '';
         if (inputFile.type.startsWith('audio/')) {
@@ -246,12 +236,11 @@ uploadForm.addEventListener('submit', async (e) => {
             storagePath = 'cicada-sounds/';
         } else if (inputFile.type.startsWith('video/')) {
             uploadType = 'video';
-            storagePath = 'cicada-videos/'; // 將影片存在不同的資料夾
+            storagePath = 'cicada-videos/';
         } else {
             throw new Error("不支援的檔案類型。請上傳音訊或影片檔。");
         }
 
-        // --- 3. Upload File to Cloud Storage ---
         const timestamp = Date.now();
         const uniqueFileName = `${currentUser.uid}_${timestamp}_${inputFile.name}`;
         const fullStoragePath = `${storagePath}${uniqueFileName}`;
@@ -260,9 +249,8 @@ uploadForm.addEventListener('submit', async (e) => {
         const uploadTask = await storageRef.put(inputFile);
         const downloadURL = await uploadTask.ref.getDownloadURL();
 
-        // --- 4. Prepare Metadata for Firestore ---
         const recordingData = {
-            uploadType: uploadType, // 新增的欄位
+            uploadType: uploadType,
             userId: currentUser.uid,
             location: new firebase.firestore.GeoPoint(lat, lng),
             county: document.getElementById('county-select').value,
@@ -271,28 +259,25 @@ uploadForm.addEventListener('submit', async (e) => {
             recordingTime: document.getElementById('recording-time').value,
             weather: document.getElementById('weather').value,
             notes: document.getElementById('notes').value,
-            fileURL: downloadURL, // 使用更通用的名稱 fileURL
+            fileURL: downloadURL,
             fileName: inputFile.name,
             fileSize: inputFile.size,
             fileType: inputFile.type,
             uploadedAt: firebase.firestore.FieldValue.serverTimestamp(),
         };
 
-        // --- 5. Write Metadata to Firestore ---
         await db.collection("recordings").add(recordingData);
 
-        // --- 6. Provide User Feedback ---
         showAlert("上傳成功！感謝您的貢獻。", "success");
-        uploadForm.reset(); // Clear the form
-        updateDistricts();  // Reset district dropdown to disabled state
+        uploadForm.reset();
+        updateDistricts();
 
     } catch (error) {
         console.error("Upload failed:", error);
         showAlert(`上傳失敗: ${error.message}`, "danger");
     } finally {
-        // --- 7. Reset Button State ---
         submitBtn.disabled = false;
         spinner.style.display = 'none';
-        submitBtn.querySelector('.spinner-border + span, span + span').textContent = ' 上傳紀錄';
+        buttonText.textContent = ' 上傳紀錄';
     }
 });
