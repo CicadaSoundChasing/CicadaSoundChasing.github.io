@@ -104,6 +104,20 @@
                 <div id="alert-container" class="mt-3"></div>
             </div>
         </div>
+        <!-- ===== 新增的紀錄列表區塊 ===== -->
+  <div class="container mt-4 mb-5">
+    <h4 class="mb-3">最近的上傳紀錄</h4>
+    <div id="loading-spinner" class="text-center">
+      <div class="spinner-border text-success" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2">正在載入紀錄...</p>
+    </div>
+    <div class="list-group" id="recordings-list">
+      <!-- JavaScript 將會在這裡動態插入紀錄 -->
+    </div>
+  </div>
+  <!-- ===== 列表區塊結束 ===== -->
     </div>
 <!-- ===== 新增的媒體播放 Modal ===== -->
 <div class="modal fade" id="media-modal" tabindex="-1" aria-labelledby="media-modal-title" aria-hidden="true">
