@@ -5,19 +5,13 @@
 // !!! !!! !!! 關鍵步驟 !!! !!! !!!
 // 請將下面整個 firebaseConfig 物件，換成您在 Firebase 控制台複製的那一個！
 const firebaseConfig = {
-    //apiKey: "YOUR_API_KEY", // <--- 這裡必須換掉
-    //authDomain: "YOUR_PROJECT_ID.firebaseapp.com", // <--- 這裡必須換掉
-    //projectId: "YOUR_PROJECT_ID", // <--- 這裡必須換掉
-    //storageBucket: "YOUR_PROJECT_ID.appspot.com", // <--- 這裡必須換掉
-    //messagingSenderId: "YOUR_SENDER_ID", // <--- 這裡必須換掉
-    //appId: "YOUR_APP_ID" // <--- 這裡必須換掉
-    apiKey: "AIzaSyAXcbzll6Fze1pQ9leQnQOH3YyTDFPhsfE",
-    authDomain: "cicadasoundchasing-30781.firebaseapp.com",
-    projectId: "cicadasoundchasing-30781",
-    storageBucket: "cicadasoundchasing-30781.firebasestorage.app",
-    messagingSenderId: "346235930686",
-    appId: "1:346235930686:web:8a114ef129f385ab93a96f",
-    measurementId: "G-7M59PW5QR2"
+    apiKey: "AIzaSyAXcbzll6Fze1pQ9leQnQOH3YyTDFPhsfE",
+    authDomain: "cicadasoundchasing-30781.firebaseapp.com",
+    projectId: "cicadasoundchasing-30781",
+    storageBucket: "cicadasoundchasing-30781.firebasestorage.app",
+    messagingSenderId: "346235930686",
+    appId: "1:346235930686:web:8a114ef129f385ab93a96f",
+    measurementId: "G-7M59PW5QR2"
 
 };
 
