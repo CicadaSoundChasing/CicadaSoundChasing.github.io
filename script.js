@@ -44,42 +44,23 @@ const districtSelect = document.getElementById('district-select');
 // SECTION 2: FUNCTION DEFINITIONS
 // =================================================================
 
-/**
- * Main initialization function called by Google Maps API script
- */
 function initMap() {
     const defaultLocation = { lat: 25.0479, lng: 121.5171 };
-
     map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 15,
-        center: defaultLocation,
-        mapTypeControl: false,
-        streetViewControl: false
+        zoom: 15, center: defaultLocation, mapTypeControl: false, streetViewControl: false
     });
-
     marker = new google.maps.Marker({
-        position: defaultLocation,
-        map: map,
-        draggable: true,
-        title: "拖動以設定位置"
+        position: defaultLocation, map: map, draggable: true, title: "拖動以設定位置"
     });
-
     updateLocationFields(defaultLocation.lat, defaultLocation.lng);
-
     google.maps.event.addListener(marker, 'dragend', (event) => {
         updateLocationFields(event.latLng.lat(), event.latLng.lng());
     });
-    
     populateCounties();
     signInAndGetLocation();
-    
-    // 頁面載入時獲取並顯示紀錄
     fetchAndDisplayRecordings();
 }
 
-/**
- * Populates the county dropdown menu.
- */
 function populateCounties() {
     taiwanDistricts.forEach(county => {
         const option = document.createElement('option');
@@ -89,14 +70,10 @@ function populateCounties() {
     });
 }
 
-/**
- * Updates the district dropdown based on the selected county.
- */
 function updateDistricts() {
     const selectedCounty = countySelect.value;
     districtSelect.innerHTML = '<option value="" selected disabled>請選擇鄉鎮市區</option>';
     districtSelect.disabled = true;
-
     if (selectedCounty) {
         const countyData = taiwanDistricts.find(c => c.name === selectedCounty);
         if (countyData) {
@@ -111,9 +88,6 @@ function updateDistricts() {
     }
 }
 
-/**
- * Signs in the user anonymously and then tries to get their location.
- */
 function signInAndGetLocation() {
     auth.signInAnonymously()
         .then((userCredential) => {
@@ -128,24 +102,16 @@ function signInAndGetLocation() {
         });
 }
 
-/**
- * Gets the user's current geographic location using the browser's Geolocation API.
- */
 function getUserLocation() {
     const locationStatus = document.getElementById("location-status");
     const submitBtn = document.getElementById('submit-btn');
-
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                const userLocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude,
-                };
+                const userLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
                 map.setCenter(userLocation);
                 marker.setPosition(userLocation);
                 updateLocationFields(userLocation.lat, userLocation.lng);
-
                 locationStatus.textContent = "成功取得您的位置！您可以在地圖上微調。";
                 locationStatus.className = "form-text text-success mt-2 fw-bold";
                 submitBtn.disabled = false;
@@ -163,48 +129,30 @@ function getUserLocation() {
     }
 }
 
-/**
- * Updates the hidden latitude and longitude form fields.
- */
 function updateLocationFields(lat, lng) {
     document.getElementById("latitude").value = lat;
     document.getElementById("longitude").value = lng;
 }
 
-/**
- * Displays an alert message to the user.
- */
 function showAlert(message, type = 'info') {
     const alertContainer = document.getElementById('alert-container');
     const alertDiv = document.createElement('div');
     alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
     alertDiv.role = 'alert';
-    alertDiv.innerHTML = `
-        ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    `;
+    alertDiv.innerHTML = `${message}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`;
     alertContainer.innerHTML = '';
     alertContainer.appendChild(alertDiv);
 }
 
-
-// ----- 新增的函式：用於讀取和顯示資料 -----
-
-/**
- * 從 Firestore 讀取紀錄並顯示在頁面上
- */
 async function fetchAndDisplayRecordings() {
     const listContainer = document.getElementById('recordings-list');
     const loadingSpinner = document.getElementById('loading-spinner');
-
     loadingSpinner.style.display = 'block';
     listContainer.innerHTML = '';
-
     try {
         const recordingsRef = db.collection('recordings');
         const query = recordingsRef.orderBy('uploadedAt', 'desc').limit(20);
         const snapshot = await query.get();
-
         if (snapshot.empty) {
             listContainer.innerHTML = '<p class="text-muted text-center">目前沒有任何紀錄。</p>';
         } else {
@@ -213,13 +161,10 @@ async function fetchAndDisplayRecordings() {
                 const listItem = document.createElement('a');
                 listItem.href = "#";
                 listItem.className = 'list-group-item list-group-item-action';
-
                 const icon = data.uploadType === 'video' 
                     ? '<i class="bi bi-camera-video-fill text-danger me-3"></i>' 
                     : '<i class="bi bi-music-note-beamed text-primary me-3"></i>';
-                
                 const uploadedDate = data.uploadedAt ? data.uploadedAt.toDate().toLocaleString('zh-TW') : '未知時間';
-
                 listItem.innerHTML = `
                     <div class="d-flex w-100 justify-content-between">
                         <h6 class="mb-1">${icon} ${data.cicadaSpecies || '未知物種'}</h6>
@@ -228,54 +173,42 @@ async function fetchAndDisplayRecordings() {
                     <p class="mb-1">${data.county || ''} ${data.district || ''}</p>
                     <small class="text-muted">${data.notes || '沒有備註'}</small>
                 `;
-
                 listItem.dataset.url = data.fileURL;
                 listItem.dataset.title = data.fileName;
                 listItem.dataset.type = data.uploadType;
-
                 listItem.addEventListener('click', handleRecordClick);
                 listContainer.appendChild(listItem);
             });
         }
     } catch (error) {
         console.error("Error fetching recordings:", error);
-        listContainer.innerHTML = '<p class="text-danger text-center">載入紀錄時發生錯誤。</p>';
+        listContainer.innerHTML = '<p class="text-danger text-center">載入紀錄時發生錯誤。請檢查 Firestore 索引設定。</p>';
     } finally {
         loadingSpinner.style.display = 'none';
     }
 }
 
-/**
- * 處理列表項目的點擊事件，打開 Modal 播放媒體
- */
 function handleRecordClick(event) {
     event.preventDefault();
-
     const target = event.currentTarget;
     const url = target.dataset.url;
     const title = target.dataset.title;
     const type = target.dataset.type;
-
     const modalTitle = document.getElementById('media-modal-title');
     const modalBody = document.getElementById('media-modal-body');
-    
     modalTitle.textContent = title;
     modalBody.innerHTML = '';
     let mediaElement;
-
     if (type === 'video') {
         mediaElement = document.createElement('video');
         mediaElement.style.width = '100%';
     } else {
         mediaElement = document.createElement('audio');
     }
-
     mediaElement.src = url;
     mediaElement.controls = true;
     mediaElement.autoplay = true;
-
     modalBody.appendChild(mediaElement);
-
     const mediaModal = new bootstrap.Modal(document.getElementById('media-modal'));
     mediaModal.show();
 }
@@ -288,78 +221,53 @@ countySelect.addEventListener('change', updateDistricts);
 
 uploadForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-
     if (!currentUser) {
         showAlert("使用者驗證失敗，無法上傳。請重新整理頁面再試一次。", "warning");
         return;
     }
-
     const submitBtn = document.getElementById('submit-btn');
     const spinner = document.getElementById('submit-spinner');
     const buttonText = document.querySelector('.button-text');
-    
     submitBtn.disabled = true;
     spinner.style.display = 'inline-block';
     buttonText.textContent = ' 上傳中...';
-
     try {
         const inputFile = document.getElementById('cicada-file').files[0];
         const lat = parseFloat(document.getElementById('latitude').value);
         const lng = parseFloat(document.getElementById('longitude').value);
-
-        if (!inputFile) {
-            throw new Error("請選擇一個要上傳的檔案。");
-        }
-        if (isNaN(lat) || isNaN(lng)) {
-            throw new Error("無法獲取有效的地理位置，請嘗試在地圖上拖動圖釘。");
-        }
-
+        if (!inputFile) throw new Error("請選擇一個要上傳的檔案。");
+        if (isNaN(lat) || isNaN(lng)) throw new Error("無法獲取有效的地理位置，請嘗試在地圖上拖動圖釘。");
         let uploadType = '';
         let storagePath = '';
         if (inputFile.type.startsWith('audio/')) {
-            uploadType = 'audio';
-            storagePath = 'cicada-sounds/';
+            uploadType = 'audio'; storagePath = 'cicada-sounds/';
         } else if (inputFile.type.startsWith('video/')) {
-            uploadType = 'video';
-            storagePath = 'cicada-videos/';
+            uploadType = 'video'; storagePath = 'cicada-videos/';
         } else {
             throw new Error("不支援的檔案類型。請上傳音訊或影片檔。");
         }
-
         const timestamp = Date.now();
         const uniqueFileName = `${currentUser.uid}_${timestamp}_${inputFile.name}`;
         const fullStoragePath = `${storagePath}${uniqueFileName}`;
-        
         const storageRef = storage.ref(fullStoragePath);
         const uploadTask = await storageRef.put(inputFile);
         const downloadURL = await uploadTask.ref.getDownloadURL();
-
         const recordingData = {
-            uploadType: uploadType,
-            userId: currentUser.uid,
-            location: new firebase.firestore.GeoPoint(lat, lng),
+            uploadType, userId: currentUser.uid, location: new firebase.firestore.GeoPoint(lat, lng),
             county: document.getElementById('county-select').value,
             district: document.getElementById('district-select').value,
             cicadaSpecies: document.getElementById('cicada-species').value || "未知",
             recordingTime: document.getElementById('recording-time').value,
             weather: document.getElementById('weather').value,
             notes: document.getElementById('notes').value,
-            fileURL: downloadURL,
-            fileName: inputFile.name,
-            fileSize: inputFile.size,
-            fileType: inputFile.type,
+            fileURL: downloadURL, fileName: inputFile.name, fileSize: inputFile.size, fileType: inputFile.type,
             uploadedAt: firebase.firestore.FieldValue.serverTimestamp(),
         };
-
         await db.collection("recordings").add(recordingData);
-
         showAlert("上傳成功！感謝您的貢獻。", "success");
         uploadForm.reset();
         updateDistricts();
-
-        // 上傳成功後，刷新列表
         fetchAndDisplayRecordings();
-
     } catch (error) {
         console.error("Upload failed:", error);
         showAlert(`上傳失敗: ${error.message}`, "danger");
@@ -370,7 +278,6 @@ uploadForm.addEventListener('submit', async (e) => {
     }
 });
 
-// 監聽 Modal 關閉事件，以停止播放
 const mediaModalEl = document.getElementById('media-modal');
 if (mediaModalEl) {
     mediaModalEl.addEventListener('hidden.bs.modal', function () {
@@ -378,8 +285,8 @@ if (mediaModalEl) {
         const mediaElement = modalBody.querySelector('video, audio');
         if (mediaElement) {
             mediaElement.pause();
-            mediaElement.src = ''; // 停止下載
-            modalBody.innerHTML = ''; // 清空內容
+            mediaElement.src = '';
+            modalBody.innerHTML = '';
         }
     });
 }
