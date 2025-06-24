@@ -45,6 +45,124 @@ const districtSelect = document.getElementById('district-select');
 // =================================================================
 
 /**
+ * 從 Firestore 讀取紀錄並顯示在頁面上
+ */
+async function fetchAndDisplayRecordings() {
+    const listContainer = document.getElementById('recordings-list');
+    const loadingSpinner = document.getElementById('loading-spinner');
+
+    // 開始載入，顯示 spinner 並清空舊列表
+    loadingSpinner.style.display = 'block';
+    listContainer.innerHTML = '';
+
+    try {
+        // 建立查詢，按上傳時間降序排序，最多取 20 筆
+        const recordingsRef = db.collection('recordings');
+        const query = recordingsRef.orderBy('uploadedAt', 'desc').limit(20);
+
+        const snapshot = await query.get();
+
+        if (snapshot.empty) {
+            listContainer.innerHTML = '<p class="text-muted text-center">目前沒有任何紀錄。</p>';
+        } else {
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                const listItem = document.createElement('a');
+                listItem.href = "#";
+                listItem.className = 'list-group-item list-group-item-action';
+
+                // 根據檔案類型設定圖示
+                const icon = data.uploadType === 'video' 
+                    ? '<i class="bi bi-camera-video-fill text-danger me-3"></i>' 
+                    : '<i class="bi bi-music-note-beamed text-primary me-3"></i>';
+                
+                // 格式化時間戳
+                const uploadedDate = data.uploadedAt ? data.uploadedAt.toDate().toLocaleString('zh-TW') : '未知時間';
+
+                listItem.innerHTML = `
+                    <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1">${icon} ${data.cicadaSpecies || '未知物種'}</h6>
+                        <small class="text-muted">${uploadedDate}</small>
+                    </div>
+                    <p class="mb-1">${data.county || ''} ${data.district || ''}</p>
+                    <small class="text-muted">${data.notes || '沒有備註'}</small>
+                `;
+
+                // 將播放所需的資料儲存在 data-* 屬性中
+                listItem.dataset.url = data.fileURL;
+                listItem.dataset.title = data.fileName;
+                listItem.dataset.type = data.uploadType;
+
+                // 綁定點擊事件
+                listItem.addEventListener('click', handleRecordClick);
+
+                listContainer.appendChild(listItem);
+            });
+        }
+    } catch (error) {
+        console.error("Error fetching recordings:", error);
+        listContainer.innerHTML = '<p class="text-danger text-center">載入紀錄時發生錯誤。</p>';
+    } finally {
+        // 載入完成，隱藏 spinner
+        loadingSpinner.style.display = 'none';
+    }
+}
+
+
+/**
+ * 處理列表項目的點擊事件，打開 Modal 播放媒體
+ * @param {Event} event - 點擊事件對象
+ */
+function handleRecordClick(event) {
+    event.preventDefault(); // 防止 <a> 標籤的預設跳轉行為
+
+    const target = event.currentTarget;
+    const url = target.dataset.url;
+    const title = target.dataset.title;
+    const type = target.dataset.type;
+
+    const modalTitle = document.getElementById('media-modal-title');
+    const modalBody = document.getElementById('media-modal-body');
+    
+    // 設定 Modal 標題
+    modalTitle.textContent = title;
+    
+    // 清空舊的播放器並建立新的
+    modalBody.innerHTML = '';
+    let mediaElement;
+
+    if (type === 'video') {
+        mediaElement = document.createElement('video');
+        mediaElement.style.width = '100%';
+    } else { // 'audio' or fallback
+        mediaElement = document.createElement('audio');
+    }
+
+    mediaElement.src = url;
+    mediaElement.controls = true;
+    mediaElement.autoplay = true;
+
+    modalBody.appendChild(mediaElement);
+
+    // 顯示 Modal
+    const mediaModal = new bootstrap.Modal(document.getElementById('media-modal'));
+    mediaModal.show();
+}
+
+// 監聽 Modal 關閉事件，以停止播放
+const mediaModalEl = document.getElementById('media-modal');
+mediaModalEl.addEventListener('hidden.bs.modal', function () {
+    const modalBody = document.getElementById('media-modal-body');
+    const mediaElement = modalBody.querySelector('video, audio');
+    if (mediaElement) {
+        mediaElement.pause();
+        mediaElement.src = ''; // 停止下載
+        modalBody.innerHTML = ''; // 清空內容
+    }
+});
+
+
+/**
  * Main initialization function called by Google Maps API script
  */
 function initMap() {
