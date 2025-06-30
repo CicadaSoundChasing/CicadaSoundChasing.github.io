@@ -2,6 +2,31 @@ body {
   background-color: #f8f9fa;
 }
 
+/* 建議將此 CSS 移至 css/style.css 檔案中 */
+#text-carousel {
+  /* 設定最小高度以防止內容跳動，您可能需要根據內容微調此數值 */
+  min-height: 180px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-carousel-item {
+  opacity: 0;
+  position: absolute;
+  transition: opacity 1.2s ease-in-out;
+  pointer-events: none;
+  /* 隱藏時不可互動 */
+}
+
+.text-carousel-item.active {
+  opacity: 1;
+  position: relative;
+  /* 顯示時恢復排版 */
+  pointer-events: auto;
+}
+
 #map {
   height: 400px;
   width: 100%;
@@ -154,5 +179,46 @@ header {
 #map-section {
   /* 為地圖區塊增加上下間距，避免黏在一起 */
   padding-top: 5rem;
-  padding-bottom: 5rem;
+  padding-bottom: 3rem; /* 減少地圖區塊底部的間距，讓它與頁尾的間距更協調 */
+}
+
+/* Call to action section style */
+#letsfind {
+  padding: 100px 0;
+  background: rgba(25, 135, 84, 0.2); /* 淡綠色毛玻璃效果 */
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+
+footer {
+  /* 毛玻璃效果 */
+  background: rgba(13, 110, 253, 0.9); /* 藍底 #0d6efd, 50% 透明度 */
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  /* 顏色與排版 */
+  color: #eee;
+  padding: 2rem 0;
+}
+
+footer .thanks {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: rgba(238, 238, 238, 0.7);
+}
+
+/* Upload Modal Style */
+.modal-content {
+  background: rgba(255, 255, 255, 0.8);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.modal-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.modal-footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
