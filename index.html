@@ -66,19 +66,31 @@
     <div class="b-example-divider"></div>
     <main>
         <section id="slogan">
-            <video autoplay once playsinline id="bg-video">
+            <video autoplay muted loop playsinline id="bg-video">
                 <source src="video.mp4" type="video/mp4">
                 您的瀏覽器不支援影片標籤。
             </video>
             <div class="slogan-content">
                 <h1 class="display-3 fw-bold">蟬聲追追追</h1>
                 <p class="lead mb-4">一個全民科學計畫，讓我們一起來收集台灣的蟬鳴地圖。</p>
-                <a href="upload.html" class="btn btn-success btn-lg">立即上傳蟬聲 <i
-                        class="bi bi-cloud-arrow-up-fill"></i></a>
+                <div>
+                    <a href="upload.html" class="btn btn-success btn-lg">立即上傳蟬聲 <i
+                            class="bi bi-cloud-arrow-up-fill"></i></a>
+                    <button id="volume-toggle" class="btn btn-outline-light btn-lg ms-2" title="切換聲音">
+                        <i class="bi bi-volume-mute-fill"></i>
+                    </button>
+                </div>
             </div>
         </section>
         <section id="second">
 
+        </section>
+        <section>
+            <div class="flourish-embed flourish-map" data-src="visualisation/23747494">
+                <script src="https://public.flourish.studio/resources/embed.js"></script><noscript><img
+                        src="https://public.flourish.studio/visualisation/23747494/thumbnail" width="50%"
+                        alt="map visualization" /></noscript>
+            </div>
         </section>
         <footer></footer>
     </main>
@@ -90,13 +102,21 @@
         document.addEventListener('DOMContentLoaded', function () {
             const sloganSection = document.getElementById('slogan');
             const video = document.getElementById('bg-video');
+            const volumeToggleButton = document.getElementById('volume-toggle');
+            const volumeIcon = volumeToggleButton.querySelector('i');
 
             // 建立一個 Intersection Observer
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        // 當 section 進入畫面時，播放影片
-                        video.play();
+                        // 當 section 進入畫面時，播放影片。
+                        // .play() 會回傳一個 promise，最好進行錯誤處理
+                        const playPromise = video.play();
+                        if (playPromise !== undefined) {
+                            playPromise.catch(error => {
+                                console.error("影片自動播放失敗:", error);
+                            });
+                        }
                     } else {
                         // 當 section 離開畫面時，暫停影片
                         video.pause();
@@ -106,6 +126,19 @@
 
             // 開始觀察 slogan section
             observer.observe(sloganSection);
+
+            // 音量切換按鈕事件
+            volumeToggleButton.addEventListener('click', () => {
+                if (video.muted) {
+                    video.muted = false;
+                    volumeIcon.classList.remove('bi-volume-mute-fill');
+                    volumeIcon.classList.add('bi-volume-up-fill');
+                } else {
+                    video.muted = true;
+                    volumeIcon.classList.remove('bi-volume-up-fill');
+                    volumeIcon.classList.add('bi-volume-mute-fill');
+                }
+            });
         });
     </script>
 </body>
