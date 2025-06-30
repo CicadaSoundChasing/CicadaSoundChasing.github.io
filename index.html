@@ -16,24 +16,50 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="css/style.css" rel="stylesheet">
     <!--  Favicon and Apple Touch Icons https://www.favicon-generator.org/ -->
-    <link href="favicon.jpeg" rel="shortcut icon" type="image/x-icon">
+    <link href="favico/favicon.jpeg" rel="shortcut icon" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="57x57" href="favico/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="favico//apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="favico//apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="favico//apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="favico//apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="favico//apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="favico//apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="favico//apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="favico//apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="favico//android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favico//favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="favico//favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favico//favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="favico/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="favico/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="favico/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="favico/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="favico/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="favico/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="favico/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favico/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="favico/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favico/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="favico/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favico/favicon-16x16.png">
     <link rel="manifest" href="favico/manifest.json">
     <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="favico//ms-icon-144x144.png">
+    <meta name="msapplication-TileImage" content="favico/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
+    <style>
+        /* 建議將此 CSS 移至 css/style.css 檔案中 */
+        #text-carousel {
+            /* 設定最小高度以防止內容跳動，您可能需要根據內容微調此數值 */
+            min-height: 180px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .text-carousel-item {
+            opacity: 0;
+            position: absolute;
+            transition: opacity 1.2s ease-in-out;
+            pointer-events: none;
+            /* 隱藏時不可互動 */
+        }
+
+        .text-carousel-item.active {
+            opacity: 1;
+            position: relative;
+            /* 顯示時恢復排版 */
+            pointer-events: auto;
+        }
+    </style>
 </head>
 
 <body>
@@ -53,7 +79,7 @@
                         <li class="nav-item"><a href="#top" class="nav-link active" aria-current="page"><i
                                     class="bi bi-house"></i><span class="d-lg-none">Home</span></a></li>
                         <li class="nav-item"><a href="#slogan" class="nav-link">slogan</a></li>
-                        <li class="nav-item"><a href="#second" class="nav-link">Pricing</a></li>
+                        <li class="nav-item"><a href="#second" class="nav-link">蟬鳴互動</a></li>
                         <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
                         <li class="nav-item"><a href="#" class="nav-link">About</a></li>
                     </ul>
@@ -64,14 +90,27 @@
     </header>
 
     <div class="b-example-divider"></div>
-    <main>
+    <main data-bs-spy="scroll">
         <section id="slogan">
             <video autoplay muted loop playsinline id="bg-video">
                 <source src="video.mp4" type="video/mp4">
                 您的瀏覽器不支援影片標籤。
             </video>
             <div class="slogan-content">
-                <h1 class="display-3 fw-bold">炎炎夏日</h1>
+                <div id="text-carousel">
+                    <div class="text-carousel-item active">
+                        <h1 class="display-3 fw-bold">炎炎夏日</h1>
+                    </div>
+                    <div class="text-carousel-item">
+                        <p class="display-4 fw-bold">大聲鳴放的夏蟬</p>
+                    </div>
+                    <div class="text-carousel-item">
+                        <p class="display-4 fw-bold">是否早已聽不見</p>
+                    </div>
+                    <div class="text-carousel-item">
+                        <p class="display-4 fw-bold">而忘記了</p>
+                    </div>
+                </div>
                 <p class="lead mb-4">一個全民科學計畫，讓我們一起來收集台灣的蟬鳴地圖。</p>
                 <div>
                     <a href="upload.html" class="btn btn-success btn-lg">立即上傳蟬聲 <i
@@ -83,13 +122,23 @@
             </div>
         </section>
         <section id="second">
-
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h2 class="display-4 fw-bold">大家一起來找蟬</h2>
+                    </div>
+                </div>
+            </div>
+            <audio id="cicada-audio" src="cicada.m4a" preload="auto"></audio>
         </section>
-        <section>
-            <div class="flourish-embed flourish-map" data-src="visualisation/23747494">
-                <script src="https://public.flourish.studio/resources/embed.js"></script><noscript><img
-                        src="https://public.flourish.studio/visualisation/23747494/thumbnail" width="50%"
-                        alt="map visualization" /></noscript>
+        <section id="map-section">
+            <div class="container">
+                <div class="flourish-embed flourish-map" data-src="visualisation/23747494">
+                    <script src="https://public.flourish.studio/resources/embed.js"></script><noscript><img
+                            src="https://public.flourish.studio/visualisation/23747494/thumbnail" width="50%"
+                            alt="A Flourish data visualisation" style="border: none;">
+                    </noscript>
+                </div>
             </div>
         </section>
         <footer></footer>
@@ -139,6 +188,42 @@
                     volumeIcon.classList.add('bi-volume-mute-fill');
                 }
             });
+
+            // 第二區塊的互動 (蟬鳴聲與 hover 效果)
+            const secondSection = document.getElementById('second');
+            const cicadaAudio = document.getElementById('cicada-audio');
+
+            secondSection.addEventListener('mouseenter', () => {
+                // 播放音訊，並處理瀏覽器可能阻止自動播放的情況
+                const playPromise = cicadaAudio.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.log("蟬鳴音訊播放被瀏覽器阻止:", error);
+                    });
+                }
+            });
+
+            secondSection.addEventListener('mouseleave', () => {
+                cicadaAudio.pause();
+                cicadaAudio.currentTime = 0; // 將音訊重置到開頭
+            });
+
+            // 文字輪播效果
+            const carouselContainer = document.getElementById('text-carousel');
+            if (carouselContainer) {
+                const carouselItems = carouselContainer.querySelectorAll('.text-carousel-item');
+                let currentItemIndex = 0;
+                const slideInterval = 4000; // 每 4 秒切換一次
+
+                function showNextItem() {
+                    carouselItems[currentItemIndex].classList.remove('active');
+                    currentItemIndex = (currentItemIndex + 1) % carouselItems.length;
+                    carouselItems[currentItemIndex].classList.add('active');
+                }
+
+                // 啟動輪播
+                setInterval(showNextItem, slideInterval);
+            }
         });
     </script>
 </body>
