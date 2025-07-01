@@ -1026,6 +1026,9 @@
                 const video = document.getElementById('bg-video');
                 const volumeToggleButton = document.getElementById('volume-toggle');
                 const volumeIcon = volumeToggleButton.querySelector('i');
+                const cicadaAudio = document.getElementById('cicada-audio');
+                const pic4Video = document.querySelector('#pic3-container video');
+
                 const observer = new IntersectionObserver(entries => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) video.play().catch(e => console.error("Video play failed", e));
@@ -1033,9 +1036,16 @@
                     });
                 });
                 observer.observe(sloganSection);
+
                 volumeToggleButton.addEventListener('click', () => {
                     video.muted = !video.muted;
                     volumeIcon.className = video.muted ? 'bi bi-volume-mute-fill' : 'bi bi-volume-up-fill';
+
+                    // If the main video is unmuted, also unmute other media elements
+                    if (!video.muted) {
+                        if (cicadaAudio) cicadaAudio.muted = false;
+                        if (pic4Video) pic4Video.muted = false;
+                    }
                 });
             }
             const chassingSection = document.getElementById('chassing');
