@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>聲聲不息-夏蟬戀習曲</title>
+<style>
+
+  body {
+    font-family: inherit;
+    background: #fff;
+    color: #2d3a1f;
+    padding: 40px;
+    margin: 0;
+    user-select: none;
+  }
+
+  h2 {
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 50px;
+    color: #3a5a40;
+    text-shadow: 1px 1px 2px #a4c3a2;
+  }
+
+  .container {
+    display: flex;
+    justify-content: space-around;
+    max-width: 900px;
+    margin: 0 auto 40px;
+  }
+
+  .main-layout {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;   /* 讓三欄等高 */
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto 40px;
+  height: 400px;
+  min-height: 400px;
+}
+  .dropzone {
+    background: #f4fbf4;
+    border-radius: 25px;
+    box-shadow: 0 4px 12px rgba(60, 120, 60, 0.10);
+    border: 2.5px solid #7fc97f;
+    padding: 25px 20px;
+    font-size: 19px;
+    color: #2d6a2d;
+    transition: background-color 0.3s, border-color 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 0;
+    min-height: 340px;
+    height: auto;
+    max-height: none;
+    overflow-y: auto;
+}
+
+  .dropzone:hover, .dropzone.dragover {
+    background-color: #e3fbe3 !important;
+    border-color: #3ca43c;
+    cursor: pointer;
+  }
+
+  /* 卡片翻面容器 */
+  .cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 32px;
+  width: 480px;
+  max-width: 90vw;
+  justify-items: center;
+  align-items: center;
+  margin: 0 0;
+  height: 100%; /* 讓 .cards 填滿 main-layout */
+}
+
+  .card-container {
+  perspective: 1200px;
+  width: 140px;
+  height: 180px;
+  cursor: pointer;
+  /* 讓拖曳時不影響 hover */
+  position: relative;
+}
+
+  .card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  user-select: none;
+}
+
+  /* 翻轉效果：hover 或 .flipped 時觀發 */
+.card-container:hover .card,
+.card.flipped {
+  transform: rotateY(180deg);
+}
+
+  /* 拖曳時透明度提示 */
+  .card.dragging {
+    opacity: 0.5;
+  }
+
+  /* 放到 dropzone 後卡片隱藏 */
+  .card.removed {
+    display: none;
+  }
+
+  .card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: 28px;
+    color: #2d6a2d;
+  }
+
+  .card-front {
+    background: linear-gradient(135deg, #7fc97f 60%, #b2e0b2 100%);
+    color: #fff;
+    border: 2px solid #7fc97f;
+  }
+
+  .card-back {
+    background: #fff;
+    color: #2d6a2d;
+    border: 2px solid #b2e0b2;
+    box-shadow: inset 0 0 20px #e0fae0;
+    transform: rotateY(180deg);
+  }
+
+  .card-back img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 12px;
+    object-fit: contain;
+  }
+
+  /* 拖曳區陰影改變 */
+  .dropzone.dragover {
+    background-color: #cce6cc !important;
+    border-color: #558855;
+  }
+
+  /* 提示窗 */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fafdff;
+    border: 3px solid #7fc97f;
+    border-radius: 20px;
+    padding: 30px 35px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(60, 120, 60, 0.13);
+    max-width: 320px;
+    color: #2d6a2d;
+    font-size: 18px;
+    font-weight: 600;
+    z-index: 1000;
+    font-family: inherit;
+  }
+
+  .modal p {
+    margin-bottom: 22px;
+  }
+
+  .modal .btn {
+    background: #7fc97f;
+    color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 5px 12px rgba(60, 120, 60, 0.13);
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+  }
+
+  .modal .btn:hover {
+    background: #3ca43c;
+  }
+
+  /* 說明框 */
+  .info-box {
+    max-width:700px;
+    margin:0 auto 30px auto;
+    padding:18px 24px 12px 24px;
+    background:#f4fbf4;
+    border-radius:18px;
+    border:2px solid #7fc97f;
+    font-size:20px;
+    line-height:1.7;
+    color:#2d6a2d;
+    text-align:center;
+    box-shadow:0 2px 10px rgba(60,120,60,0.07);
+  }
+
+  .modal-btn-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 30px;
+    width: 100%;
+    gap: 10px;
+  }
+  .modal-btn-row .btn {
+    min-width: 100px;
+  }
+</style>
+</head>
+<body>
+<div style="width:100%;max-width:900px;margin:0 auto 18px auto;text-align:center;">
+  <div style="font-size:2.2em;font-weight:bold;letter-spacing:0.08em;color:#3ca43c;text-shadow:1px 2px 8px #e0fae0;line-height:1.2;">聲聲不息 夏蟬戀習曲</div>
+</div>
+<div class="info-box">
+  <div style="font-weight:bold;font-size:1.1em;margin-bottom:8px;">哪些動物主要是用聲音來求偶？</div>
+  請將下方的動物卡片拖曳到正確的分類區域：<br>
+  <b>「主要用聲音求偶」</b>或<b>「不用聲音求偶」</b>。<br>
+  共有兩個關卡，全部配對正確後可再玩一次或分享給朋友！
+</div>
+
+<div class="main-layout">
+  <div class="dropzone" id="soundZone">主要用聲音求偶</div>
+  <div class="cards" id="cardsContainer">
+    <!-- 動物卡片會用 JS 產生 -->
+  </div>
+  <div class="dropzone" id="silentZone">不用聲音求偶</div>
+</div>
+
+<!-- 提示窗 -->
+<div class="modal" id="modal">
+  <p id="modalText">提示內容</p>
+  <div id="modalBtnArea">
+    <button class="btn" onclick="closeModal()">繼續</button>
+  </div>
+</div>
+
+<script>
+  // 動物資料陣列
+  const animals = [
+    {name: "蟋蟀", sound: true, img: "images/蟋蟀.png", hint:"雄蟋蟀會摩擦翅膀發出叫聲，吸引雌性，這種聲音也是牠們的領地宣示。"},
+    {name: "螽斯", sound: true, img: "images/螽斯.png", hint:"螽斯會利用翅膀摩擦產生聲音，用來傳遞求偶的訊息。"},
+    {name: "螢火蟲", sound: false, img: "images/螢火蟲.png", hint:"螢火蟲不靠聲音，而是用發光來傳情～閃爍節奏可是牠們的浪漫語言呢！"},
+    {name: "青蛙", sound: true, img: "images/青蛙.png", hint:"在池塘邊聽到呱呱叫嗎？那是雄青蛙在開演唱會，希望吸引心儀的對象過來！"},
+    {name: "蜜蜂", sound: false, img: "images/蜜蜂.png", hint:"蜜蜂的求偶靠的是氣味密碼（費洛蒙），不是靠嗡嗡叫來談戀愛的喔～"},
+    {name: "蟬", sound: true, img: "images/蟬.png", hint:"蟬是經典的『叫聲求偶』昆蟲，雄蟬會震動腹部的鼓膜，發出嘹亮鳴叫聲吸引雌蟬。"},
+    {name: "螳螂", sound: false, img: "images/螳螂.png", hint:"雌螳螂會釋放費洛蒙吸引雄性，牠們的求偶行為主要透過氣味與視覺進行。"},
+    {name: "夜鷹", sound: true, img: "images/夜鷹.png", hint:"雄鳥會在夜晚高亢鳴叫，用聲音展示求偶意圖。"},
+    {name: "鯨魚", sound: true, img: "images/鯨魚.png", hint:"雄性會唱出特定頻率，複雜的鯨歌就是牠們吸引異性的方式。"},
+    {name: "丹頂鶴", sound: true, img: "images/丹頂鶴.png", hint:"丹頂鶴會發出協調的叫聲吸引異性，接著跳舞，是牠們獨特的求偶方式。"},
+    {name: "海馬", sound: false, img: "images/海馬.png", hint:"海馬會透過雙人舞蹈建立感情，交配後由雄性懷孕並育兒。"},
+    {name: "北極熊", sound: false, img: "images/北極熊.png", hint:"北極熊會依賴氣味與視覺線索來尋找配偶，不發出求偶聲音。"},
+  ];
+
+  const praises = [
+    "答對了！你超棒！🎉",
+    "正確！你很了解喔～🪲",
+    "沒錯！這題輕鬆拿下 💪",
+    "超厲害！完全正解 👏",
+    "生物小博士就是你！🧠"
+  ];
+
+  const cardsContainer = document.getElementById("cardsContainer");
+  const soundZone = document.getElementById("soundZone");
+  const silentZone = document.getElementById("silentZone");
+  const modal = document.getElementById("modal");
+  const modalText = document.getElementById("modalText");
+  const modalBtnArea = document.getElementById("modalBtnArea");
+
+  // 建立卡片元素
+animals.forEach(animal => {
+  const cardCont = document.createElement("div");
+  cardCont.className = "card-container";
+  cardCont.setAttribute("draggable", "true");
+  cardCont.dataset.name = animal.name;
+  cardCont.dataset.sound = animal.sound;
+
+  const card = document.createElement("div");
+  card.className = "card";
+
+  const front = document.createElement("div");
+  front.className = "card-front";
+  front.textContent = animal.name;
+
+  const back = document.createElement("div");
+  back.className = "card-back";
+  const img = document.createElement("img");
+  img.src = animal.img;
+  img.alt = animal.name;
+  back.appendChild(img);
+
+  card.appendChild(front);
+  card.appendChild(back);
+  cardCont.appendChild(card);
+  cardsContainer.appendChild(cardCont);
+
+  // 拖曳事件
+  cardCont.addEventListener("dragstart", e => {
+    e.dataTransfer.setData("name", animal.name);
+    e.dataTransfer.setData("sound", animal.sound);
+    cardCont.classList.add("dragging");
+    // 拖曳時自動翻面
+    card.classList.add("flipped");
+  });
+  cardCont.addEventListener("dragend", e => {
+    cardCont.classList.remove("dragging");
+    // 拖曳結束自動翻回
+    card.classList.remove("flipped");
+  });
+
+  // 點擊也可翻面
+  cardCont.addEventListener("click", () => {
+    card.classList.toggle("flipped");
+  });
+});
+
+// dropzone 拖曳進入與離開效果
+[soundZone, silentZone].forEach(zone => {
+  zone.addEventListener("dragover", e => {
+    e.preventDefault();
+    zone.style.borderColor = "#000";
+    zone.classList.add("dragover");
+  });
+  zone.addEventListener("dragleave", e => {
+    zone.style.borderColor = "#a9c4a2";
+    zone.classList.remove("dragover");
+  });
+  zone.addEventListener("drop", e => {
+    e.preventDefault();
+    zone.style.borderColor = "#a9c4a2";
+    zone.classList.remove("dragover");
+    const name = e.dataTransfer.getData("name");
+    const isSound = e.dataTransfer.getData("sound") === "true";
+    const correctZone = zone.id === "soundZone";
+
+    // 找對應卡片元素
+    const cardElems = Array.from(cardsContainer.children);
+    const draggedCard = cardElems.find(c => c.dataset.name === name);
+
+    if (!draggedCard) return;
+
+    // 判斷答案
+    if (isSound === correctZone) {
+      // 答對，移除本欄位和另一個欄位所有該卡片的❌和✔️
+      [soundZone, silentZone].forEach(z => {
+        Array.from(z.querySelectorAll('p')).forEach(p => {
+          if (p.textContent === `❌ ${name}` || p.textContent === `✔️ ${name}`) p.remove();
+        });
+      });
+      // 新增✔️到正確欄位
+      const p = document.createElement('p');
+      p.textContent = `✔️ ${name}`;
+      p.setAttribute('data-name', name);
+      zone.appendChild(p);
+      cardsContainer.removeChild(draggedCard);
+      // 顯示hint（與前面文字空一行，正確處理HTML）
+      const animalData = animals.find(a => a.name === name);
+      if (checkAllMatched()) {
+        // 最後一張卡片，必須點「繼續」才能消失
+        showModal(
+          praises[Math.floor(Math.random() * praises.length)] + '\n\n' + animalData.hint,
+          '<button class="btn" onclick="closeModal();showLevelModal();">繼續</button>'
+        );
+        return;
+      } else {
+        showModal(
+          praises[Math.floor(Math.random() * praises.length)] + '\n\n' + animalData.hint
+        );
+      }
+    } else {
+      // 答錯，先移除該卡片的所有❌再新增一個❌
+      Array.from(zone.querySelectorAll('p')).forEach(p => {
+        if (p.textContent === `❌ ${name}`) p.remove();
+      });
+      const p = document.createElement('p');
+      p.textContent = `❌ ${name}`;
+      p.setAttribute('data-name', name);
+      zone.appendChild(p);
+      // 只顯示「不對喔，再想想看！`
+      showModal('不對喔，再想想看！');
+    }
+  });
+});
+// 檢查是否全部配對完成
+function checkAllMatched() {
+  // cardsContainer 沒有任何卡片時代表全部配對完成
+  return cardsContainer.children.length === 0;
+}
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+let lastGroupIndex = 0;
+let playCount = 0;
+let groupOrder = [];
+
+function resetGame() {
+  // 清空兩個 dropzone 的所有 p 標籤（只保留標題文字）
+  [soundZone, silentZone].forEach(z => {
+    Array.from(z.querySelectorAll('p')).forEach(p => p.remove());
+  });
+  // 產生分組（兩關不重複）
+  if (groupOrder.length === 0) {
+    const shuffled = animals.slice();
+    shuffleArray(shuffled);
+    groupOrder = [
+      shuffled.slice(0, 6),
+      shuffled.slice(6, 12)
+    ];
+  }
+  // 依 playCount 決定顯示哪一組
+  const groupIdx = playCount % 2;
+  const group = groupOrder[groupIdx];
+  cardsContainer.innerHTML = '';
+  group.forEach(animal => {
+    const cardCont = document.createElement("div");
+    cardCont.className = "card-container";
+    cardCont.setAttribute("draggable", "true");
+    cardCont.dataset.name = animal.name;
+    cardCont.dataset.sound = animal.sound;
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const front = document.createElement("div");
+    front.className = "card-front";
+    front.textContent = animal.name;
+
+    const back = document.createElement("div");
+    back.className = "card-back";
+    const img = document.createElement("img");
+    img.src = animal.img;
+    img.alt = animal.name;
+    back.appendChild(img);
+
+    card.appendChild(front);
+    card.appendChild(back);
+    cardCont.appendChild(card);
+    cardsContainer.appendChild(cardCont);
+
+    // 拖曳事件
+    cardCont.addEventListener("dragstart", e => {
+      e.dataTransfer.setData("name", animal.name);
+      e.dataTransfer.setData("sound", animal.sound);
+      cardCont.classList.add("dragging");
+      card.classList.add("flipped");
+    });
+    cardCont.addEventListener("dragend", e => {
+      cardCont.classList.remove("dragging");
+      card.classList.remove("flipped");
+    });
+    cardCont.addEventListener("click", () => {
+      card.classList.toggle("flipped");
+    });
+    enableTouchDrag(cardCont);
+  });
+}
+
+// 首次載入時也要隨機
+resetGame();
+
+  function showModal(text, customBtnsHtml) {
+    // 若內容有 \n，轉成 <br> 顯示
+    modalText.innerHTML = text.replace(/\n/g, '<br>');
+    if (customBtnsHtml) {
+      modalBtnArea.innerHTML = customBtnsHtml;
+    } else {
+      modalBtnArea.innerHTML = '<button class="btn" onclick="closeModal()">繼續</button>';
+    }
+    modal.style.display = "block";
+  }
+
+  function closeModal() {
+    modal.style.display = "none";
+  }
+
+  function showLevelModal() {
+  playCount++;
+  if (playCount % 2 === 1) {
+    modalText.textContent = '恭喜完成第一關！';
+    modalBtnArea.innerHTML = '<button class="btn" onclick="resetGame();closeModal();">下一關</button>';
+    modal.style.display = 'block';
+  } else {
+    modalText.textContent = '全部配對正確！';
+    modalBtnArea.innerHTML = '<div class="modal-btn-row">'
+      + '<button class="btn" style="float:left" onclick="groupOrder=[];playCount=0;resetGame();closeModal();">再玩一次</button>'
+      + '<button class="btn" style="float:right" onclick="shareGame()">分享</button>'
+      + '</div>';
+    modal.style.display = 'block';
+  }
+}
+
+  function shareGame() {
+  if (navigator.share) {
+    navigator.share({
+      title: document.title,
+      text: '我完成了昆蟲求偶分類遊戲，一起來挑戰吧！',
+      url: window.location.href
+    });
+  } else {
+    // 傳統複製連結
+    const temp = document.createElement('input');
+    temp.value = window.location.href;
+    document.body.appendChild(temp);
+    temp.select();
+    document.execCommand('copy');
+    document.body.removeChild(temp);
+    alert('連結已複製，快分享給朋友吧！');
+  }
+}
+
+// 手機端支援拖曳：用 touch 事件模擬拖曳
+function enableTouchDrag(cardCont) {
+  let touchStartX, touchStartY, dragging = false;
+  cardCont.addEventListener('touchstart', function(e) {
+    if (e.touches.length !== 1) return;
+    dragging = true;
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    cardCont.classList.add('dragging');
+    cardCont.querySelector('.card').classList.add('flipped');
+  });
+  cardCont.addEventListener('touchmove', function(e) {
+    if (!dragging) return;
+    const x = e.touches[0].clientX;
+    const y = e.touches[0].clientY;
+    cardCont.style.position = 'fixed';
+    cardCont.style.left = (x - 70) + 'px';
+    cardCont.style.top = (y - 90) + 'px';
+    cardCont.style.zIndex = 9999;
+    e.preventDefault();
+  }, {passive: false});
+  cardCont.addEventListener('touchend', function(e) {
+    if (!dragging) return;
+    dragging = false;
+    cardCont.classList.remove('dragging');
+    cardCont.querySelector('.card').classList.remove('flipped');
+    cardCont.style.position = '';
+    cardCont.style.left = '';
+    cardCont.style.top = '';
+    cardCont.style.zIndex = '';
+    // 判斷是否在 dropzone 上
+    const touch = e.changedTouches[0];
+    const dropzones = [soundZone, silentZone];
+    let dropped = false;
+    dropzones.forEach(zone => {
+      const rect = zone.getBoundingClientRect();
+      if (
+        touch.clientX >= rect.left && touch.clientX <= rect.right &&
+        touch.clientY >= rect.top && touch.clientY <= rect.bottom
+      ) {
+        // 模擬 drop 行為
+        const evt = new Event('drop', {bubbles: true});
+        evt.dataTransfer = {
+          getData: (key) => key === 'name' ? cardCont.dataset.name : (key === 'sound' ? cardCont.dataset.sound : '')
+        };
+        zone.dispatchEvent(evt);
+        dropped = true;
+      }
+    });
+    if (!dropped) {
+      // 沒有放到區域就彈回原位
+      cardCont.style.transition = 'all 0.2s';
+      setTimeout(() => { cardCont.style.transition = ''; }, 200);
+    }
+  });
+}
+</script>
+</body>
+</html>
+<!--
+  這個 HTML 文件實現了一個昆蟲求偶分類遊戲，使用卡片翻面效果來展示昆蟲資訊。
+  使用者可以將昆蟲卡片拖放到正確的求偶方式區域，答對會顯示提示窗。
+  卡片包含昆蟲名稱和圖片，並且有聲音和無聲音的分類。
+-->
