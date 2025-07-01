@@ -2,6 +2,10 @@ body {
   background-color: #f8f9fa;
 }
 
+.serif {
+  font-family: "Chiron Sung HK", serif, sans-serif;
+}
+
 /* 建議將此 CSS 移至 css/style.css 檔案中 */
 #text-carousel {
   /* 設定最小高度以防止內容跳動，您可能需要根據內容微調此數值 */
@@ -26,7 +30,22 @@ body {
   /* 顯示時恢復排版 */
   pointer-events: auto;
 }
+#cicadapedia {
+  display: flex;
+}
 
+.pedia {
+  /*columns: 2; /* Number of columns */
+  /*column-gap: 20px; /* Space between columns */
+  width: 80%;
+  height: 100vh;
+  padding: 100px;
+}
+#cicadapedia article {
+}
+#cicadapedia h2 {
+  /*border: 1px solid red;*/
+}
 #map {
   height: 400px;
   width: 100%;
@@ -129,7 +148,7 @@ header {
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* 為文字加上陰影以提高可讀性 */
 }
 
-#second {
+#chassing {
   position: relative;
   /* 設定一個合適的高度，讓區塊可見且可互動 */
   min-height: 70vh;
@@ -145,7 +164,7 @@ header {
 }
 
 /* 使用偽元素來放置 hover 時的背景圖，以實現漸變效果 */
-#second::after {
+#chassing::after {
   content: "";
   position: absolute;
   top: 0;
@@ -161,25 +180,34 @@ header {
   transition: opacity 0.5s ease-in-out;
 }
 
-#second:hover::after {
+#chassing:hover::after {
   opacity: 1;
 }
 
 /* 確保文字內容在背景圖之上 */
-#second .container {
+#chassing .container {
   position: relative;
   z-index: 2;
 }
 
-#second h2 {
+#chassing h2 {
   /* 增加文字陰影以提高可讀性 */
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
 }
-
+.subtitle {
+  font-size: 3rem;
+}
 #map-section {
   /* 為地圖區塊增加上下間距，避免黏在一起 */
   padding-top: 5rem;
   padding-bottom: 3rem; /* 減少地圖區塊底部的間距，讓它與頁尾的間距更協調 */
+}
+
+/* "一起追追追" 區塊樣式 */
+#letsupload {
+  padding: 5rem 0; /* 上下 5rem, 左右 0 */
+  background-color: rgba(25, 135, 84, 0.5); /* Bootstrap 成功綠色的半透明版本 */
+  /* 移除固定的白色文字，讓文字繼承預設深色，以確保在淺色背景上的可讀性 */
 }
 
 /* Call to action section style */
@@ -221,4 +249,10 @@ footer .thanks {
 
 .modal-footer {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+#cicadapedia {
+  display: flex;
+  align-items: center;
+  font-family: "Huninn", sans-serif;
 }
