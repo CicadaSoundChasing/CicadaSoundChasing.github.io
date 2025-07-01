@@ -283,14 +283,15 @@
                     <ul class="nav nav-pills fw-bolder">
                         <li class="nav-item"><a href="#top" class="nav-link active" aria-current="page"><i
                                     class="bi bi-house"></i><span class="d-lg-none">Home</span></a></li>
-                        <li class="nav-item"><a href="#slogan" class="nav-link">Intro 介紹</a></li>
                         <li class="nav-item"><a href="#chassing" class="nav-link">一起來找蟬</a></li>
                         <li class="nav-item"><a href="#whereiscicada" class="nav-link">蟬去哪了</a></li>
                         <li class="nav-item"><a href="#cicadapedia" class="nav-link">蟬百科</a></li>
+                        <li class="nav-item"><a href="#soundrecords" class="nav-link">蟬聲紀錄</a></li>
                         <li class="nav-item"><a href="#game" class="nav-link">蟬聲小遊戲</a></li>
                         <li class="nav-item"><a href="#cicadaincolture" class="nav-link">蟬文化</a></li>
                         <li class="nav-item"><a href="#why" class="nav-link">為什麼</a></li>
                         <li class="nav-item"><a href="#cause" class="nav-link">可能的原因</a></li>
+                        <li class="nav-item"><a href="#solution" class="nav-link">解決方案</a></li>
                         <li class="nav-item"><a href="#map-section" class="nav-link">蟬鳴/潛在空污地圖</a></li>
                         <li class="nav-item"><a href="#letsupload" class="nav-link">一起追追追</a></li>
                     </ul>
@@ -430,6 +431,16 @@
                 </div>
             </section>
         </section>
+        <section id="soundrecords">
+            <div class="container">
+                <h2 class="display-4 fw-bold text-center mb-4">蟬聲紀錄</h2>
+                <div class="carousel-container" style="overflow: hidden; white-space: nowrap; position: relative;">
+                    <div class="carousel-track" style="display: inline-block;">
+                        <!-- Carousel items will be populated here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
         <section id="game">
             <div class="container">
                 <div class="row justify-content-center">
@@ -539,40 +550,50 @@
             <h3>還是蟬晚叫？</h3>
         </section>
         <section id="cause" class="text-center pt-5 pb-5">
-            <h2>可能的原因</h2>
-            <div class="container mt-5">
-                <div class="row">
-                    <div class="col-md-6 mb-4" data-aos="fade-right">
-                        <div class="card h-100 shadow-sm">
-                            <div class="card-body">
-                                <h5 class="card-title">氣候變遷</h5>
-                                <p class="card-text">全球暖化導致氣溫升高，影響蟬的生長週期和鳴叫時間。極端天氣事件也可能破壞蟬的棲息地。</p>
+
+            <div class="container">
+                <h2>可能的原因</h2>
+                <div class="container mt-5">
+                    <div class="row">
+                        <div class="col-md-6 mb-4" data-aos="fade-right">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title">氣候變遷</h5>
+                                    <p class="card-text">全球暖化導致氣溫升高，影響蟬的生長週期和鳴叫時間。極端天氣事件也可能破壞蟬的棲息地。</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 mb-4" data-aos="fade-left">
-                        <div class="card h-100 shadow-sm">
-                            <div class="card-body">
-                                <h5 class="card-title">污染落塵造成土壤有害</h5>
-                                <p class="card-text">空氣污染和土壤中的有害物質會影響蟬幼蟲的發育，降低其存活率，進而減少成蟲數量。</p>
+                        <div class="col-md-6 mb-4" data-aos="fade-left">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title">污染落塵造成土壤有害</h5>
+                                    <p class="card-text">空氣污染和土壤中的有害物質會影響蟬幼蟲的發育，降低其存活率，進而減少成蟲數量。</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
+        <section id="solution" class="text-center bg-info">
+            <div class="container pb-5 pt-5">
+                <h2>解決方案</h2>
+                <p class="fw-bold">這是一個全民科學計畫，透過李富城主播的疑問，進而促使這個行動倡議計畫：</p>
+                <h2>蟬聲追追追</h2>
             </div>
         </section>
         <section id="map-section" class="mt-5">
             <div class="container">
                 <div class="flourish-embed flourish-map" data-src="visualisation/23747494">
                     <script src="https://public.flourish.studio/resources/embed.js"></script>
-                    <noscript><img src="https://public.flourish.studio/visualisation/23747494/thumbnail" width="50%"
+                    <noscript><img src="https://public.flourish.studio/visualisation/23747494/thumbnail" width="80%"
                             alt="A Flourish data visualisation" style="border: none;">
                     </noscript>
                 </div>
             </div>
         </section>
         <section id="letsupload" class="text-center">
-            <p class="lead mb-4">一個全民科學計畫，讓我們一起來收集台灣的蟬鳴地圖。</p>
+            <p class="lead mb-4">我們一起來收集台灣的蟬鳴地圖</p>
             <div>
                 <!-- Changed from <a> to <button> to trigger modal -->
                 <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal"
@@ -766,6 +787,12 @@
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
         crossorigin="anonymous"></script>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+
+
     <!-- Firebase SDK (from upload.html) -->
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth-compat.js"></script>
@@ -774,7 +801,8 @@
 
     <!-- Google Maps API (from upload.html) -->
     <!-- !!! 請務必將 YOUR_GOOGLE_MAPS_API_KEY 換成您自己的金鑰 !!! -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDC2tIOisTjw1AISQXEEGax778CQjpjfSc&callback=initMap&loading=async&libraries=marker"
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDC2tIOisTjw1AISQXEEGax778CQjpjfSc&callback=initMap&loading=async&libraries=marker"
         defer></script>
 
     <script>
@@ -891,19 +919,36 @@
 
         async function fetchAndDisplayRecordings() {
             const listContainer = document.getElementById('recordings-list');
+            const carouselTrack = document.querySelector('#soundrecords .carousel-track');
             const loadingSpinner = document.getElementById('loading-spinner');
+
             if (listContainer && loadingSpinner) {
+                // Handle the recordings list modal (existing functionality)
                 loadingSpinner.style.display = 'block';
                 listContainer.innerHTML = '';
-                try {
-                    const recordingsRef = db.collection('recordings');
-                    const query = recordingsRef.orderBy('uploadedAt', 'desc').limit(20);
-                    const snapshot = await query.get();
-                    if (snapshot.empty) {
-                        listContainer.innerHTML = '<p class="text-muted text-center">目前沒有任何紀錄。</p>';
-                    } else {
-                        snapshot.forEach(doc => {
-                            const data = doc.data();
+            }
+
+            if (carouselTrack) {
+                carouselTrack.innerHTML = ''; // Clear existing carousel items
+            }
+
+            try {
+                const recordingsRef = db.collection('recordings');
+                const query = recordingsRef.orderBy('uploadedAt', 'desc').limit(20);
+                const snapshot = await query.get();
+
+                if (snapshot.empty) {
+                    if (listContainer) listContainer.innerHTML = '<p class="text-muted text-center">目前沒有任何紀錄。</p>';
+                    if (carouselTrack) carouselTrack.innerHTML = '<p class="text-muted text-center">目前沒有任何紀錄。</p>';
+                } else {
+                    const records = [];
+                    snapshot.forEach(doc => {
+                        records.push(doc.data());
+                    });
+
+                    // Populate recordings list modal
+                    if (listContainer) {
+                        records.forEach(data => {
                             const listItem = document.createElement('a');
                             listItem.href = "#";
                             listItem.className = 'list-group-item list-group-item-action';
@@ -912,13 +957,13 @@
                                 : '<i class="bi bi-music-note-beamed text-primary me-3"></i>';
                             const uploadedDate = data.uploadedAt ? data.uploadedAt.toDate().toLocaleString('zh-TW') : '未知時間';
                             listItem.innerHTML = `
-                    <div class="d-flex w-100 justify-content-between">
-                        <h6 class="mb-1">${icon} ${data.cicadaSpecies || '未知物種'}</h6>
-                        <small class="text-muted">${uploadedDate}</small>
-                    </div>
-                    <p class="mb-1">${data.county || ''} ${data.district || ''}</p>
-                    <small class="text-muted">${data.notes || '沒有備註'}</small>
-                `;
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">${icon} ${data.cicadaSpecies || '未知物種'}</h6>
+                                    <small class="text-muted">${uploadedDate}</small>
+                                </div>
+                                <p class="mb-1">${data.county || ''} ${data.district || ''}</p>
+                                <small class="text-muted">${data.notes || '沒有備註'}</small>
+                            `;
                             listItem.dataset.url = data.fileURL;
                             listItem.dataset.title = data.fileName;
                             listItem.dataset.type = data.uploadType;
@@ -926,13 +971,84 @@
                             listContainer.appendChild(listItem);
                         });
                     }
-                } catch (error) {
-                    console.error("Error fetching recordings:", error);
-                    listContainer.innerHTML = '<p class="text-danger text-center">載入紀錄時發生錯誤。請檢查 Firestore 索引設定。</p>';
-                } finally {
-                    loadingSpinner.style.display = 'none';
+
+                    // Populate carousel
+                    if (carouselTrack) {
+                        // Duplicate items for infinite scroll effect
+                        const allRecords = [...records, ...records, ...records]; // Repeat records 3 times
+                        allRecords.forEach(data => {
+                            const carouselItem = createCarouselItem(data);
+                            carouselTrack.appendChild(carouselItem);
+                        });
+                        initCarousel(carouselTrack);
+                    }
                 }
+            } catch (error) {
+                console.error("Error fetching recordings:", error);
+                if (listContainer) listContainer.innerHTML = '<p class="text-danger text-center">載入紀錄時發生錯誤。請檢查 Firestore 索引設定。</p>';
+                if (carouselTrack) carouselTrack.innerHTML = '<p class="text-danger text-center">載入紀錄時發生錯誤。</p>';
+            } finally {
+                if (loadingSpinner) loadingSpinner.style.display = 'none';
             }
+        }
+
+        function createCarouselItem(data) {
+            const carouselItem = document.createElement('div');
+            carouselItem.className = 'carousel-item-custom card m-2 shadow-sm'; // Add Bootstrap card classes
+            carouselItem.style.cssText = 'display: inline-block; width: 300px; vertical-align: top;'; // Inline-block for horizontal layout
+
+            const iconHtml = data.uploadType === 'video'
+                ? '<i class="bi bi-camera-video-fill text-danger fs-3"></i>'
+                : '<i class="bi bi-music-note-beamed text-primary fs-3"></i>';
+            const uploadedDate = data.uploadedAt ? data.uploadedAt.toDate().toLocaleString('zh-TW') : '未知時間';
+
+            carouselItem.innerHTML = `
+                <div class="card-body">
+                    <h5 class="card-title">${iconHtml} ${data.cicadaSpecies || '未知物種'}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">${data.county || ''} ${data.district || ''}</h6>
+                    <p class="card-text small">${data.notes || '沒有備註'}</p>
+                    <p class="card-text"><small class="text-muted">上傳時間: ${uploadedDate}</small></p>
+                </div>
+            `;
+            carouselItem.dataset.url = data.fileURL;
+            carouselItem.dataset.title = data.fileName;
+            carouselItem.dataset.type = data.uploadType;
+            carouselItem.addEventListener('click', handleRecordClick);
+            return carouselItem;
+        }
+
+        let scrollPos = 0;
+        let animationFrameId;
+
+        function initCarousel(track) {
+            const carouselContainer = track.parentElement;
+            const itemWidth = 300 + (2 * 16); // Item width + 2*margin (m-2 is 0.5rem, so 8px, 16px total)
+            const totalWidth = track.scrollWidth;
+            const numOriginalItems = track.children.length / 3; // Because we duplicated 3 times
+
+            // Start scrolling from the middle set of duplicated items
+            scrollPos = numOriginalItems * itemWidth;
+            track.style.transform = `translateX(-${scrollPos}px)`;
+
+            function animateCarousel() {
+                scrollPos += 1; // Adjust speed as needed
+                if (scrollPos >= (totalWidth / 3) * 2) { // If we pass the second set of items
+                    scrollPos = totalWidth / 3; // Reset to the start of the second set
+                }
+                track.style.transform = `translateX(-${scrollPos}px)`;
+                animationFrameId = requestAnimationFrame(animateCarousel);
+            }
+
+            // Pause on hover
+            carouselContainer.addEventListener('mouseenter', () => {
+                cancelAnimationFrame(animationFrameId);
+            });
+
+            carouselContainer.addEventListener('mouseleave', () => {
+                animateCarousel();
+            });
+
+            animateCarousel(); // Start animation
         }
 
         function handleRecordClick(event) {
@@ -1136,6 +1252,9 @@
 
                 observer.observe(whySection);
             }
+
+            // Initial fetch for carousel when DOM is ready
+            fetchAndDisplayRecordings();
         });
 
         function initMap() {
