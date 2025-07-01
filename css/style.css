@@ -6,6 +6,10 @@ body {
   font-family: "Chiron Sung HK", serif, sans-serif;
 }
 
+.cicadabg {
+  background: url(../i/cicada.png) no-repeat center center !important;
+}
+
 /* 建議將此 CSS 移至 css/style.css 檔案中 */
 #text-carousel {
   /* 設定最小高度以防止內容跳動，您可能需要根據內容微調此數值 */

@@ -150,6 +150,111 @@
             height: auto;
             border-radius: 0.5rem;
         }
+
+        @media (max-width: 768px) {
+            #sectionPin {
+                height: auto;
+                /* Remove fixed height */
+                overflow: auto;
+                /* Reset overflow */
+                view-timeline-name: none;
+                /* Disable animation timeline */
+            }
+
+            .pin-wrap-sticky {
+                position: static;
+                /* Remove sticky positioning */
+                height: auto;
+            }
+
+            .pin-wrap {
+                animation: none;
+                /* Disable horizontal scroll animation */
+                display: block;
+                /* Stack articles vertically */
+                width: 100%;
+                height: auto;
+            }
+
+            .pin-wrap>article {
+                width: 100%;
+                /* Full width for each article */
+                height: auto;
+                /* Auto height based on content */
+                min-height: 50vh;
+                /* Give some minimum height */
+                padding: 2rem 1rem;
+                /* Adjust padding for smaller screens */
+                border-right: none;
+                /* Remove right border */
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                /* Add bottom border */
+                margin-bottom: 1rem;
+                /* Add space between articles */
+            }
+
+            .pin-wrap>article.title-slide h2 {
+                font-size: 3rem;
+                /* Smaller font size for titles on mobile */
+            }
+
+            .pin-wrap>article.wide>img {
+                height: auto;
+                /* Let image height be natural */
+                max-width: 100%;
+            }
+        }
+
+        /* Scroll-linked fade-in for cicadaincolture */
+        #cicadaincolture {
+            view-timeline-name: --cicada-culture-timeline;
+            view-timeline-axis: block;
+        }
+
+        #cicadaincolture article {
+            display: flex;
+            line-height: 2;
+        }
+
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #cicadaincolture article span {
+            opacity: 0;
+            animation: fade-in-up forwards;
+            animation-timeline: --cicada-culture-timeline;
+            animation-range: entry 0% cover 30%;
+            /* Adjust range as needed */
+        }
+
+        #cicadaincolture article span:nth-child(1) {
+            animation-range: entry 0% cover 30%;
+        }
+
+        #cicadaincolture article span:nth-child(2) {
+            animation-range: entry 10% cover 40%;
+        }
+
+        #cicadaincolture article span:nth-child(3) {
+            animation-range: entry 20% cover 50%;
+        }
+
+        #cicadaincolture article span:nth-child(4) {
+            animation-range: entry 30% cover 60%;
+        }
+
+        #cicadaincolture article span:nth-child(5) {
+            animation-range: entry 40% cover 70%;
+        }
     </style>
 </head>
 
@@ -174,6 +279,7 @@
                         <li class="nav-item"><a href="#whereiscicada" class="nav-link">蟬去哪了</a></li>
                         <li class="nav-item"><a href="#cicadapedia" class="nav-link">蟬百科</a></li>
                         <li class="nav-item"><a href="#game" class="nav-link">蟬聲小遊戲</a></li>
+                        <li class="nav-item"><a href="#cicadaincolture" class="nav-link">蟬文化</a></li>
                         <li class="nav-item"><a href="#map-section" class="nav-link">蟬鳴/潛在空污地圖</a></li>
                         <li class="nav-item"><a href="#letsupload" class="nav-link">一起追追追</a></li>
                     </ul>
@@ -219,8 +325,8 @@
             </div>
             <audio id="cicada-audio" src="cicada.m4a" preload="auto"></audio>
         </section>
-        <section class="text-center pt-5 pb-5" id="whereiscicada"><!--主播-->
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/ATpQYIhJbVc?si=1ls_TW-FORcG9qef"
+        <section class="text-center pb-5" id="whereiscicada"><!--主播-->
+            <iframe width="100%" height="800" src="https://www.youtube.com/embed/ATpQYIhJbVc?si=1ls_TW-FORcG9qef"
                 title="YouTube video player" frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
@@ -229,11 +335,18 @@
             <section id="sectionPin">
                 <div class="pin-wrap-sticky">
                     <div class="pin-wrap">
-                        <article class="title-slide wide@">
+                        <article class="title-slide wide cicadabg">
                             <h2>蟬百科<br><span class="subtitle">揭開夏日鳴唱者的祕密</span>
                             </h2>
                         </article>
-                        <article>
+                        <article style="display:flex" class="pt-5">
+                            <iframe width="100%" height="300"
+                                src="https://www.youtube.com/embed/1yjx7eqEKvY?si=6V7ib1Et8NbiUK70"
+                                title="YouTube video player" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        </article>
+                        <article style="">
                             <p class="mt-5">
                                 每到夏季，從城市行道樹到山林步道，一陣陣高亢的蟬鳴便成了盛夏最具代表性的聲音。這些聲音來自蟬，一種外表並不起眼、卻擁有強大鳴叫能力的昆蟲。蟬廣泛分布於溫帶與熱帶地區，是地球上歷史悠久的昆蟲之一。在台灣，已記錄的蟬類約有六十種，其中近六成為台灣特有，是夏日最常見的節肢動物之一。
                             </p>
@@ -315,39 +428,104 @@
                 </div>
             </div>
         </section>
-        <section id="map-section">
-            <div class="container">
-                <div class="flourish-embed flourish-map" data-src="visualisation/23747494">
-                    <script src="https://public.flourish.studio/resources/embed.js"></script><noscript><img
-                            src="https://public.flourish.studio/visualisation/23747494/thumbnail" width="50%"
-                            alt="A Flourish data visualisation" style="border: none;">
-                    </noscript>
-                </div>
-            </div>
-        </section>
-        <section id="letsupload" class="text-center">
-            <p class="lead mb-4">一個全民科學計畫，讓我們一起來收集台灣的蟬鳴地圖。</p>
-            <div>
-                <!-- Changed from <a> to <button> to trigger modal -->
-                <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal"
-                    data-bs-target="#uploadModal">
-                    立即上傳蟬聲 <i class="bi bi-cloud-arrow-up-fill"></i>
-                </button>
-                <button type="button" class="btn btn-info btn-lg" data-bs-toggle="modal"
-                    data-bs-target="#recordingsListModal">
-                    查看所有上傳紀錄 <i class="bi bi-list-ul"></i>
-                </button>
+        <section id="cicadaincolture">
+            <section id="sectionPin">
+                <div class="pin-wrap-sticky">
+                    <div class="pin-wrap serif">
+                        <article class="title-slide wide cicadabg">
+                            <h2>蟬文化</h2>
+                        </article>
+                        <article>
+                            <div>
+                                <h3 class="fade-in-section">蟬絢爛的生命歷程，喚起了華人文化對於純潔、堅韌與新生的嚮往。</h3>
+                                <h3 class="fade-in-section">牠們不只是夏日的聲音，</h3>
+                                <h3 class="fade-in-section">從詩詞典故中的高潔隱喻，至玉器上的靈魂象徵；</h3>
+                                <h3 class="fade-in-section">從藥櫃裡的蟬蛻入方，至作為陪葬之物。</h3>
+                                <h3 class="fade-in-section">蟬跨越了自然與文化的邊界，也成為人類共同的記憶與精神遺產的一部分。</h3>
+                            </div>
+                        </article>
+                        <article>
+                            <div>
+                                <h3>「蟬君子」與華人文化</h3>
+                                <p>根據《史記·屈原列傳》「蟬蛻於濁穢，以浮游塵埃之外，不獲世之滋垢」，蟬成為「潔身自好」的象徵。從西漢開始，玉蟬不僅作為冕冠上的裝飾，也出現在陶俑、漆器、瓦當之中，展現了藝術與信仰的融合。
+                                </p>
+                                <img src="i/cicadaincolture-1.png" class="img-fluid mb-5" alt="">
+                                <p>漢代玉蟬除了喪葬用的唅蟬之外，也有專為貴族在世佩戴用的佩飾玉蟬。</p>
+                            </div>
+                        </article>
+                        <article>
+                            <div>
+                                <img src="i/cicadaincolture-2.png" class="img-fluid mb-5" alt="">
+                                <p>古人將蟬形狀的玉放在亡者口中，象徵著靈魂脫殼、蛻變、重生的意思，所以在玉器文化中，有「清蟬玉」的製作與陪葬習俗，蟬紋象徵著冥界重生與尊貴的地位，顯示出古人對蟬所蘊含的價值，以及生命的潔淨與精神提升。
+                                </p>
+                                <cite class="right">【資料來源：漢唐詠蟬詩賦的體物寫志與人物典故】</cite>
+                            </div>
+                        </article>
+                        <article>
+                            <div>
+                                <h3>蟬在語言裡的意涵</h3>
+                                <p>成語「金蟬脫殼」常用來形容巧妙脫身的手段；「噤若寒蟬」則描繪在威壓下不敢發聲的沉默狀態；而「蟪蛄不知春秋」出自《莊子》，用以比喻眼界狹窄、不知長遠的見識。這些成語典故背後，隱含著人對生命、環境與時間的觀察與體悟。
+                                </p>
+                                <figure>
+                                    <img src="i/cicadaincolture-3.png" class="img-fluid mb-3" alt="">
+                                    <figcaption class="text-center">清惲壽平寫生花卉　冊　風柳蟬聲
+                                    </figcaption>
+                                </figure>
+                                <cite>【資料來源：蟬百科】</cite>
+                            </div>
+                        </article>
+                        <article>
 
-            </div>
-        </section>
-        <footer class="text-center">蟬聲追追追
-            <div class="thanks">特別感謝（依注音排序）：
-                林亮竹老師
-                陳俊廷老師
-                阮明淑老師
-                吳林展老師
-                在此專題中的指導與協助。</div>
-        </footer>
+                            <div>
+                                <h3>蟬的食用與藥用價值</h3>
+                                <p>在生活中，蟬也是人類飲食與醫療的一部分。「紅脈熊蟬」被認為是傳統藥用「金蟬」的對應物。蟬蛹油炸後也會被人類食用，有「補腎壯陽」的說法；蛻下的外殼「蟬蛻」（又稱蟬衣），則長年被中醫用來退熱止癢、抗過敏、舒眠鎮靜。另外一種鮮為人知的，是蟬蛹被真菌寄生後稱為「蟬花」，可以被做為藥材，外形似花，與冬蟲夏草類似，可以用來補氣、抗疲勞與免疫調節。
+                                </p>
+                                <div class="clearfix">
+                                    <img src="i/cicadaincolture-4.png" class="mb-5 rounded float-start" alt=""
+                                        style="width:45%">
+                                    <img src="i/cicadaincolture-5.png" class="mb-5 rounded float-end" alt=""
+                                        style="width:45%">
+                                </div>
+                                <cite>【資料來源：當蟬聲響起】</cite>
+                            </div>
+
+                        </article>
+                    </div>
+                </div>
+            </section>
+            <section id=" map-section">
+                <div class="container">
+                    <div class="flourish-embed flourish-map" data-src="visualisation/23747494">
+                        <script src="https://public.flourish.studio/resources/embed.js"></script>
+                        <noscript><img src="https://public.flourish.studio/visualisation/23747494/thumbnail" width="50%"
+                                alt="A Flourish data visualisation" style="border: none;">
+                        </noscript>
+                    </div>
+                </div>
+            </section>
+            <section id="letsupload" class="text-center">
+                <p class="lead mb-4">一個全民科學計畫，讓我們一起來收集台灣的蟬鳴地圖。</p>
+                <div>
+                    <!-- Changed from <a> to <button> to trigger modal -->
+                    <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal"
+                        data-bs-target="#uploadModal">
+                        立即上傳蟬聲 <i class="bi bi-cloud-arrow-up-fill"></i>
+                    </button>
+                    <button type="button" class="btn btn-info btn-lg" data-bs-toggle="modal"
+                        data-bs-target="#recordingsListModal">
+                        查看蟬聲紀錄 <i class="bi bi-list-ul"></i>
+                    </button>
+
+                </div>
+            </section>
+            <footer class="text-center">蟬聲追追追
+                <div class="thanks">特別感謝（依注音排序）：
+                    林亮竹老師
+                    陳俊廷老師
+                    阮明淑老師
+                    吳林展老師
+                    在此專題中的指導與協助。</div>
+            </footer>
     </main>
 
     <!-- Recordings List Modal -->
