@@ -57,6 +57,7 @@ body {
 
 .card {
   border: none;
+  margin-bottom: 1rem; /* Add some space below cards */
 }
 
 /* Header Navigation Link Color */
@@ -198,6 +199,11 @@ header {
   /* 為地圖區塊增加上下間距，避免黏在一起 */
   padding-top: 5rem;
   padding-bottom: 3rem; /* 減少地圖區塊底部的間距，讓它與頁尾的間距更協調 */
+}
+
+#map-section .flourish-embed {
+  width: 50%;
+  margin: 0 auto; /* 置中 */
 }
 
 /* "一起追追追" 區塊樣式 */
