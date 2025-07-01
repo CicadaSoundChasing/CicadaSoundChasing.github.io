@@ -89,7 +89,7 @@ header .nav-pills .nav-link::after {
 }
 
 header .nav-pills .nav-link:not(.active):hover {
-  color: #efefef; /* Hover 時文字也變色 */
+  color: #333; /* Hover 時文字也變色 */
   text-shadow: 0 0 8px rgba(13, 110, 253, 0.5); /* 光暈效果 */
 }
 
