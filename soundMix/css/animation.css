@@ -1,0 +1,67 @@
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+  60% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Apply animations to specific elements */
+.game-title {
+  animation: slideInUp 0.8s ease-out;
+}
+
+.game-intro {
+  animation: fadeIn 1s ease-out 0.3s both;
+}
+
+.game-board {
+  animation: fadeIn 1s ease-out 0.5s both;
+}
+
+.option-item {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.result-score {
+  animation: scaleIn 0.5s ease-out;
+}
+
+.final-result {
+  animation: fadeIn 1s ease-out;
+}
+
+.correct-answer-reveal {
+  animation: bounce 1s;
+}

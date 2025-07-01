@@ -1,0 +1,94 @@
+<!-- 嘒嘒知音遊戲 - 僅 body 部分 (可嵌入其他網頁) -->
+<!-- 請確保在包含此代碼的頁面中已引入必要的CSS和JS文件：
+     <link rel="stylesheet" href="css/style.css">
+     <link rel="stylesheet" href="css/animation.css">
+     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+     <script src="js/game-data.js"></script>
+     <script src="js/game.js"></script>
+-->
+
+<div class="game-container">        <div class="game-title">
+            <h1>嘒嘒知音</h1>
+        </div>
+    
+    <div class="game-intro">
+        <p>請仔細聆聽音軌，辨識出其中包含了哪些聲音！</p>
+        <p>完成所有題目，看看你是否是大自然的「知音」！</p>
+    </div>        <div class="game-progress">
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 20%"></div>
+                </div>
+                <div class="progress-text">第 <span id="current-question">1</span> 題 / 共 5 題</div>
+            </div>
+            <div class="current-score">
+                當前得分：<span id="current-total-score">0</span>
+            </div>
+        </div>
+
+    <div class="game-board">
+        <!-- 題目區 -->
+        <div id="question-container" class="question-container">
+            <div id="question-text" class="question-text">請勾選出所有聽見的大自然的聲音。</div>
+            <div class="hint-container">
+                <button id="hint-button" class="hint-button">提示</button>
+                <div id="hint-text" class="hint-text">該題有 <span id="correct-count">4</span> 個正確答案</div>
+            </div>
+        </div>
+
+        <!-- 播放器 -->
+        <div class="audio-player">
+            <div class="player-controls">
+                <button id="play-button" class="play-button">
+                    <span class="play-icon">▶</span>
+                    <span class="pause-icon hidden">❚❚</span>
+                </button>
+                <div class="audio-progress">
+                    <div id="audio-progress-bar" class="audio-progress-bar"></div>
+                </div>
+                <div id="audio-time" class="audio-time">00:00 / 00:00</div>
+            </div>
+            <audio id="audio-track" src=""></audio>
+        </div>
+
+        <!-- 選項區 -->
+        <div id="options-container" class="options-container">
+            <!-- 選項會由 JS 動態生成 -->
+        </div>
+
+        <!-- 提交按鈕 -->
+        <div class="action-buttons">
+            <button id="submit-button" class="submit-button">確認！</button>
+        </div>
+    </div>
+
+    <!-- 結果區 (初始隱藏) -->
+    <div id="result-container" class="result-container hidden">
+        <div class="result-header">
+            <h2 id="result-title">結果出爐！</h2>
+            <div id="result-score" class="result-score">0</div>
+        </div>
+        <div id="result-feedback" class="result-feedback"></div>
+        <div id="correct-answers" class="correct-answers"></div>
+        <div class="result-actions">
+            <button id="next-question" class="next-button">下一題</button>
+        </div>
+    </div>
+
+    <!-- 最終結果區 (初始隱藏) -->
+    <div id="final-result" class="final-result hidden">
+        <h2>遊戲結束！</h2>
+        <div class="final-score">
+            <div class="score-text">您的得分：</div>
+            <div id="total-score" class="total-score">0</div>
+            <div id="score-comment" class="score-comment"></div>        </div>            <div class="final-feedback">
+                <p>在這麼多聲音中，辨識出蟬鳴是不是沒那麼容易呀！</p>
+                <p>現代的都市化環境下，蟬在鳴叫時也面臨了噪音的挑戰！當車輛呼嘯而過、施工機具轟鳴、城市環境音頻率，導致牠們的聲音被淹沒。蟬必須嘗試在聲浪中找到彼此，為了繁衍下一代，牠們可能需要改變頻率，讓自己暴露於危險中。</p>
+            </div>
+        <div class="final-actions">                <button id="restart-button" class="restart-button">再來一次</button>
+                <button id="share-button" class="share-button">分享</button>        </div>
+    </div>
+    
+    <!-- 重新答題按鈕 -->
+    <button id="reset-game-button" class="reset-game-button">重新答題</button>
+</div>
