@@ -17,3 +17,19 @@ body {
 .card {
     border: none;
 }
+
+#why {
+    padding: 50px 20px;
+    margin-top: 20px;
+    background-color: #e0f2f7; /* 淡藍色背景 */
+    text-align: center; /* 置中內容 */
+}
+
+#why h3 {
+    opacity: 0; /* 初始隱藏 */
+    transition: opacity 1s ease-in-out; /* 淡入動畫 */
+}
+
+#why h3.visible {
+    opacity: 1; /* 顯示 */
+}

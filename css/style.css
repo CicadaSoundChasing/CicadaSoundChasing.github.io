@@ -34,9 +34,6 @@ body {
   /* 顯示時恢復排版 */
   pointer-events: auto;
 }
-#cicadapedia {
-  display: flex;
-}
 
 .pedia {
   /*columns: 2; /* Number of columns */
@@ -45,11 +42,7 @@ body {
   height: 100vh;
   padding: 100px;
 }
-#cicadapedia article {
-}
-#cicadapedia h2 {
-  /*border: 1px solid red;*/
-}
+
 #map {
   height: 400px;
   width: 100%;
@@ -259,4 +252,38 @@ footer .thanks {
   display: flex;
   align-items: center;
   font-family: "Huninn", sans-serif;
+}
+
+#game {
+  background: #fff;
+}
+
+/* Styles for the #why section */
+#why {
+  background: #f0f8ff url(../i/cicada.png) no-repeat center center;
+  background-size: cover; /* AliceBlue: a very light and soft blue */
+  min-height: 80vh;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  overflow: hidden; /* To contain elements during animation */
+}
+
+#why h2 {
+  margin-bottom: 2.5rem;
+}
+
+#why h3 {
+  opacity: 0;
+  transform: translateY(30px); /* Start slightly lower */
+  transition: opacity 1.2s ease-out, transform 1.2s ease-out; /* Smooth transition */
+  margin-bottom: 1.5rem; /* Spacing between questions */
+}
+
+#why h3.visible {
+  opacity: 1;
+  transform: translateY(0); /* Move to original position */
 }

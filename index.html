@@ -42,7 +42,7 @@
             }
         }
 
-        #sectionPin {
+        .sectionPin {
             /* Stretch it out, so that we create room for the horizontal scroll animation */
             height: 500vh;
             /* Adjusted for 5 slides */
@@ -66,7 +66,6 @@
 
         .pin-wrap {
             height: 100vh;
-            width: 900vw;
             /* 5 articles * 100vw */
             display: flex;
             align-items: center;
@@ -96,6 +95,7 @@
             border-right: 1px solid rgba(0, 0, 0, 0.1);
             /* Add a subtle separator */
             align-items: center;
+            display: flex;
         }
 
         .pin-wrap>article.wide {
@@ -119,9 +119,9 @@
             background: #efefef;
         }
 
-        .pin-wrap>article>p {
+        /*.pin-wrap>article>p {
             font-size: 1.25rem;
-        }
+        }*/
 
         .pin-wrap>article h4 {
             margin: 25px 0;
@@ -152,7 +152,7 @@
         }
 
         @media (max-width: 768px) {
-            #sectionPin {
+            .sectionPin {
                 height: auto;
                 /* Remove fixed height */
                 overflow: auto;
@@ -203,6 +203,14 @@
                 /* Let image height be natural */
                 max-width: 100%;
             }
+        }
+
+        #cicadapedia .pin-wrap {
+            width: 900vw;
+        }
+
+        #cicadaincolture .pin-wrap {
+            width: 400vw;
         }
 
         /* Scroll-linked fade-in for cicadaincolture */
@@ -258,12 +266,12 @@
     </style>
 </head>
 
-<body>
+<body data-bs-spy="scroll">
 
 
     <header class="py-3 border-bottom sticky-top">
         <div class=" container-fluid">
-            <nav class="navbar">
+            <nav class="navbar" id="cicada-nav">
 
                 <a href="/"
                     class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
@@ -280,6 +288,8 @@
                         <li class="nav-item"><a href="#cicadapedia" class="nav-link">蟬百科</a></li>
                         <li class="nav-item"><a href="#game" class="nav-link">蟬聲小遊戲</a></li>
                         <li class="nav-item"><a href="#cicadaincolture" class="nav-link">蟬文化</a></li>
+                        <li class="nav-item"><a href="#why" class="nav-link">為什麼</a></li>
+                        <li class="nav-item"><a href="#cause" class="nav-link">可能的原因</a></li>
                         <li class="nav-item"><a href="#map-section" class="nav-link">蟬鳴/潛在空污地圖</a></li>
                         <li class="nav-item"><a href="#letsupload" class="nav-link">一起追追追</a></li>
                     </ul>
@@ -289,7 +299,7 @@
         </div>
     </header>
 
-    <main data-bs-spy="scroll">
+    <main>
         <section id="slogan">
             <video autoplay muted loop playsinline id="bg-video">
                 <source src="video.mp4" type="video/mp4">
@@ -332,7 +342,7 @@
                 referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </section>
         <section class="serif" id="cicadapedia"><!--百科-->
-            <section id="sectionPin">
+            <section class="sectionPin">
                 <div class="pin-wrap-sticky">
                     <div class="pin-wrap">
                         <article class="title-slide wide cicadabg">
@@ -346,44 +356,55 @@
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                 referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                         </article>
-                        <article style="">
-                            <p class="mt-5">
-                                每到夏季，從城市行道樹到山林步道，一陣陣高亢的蟬鳴便成了盛夏最具代表性的聲音。這些聲音來自蟬，一種外表並不起眼、卻擁有強大鳴叫能力的昆蟲。蟬廣泛分布於溫帶與熱帶地區，是地球上歷史悠久的昆蟲之一。在台灣，已記錄的蟬類約有六十種，其中近六成為台灣特有，是夏日最常見的節肢動物之一。
-                            </p>
-                            <p>蟬的一生多數時間潛伏於地底，歷經數年才終於破土而出。短短數週的成蟲期，是牠們唯一能夠飛翔、鳴叫與繁殖的階段。在這段短暫而熱烈的夏日生命裡，蟬不只是聲音的製造者，也是生態系中的重要角色。當牠們從地下羽化，會將累積多年的氮元素帶上地面，促進土壤養分的循環，間接維繫著植物的健康。同時，大量出現的蟬成蟲也成為鳥類、蜘蛛與其他昆蟲的重要食物來源，支撐著夏季食物鏈的穩定運作。
-                            </p>
+                        <article>
+                            <div>
+                                <p class="mt-5">
+                                    每到夏季，從城市行道樹到山林步道，一陣陣高亢的蟬鳴便成了盛夏最具代表性的聲音。這些聲音來自蟬，一種外表並不起眼、卻擁有強大鳴叫能力的昆蟲。蟬廣泛分布於溫帶與熱帶地區，是地球上歷史悠久的昆蟲之一。在台灣，已記錄的蟬類約有六十種，其中近六成為台灣特有，是夏日最常見的節肢動物之一。
+                                </p>
+                                <p>蟬的一生多數時間潛伏於地底，歷經數年才終於破土而出。短短數週的成蟲期，是牠們唯一能夠飛翔、鳴叫與繁殖的階段。在這段短暫而熱烈的夏日生命裡，蟬不只是聲音的製造者，也是生態系中的重要角色。當牠們從地下羽化，會將累積多年的氮元素帶上地面，促進土壤養分的循環，間接維繫著植物的健康。同時，大量出現的蟬成蟲也成為鳥類、蜘蛛與其他昆蟲的重要食物來源，支撐著夏季食物鏈的穩定運作。
+                                </p>
+                            </div>
                         </article>
                         <article class="title-slide">
                             <h3>蟬為什麼會叫？</h3>
                         </article>
                         <article>
-                            <h4>什麼時候會叫？──出現的時節</h4>
-                            <p>蟬的鳴叫主要出現在夏季，是因為牠們的成蟲通常在氣溫升高（25℃以上）、濕度偏高（60%以上）的時候才會活動。在台灣， 4 到 9 月是蟬鳴最頻繁的季節，高砂熊蟬等物種甚至能延續到
-                                10 月。</p>
-                            <img src="i/pic1.png" class="img-fluid" alt="">
+                            <div>
+                                <h4>什麼時候會叫？──出現的時節</h4>
+                                <p>蟬的鳴叫主要出現在夏季，是因為牠們的成蟲通常在氣溫升高（25℃以上）、濕度偏高（60%以上）的時候才會活動。在台灣， 4 到 9
+                                    月是蟬鳴最頻繁的季節，高砂熊蟬等物種甚至能延續到
+                                    10 月。</p>
+                                <img src="i/pic1.png" class="img-fluid" alt="">
+                            </div>
                         </article>
                         <article>
-                            <h4>什麼時間叫？──依物種區分的鳴叫時段</h4>
-                            <p>不同的蟬會選擇一天中不同的時段鳴叫。這樣的時間分化有助於物種之間避免彼此干擾，也反映出牠們各自的生理節奏。根據鳴叫時間，可將蟬大致分為三種類型：</p>
-                            <img src="i/pic2.jpg" class="img-fluid mb-5" alt="">
+                            <div>
+                                <h4>什麼時間叫？──依物種區分的鳴叫時段</h4>
+                                <p>不同的蟬會選擇一天中不同的時段鳴叫。這樣的時間分化有助於物種之間避免彼此干擾，也反映出牠們各自的生理節奏。根據鳴叫時間，可將蟬大致分為三種類型：</p>
+                                <img src="i/pic2.jpg" class="img-fluid mb-5" alt="">
 
-                            <p>每種蟬在特定時段鳴叫，可以減少聲音重疊與資源競爭，讓多種蟬得以在同一棵樹、同一片林地中共存。然而，近年來受到<strong>氣候變遷、環境污染、都市擴張以及天敵改變</strong>等多重因素影響，蟬的鳴叫時間出現異常現象。
-                            </p>
+                                <p>每種蟬在特定時段鳴叫，可以減少聲音重疊與資源競爭，讓多種蟬得以在同一棵樹、同一片林地中共存。然而，近年來受到<strong>氣候變遷、環境污染、都市擴張以及天敵改變</strong>等多重因素影響，蟬的鳴叫時間出現異常現象。
+                                </p>
+                            </div>
                         </article>
                         <article>
-                            <h4>為什麼會叫？──鳴叫的目的</h4>
-                            <p>蟬的鳴叫是雄蟬的求偶行為。牠們用叫聲吸引雌蟬靠近，聲音強弱與節奏變化都是「展示自我」的一種方式。不同物種的叫聲節奏、音高與長度各異，這不僅是繁殖訊號，也是雌蟬辨認同種對象的依據。當多隻雄蟬聚集時，牠們甚至會彼此「唱和」或「對抗」，這是一種聲音上的競爭行為，有時會形成整片林地的共鳴景象。
-                            </p>
-                            <h4>怎麼會叫？──發聲的構造原理</h4>
-                            <p>蟬的聲音不是從嘴巴發出，而是來自腹部的「鳴器」（tymbal）。這是一對彈性膜片，能快速振動。每一次振動會發出「啪」的聲響，當鳴器以高速規律震動時，就會產生連續的鳴叫聲。蟬的體腔會產生共鳴，進一步放大聲音，讓牠們即使體型小，聲音卻能傳得很遠。
-                            </p>
+                            <div>
+                                <h4>為什麼會叫？──鳴叫的目的</h4>
+                                <p>蟬的鳴叫是雄蟬的求偶行為。牠們用叫聲吸引雌蟬靠近，聲音強弱與節奏變化都是「展示自我」的一種方式。不同物種的叫聲節奏、音高與長度各異，這不僅是繁殖訊號，也是雌蟬辨認同種對象的依據。當多隻雄蟬聚集時，牠們甚至會彼此「唱和」或「對抗」，這是一種聲音上的競爭行為，有時會形成整片林地的共鳴景象。
+                                </p>
+                                <h4>怎麼會叫？──發聲的構造原理</h4>
+                                <p>蟬的聲音不是從嘴巴發出，而是來自腹部的「鳴器」（tymbal）。這是一對彈性膜片，能快速振動。每一次振動會發出「啪」的聲響，當鳴器以高速規律震動時，就會產生連續的鳴叫聲。蟬的體腔會產生共鳴，進一步放大聲音，讓牠們即使體型小，聲音卻能傳得很遠。
+                                </p>
+                            </div>
                         </article>
                         <article>
-                            <div class="media-container" id="pic3-container"
-                                style="position: relative; cursor: pointer;">
-                                <img src="i/pic3.png" class="img-fluid" alt="蟬的發聲構造">
-                                <video src="i/pic4.mp4" class="img-fluid video-overlay" loop playsinline
-                                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: none;"></video>
+                            <div>
+                                <div class="media-container" id="pic3-container"
+                                    style="position: relative; cursor: pointer;">
+                                    <img src="i/pic3.png" class="img-fluid" alt="蟬的發聲構造">
+                                    <video src="i/pic4.mp4" class="img-fluid video-overlay" loop playsinline
+                                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: none;"></video>
+                                </div>
                             </div>
                         </article>
                         <article class="title-slide">
@@ -429,7 +450,7 @@
             </div>
         </section>
         <section id="cicadaincolture">
-            <section id="sectionPin">
+            <section class="sectionPin">
                 <div class="pin-wrap-sticky">
                     <div class="pin-wrap serif">
                         <article class="title-slide wide cicadabg">
@@ -437,10 +458,10 @@
                         </article>
                         <article>
                             <div>
-                                <h3 class="fade-in-section">蟬絢爛的生命歷程，喚起了華人文化對於純潔、堅韌與新生的嚮往。</h3>
-                                <h3 class="fade-in-section">牠們不只是夏日的聲音，</h3>
-                                <h3 class="fade-in-section">從詩詞典故中的高潔隱喻，至玉器上的靈魂象徵；</h3>
-                                <h3 class="fade-in-section">從藥櫃裡的蟬蛻入方，至作為陪葬之物。</h3>
+                                <h4 class="fade-in-section">蟬絢爛的生命歷程，喚起了華人文化對於純潔、堅韌與新生的嚮往。</h4>
+                                <h4 class="fade-in-section">牠們不只是夏日的聲音，</h4>
+                                <h4 class="fade-in-section">從詩詞典故中的高潔隱喻，至玉器上的靈魂象徵；</h4>
+                                <h4 class="fade-in-section">從藥櫃裡的蟬蛻入方，至作為陪葬之物。</h4>
                                 <h3 class="fade-in-section">蟬跨越了自然與文化的邊界，也成為人類共同的記憶與精神遺產的一部分。</h3>
                             </div>
                         </article>
@@ -475,7 +496,6 @@
                             </div>
                         </article>
                         <article>
-
                             <div>
                                 <h3>蟬的食用與藥用價值</h3>
                                 <p>在生活中，蟬也是人類飲食與醫療的一部分。「紅脈熊蟬」被認為是傳統藥用「金蟬」的對應物。蟬蛹油炸後也會被人類食用，有「補腎壯陽」的說法；蛻下的外殼「蟬蛻」（又稱蟬衣），則長年被中醫用來退熱止癢、抗過敏、舒眠鎮靜。另外一種鮮為人知的，是蟬蛹被真菌寄生後稱為「蟬花」，可以被做為藥材，外形似花，與冬蟲夏草類似，可以用來補氣、抗疲勞與免疫調節。
@@ -486,46 +506,72 @@
                                     <img src="i/cicadaincolture-5.png" class="mb-5 rounded float-end" alt=""
                                         style="width:45%">
                                 </div>
+                                <cite>pic via 新莊運動公園周邊</cite>
                                 <cite>【資料來源：當蟬聲響起】</cite>
                             </div>
-
+                        </article>
+                        <article>
+                            <div>
+                                <p>
+                                    在華人文化中，蟬被奉為高潔脫俗、通靈長生的神聖之物，
+                                    在歷史上留下迴響不絕的印記。
+                                </p>
+                                <p>
+                                    詩詞典籍、哲學、藝術與民俗生活等方面，
+                                    體現出人類對自然生命的觀照與文化想像。
+                                </p>
+                                <p>
+                                    在台灣，這些聲音早已成為每個人生活中，
+                                    接影響人們的生活與更深層記憶連結。
+                                </p>
+                            </div>
                         </article>
                     </div>
                 </div>
             </section>
-            <section id=" map-section">
-                <div class="container">
-                    <div class="flourish-embed flourish-map" data-src="visualisation/23747494">
-                        <script src="https://public.flourish.studio/resources/embed.js"></script>
-                        <noscript><img src="https://public.flourish.studio/visualisation/23747494/thumbnail" width="50%"
-                                alt="A Flourish data visualisation" style="border: none;">
-                        </noscript>
-                    </div>
+        </section>
+        <section id="why">
+            <h2 class="serif">我們的問題：</h2>
+            <h3>為什麼</h3>
+            <h3>蟬聲變少？</h3>
+            <h3>到底是蟬變少？</h3>
+            <h3>還是蟬晚叫？</h3>
+        </section>
+        <section id="cause" class="text-center pt-5 pb-5">
+            <h2>可能的原因</h2>
+        </section>
+        <section id="map-section" class="mt-5">
+            <div class="container">
+                <div class="flourish-embed flourish-map" data-src="visualisation/23747494">
+                    <script src="https://public.flourish.studio/resources/embed.js"></script>
+                    <noscript><img src="https://public.flourish.studio/visualisation/23747494/thumbnail" width="50%"
+                            alt="A Flourish data visualisation" style="border: none;">
+                    </noscript>
                 </div>
-            </section>
-            <section id="letsupload" class="text-center">
-                <p class="lead mb-4">一個全民科學計畫，讓我們一起來收集台灣的蟬鳴地圖。</p>
-                <div>
-                    <!-- Changed from <a> to <button> to trigger modal -->
-                    <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal"
-                        data-bs-target="#uploadModal">
-                        立即上傳蟬聲 <i class="bi bi-cloud-arrow-up-fill"></i>
-                    </button>
-                    <button type="button" class="btn btn-info btn-lg" data-bs-toggle="modal"
-                        data-bs-target="#recordingsListModal">
-                        查看蟬聲紀錄 <i class="bi bi-list-ul"></i>
-                    </button>
-
-                </div>
-            </section>
-            <footer class="text-center">蟬聲追追追
-                <div class="thanks">特別感謝（依注音排序）：
-                    林亮竹老師
-                    陳俊廷老師
-                    阮明淑老師
-                    吳林展老師
-                    在此專題中的指導與協助。</div>
-            </footer>
+            </div>
+        </section>
+        <section id="letsupload" class="text-center">
+            <p class="lead mb-4">一個全民科學計畫，讓我們一起來收集台灣的蟬鳴地圖。</p>
+            <div>
+                <!-- Changed from <a> to <button> to trigger modal -->
+                <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal"
+                    data-bs-target="#uploadModal">
+                    立即上傳蟬聲 <i class="bi bi-cloud-arrow-up-fill"></i>
+                </button>
+                <button type="button" class="btn btn-info btn-lg" data-bs-toggle="modal"
+                    data-bs-target="#recordingsListModal">
+                    查看蟬聲紀錄 <i class="bi bi-list-ul"></i>
+                </button>
+            </div>
+        </section>
+        <footer class="text-center">蟬聲追追追
+            <div class="thanks">特別感謝（依注音排序）：
+                林亮竹老師
+                陳俊廷老師
+                阮明淑老師
+                吳林展老師
+                在此專題中的指導與協助。</div>
+        </footer>
     </main>
 
     <!-- Recordings List Modal -->
@@ -1037,6 +1083,26 @@
                     video.currentTime = 0;
                     video.style.display = 'none';
                 });
+            }
+
+            // Animation for #why section h3 elements
+            const whySection = document.getElementById('why');
+            if (whySection) {
+                const h3Elements = whySection.querySelectorAll('h3');
+                const observer = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            h3Elements.forEach((h3, index) => {
+                                setTimeout(() => {
+                                    h3.classList.add('visible');
+                                }, index * 1000); // 每個 h3 延遲 1 秒
+                            });
+                            observer.unobserve(whySection); // 只執行一次
+                        }
+                    });
+                }, { threshold: 0.5 }); // 當 #why 區塊有 50% 進入視窗時觸發
+
+                observer.observe(whySection);
             }
         });
 
