@@ -38,70 +38,46 @@
     <style>
         @keyframes move {
             to {
-                /* Move horizontally so that right edge is aligned against the viewport */
                 transform: translateX(calc(-100% + 100vw));
             }
         }
 
         .sectionPin {
-            /* Stretch it out, so that we create room for the horizontal scroll animation */
             height: 500vh;
-            /* Adjusted for 5 slides */
             overflow: visible;
-            /* To make position sticky work … */
-
             view-timeline-name: --section-pin-tl;
             view-timeline-axis: block;
         }
 
         .pin-wrap-sticky {
-            /* Stick to Top */
             height: 100vh;
             width: 100vw;
             position: sticky;
             top: 50px;
-
             width: 100vw;
             overflow-x: hidden;
         }
 
         .pin-wrap {
             height: 100vh;
-            /* 5 articles * 100vw */
             display: flex;
             align-items: center;
-            /* No gap or padding for seamless scroll */
-
-            /* Hook animation */
             will-change: transform;
             animation: linear move forwards;
-
-            /* Link animation to view-timeline */
             animation-timeline: --section-pin-tl;
             animation-range: contain 0% contain 100%;
         }
 
         .pin-wrap>article {
-            width: 50vw;
+            width: 100vw;
             flex-shrink: 0;
             height: 100vh;
-            /* Full viewport height */
             overflow-y: auto;
-            /* For long content */
             padding: 3rem;
-            /* Give content some space */
-            /*background: rgba(255, 255, 255, 0.9);*/
             backdrop-filter: blur(10px);
-            /* No border-radius for seamless edges */
             border-right: 1px solid rgba(0, 0, 0, 0.1);
-            /* Add a subtle separator */
             align-items: center;
             display: flex;
-        }
-
-        .pin-wrap>article.wide {
-            width: 100vw;
-            text-align: center;
         }
 
         .pin-wrap>article.wide>img {
@@ -119,10 +95,6 @@
         .pin-wrap>article:first-child {
             background: #efefef;
         }
-
-        /*.pin-wrap>article>p {
-            font-size: 1.25rem;
-        }*/
 
         .pin-wrap>article h4 {
             margin: 25px 0;
@@ -155,54 +127,42 @@
         @media (max-width: 768px) {
             .sectionPin {
                 height: auto;
-                /* Remove fixed height */
                 overflow: auto;
-                /* Reset overflow */
                 view-timeline-name: none;
-                /* Disable animation timeline */
             }
 
             .pin-wrap-sticky {
                 position: static;
-                /* Remove sticky positioning */
                 height: auto;
             }
 
             .pin-wrap {
                 animation: none;
-                /* Disable horizontal scroll animation */
                 display: block;
-                /* Stack articles vertically */
                 width: 100%;
                 height: auto;
             }
 
             .pin-wrap>article {
                 width: 100%;
-                /* Full width for each article */
                 height: auto;
-                /* Auto height based on content */
                 min-height: 50vh;
-                /* Give some minimum height */
                 padding: 2rem 1rem;
-                /* Adjust padding for smaller screens */
                 border-right: none;
-                /* Remove right border */
                 border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-                /* Add bottom border */
                 margin-bottom: 1rem;
-                /* Add space between articles */
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                display: block;
             }
 
             .pin-wrap>article.title-slide h2 {
                 font-size: 3rem;
-                /* Smaller font size for titles on mobile */
             }
 
-            .pin-wrap>article.wide>img {
+            #cicadapedia .pin-wrap>article iframe {
+                width: 100%;
                 height: auto;
-                /* Let image height be natural */
-                max-width: 100%;
             }
         }
 
@@ -214,7 +174,6 @@
             width: 400vw;
         }
 
-        /* Scroll-linked fade-in for cicadaincolture */
         #cicadaincolture {
             view-timeline-name: --cicada-culture-timeline;
             view-timeline-axis: block;
@@ -242,7 +201,6 @@
             animation: fade-in-up forwards;
             animation-timeline: --cicada-culture-timeline;
             animation-range: entry 0% cover 30%;
-            /* Adjust range as needed */
         }
 
         #cicadaincolture article span:nth-child(1) {
@@ -272,15 +230,18 @@
 
     <header class="py-3 border-bottom sticky-top">
         <div class=" container-fluid">
-            <nav class="navbar" id="cicada-nav">
-
+            <nav class="navbar navbar-expand-lg" id="cicada-nav">
                 <a href="/"
-                    class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                    class="navbar-brand d-flex align-items-center mb-3 mb-lg-0 me-lg-auto link-body-emphasis text-decoration-none">
                     <svg class="bi me-2" id="top" width="40" height="32" aria-hidden="true">
                         <use xlink:href="#bootstrap"></use>
                     </svg> <span class="fs-4">蟬聲追追追</span> </a>
-                <div class="d-flex">
-                    <ul class="nav nav-pills fw-bolder">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 nav-pills fw-bolder">
                         <li class="nav-item"><a href="#top" class="nav-link active" aria-current="page"><i
                                     class="bi bi-house"></i><span class="d-lg-none">Home</span></a></li>
                         <li class="nav-item"><a href="#chassing" class="nav-link">一起來找蟬</a></li>
@@ -296,7 +257,6 @@
                         <li class="nav-item"><a href="#letsupload" class="nav-link">一起追追追</a></li>
                     </ul>
                 </div>
-
             </nav>
         </div>
     </header>
@@ -337,11 +297,45 @@
             </div>
             <audio id="cicada-audio" src="cicada.m4a" preload="auto"></audio>
         </section>
-        <section class="text-center pb-5" id="whereiscicada"><!--主播-->
-            <iframe width="100%" height="800" src="https://www.youtube.com/embed/ATpQYIhJbVc?si=1ls_TW-FORcG9qef"
-                title="YouTube video player" frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <section class="text-center pb-5" id="whereiscicada">
+            <div id="youtubeCarousel" class="carousel slide" data-bs-ride="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="ratio ratio-16x9">
+                            <iframe src="https://www.youtube.com/embed/ATpQYIhJbVc?si=1ls_TW-FORcG9qef"
+                                title="YouTube video player" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="ratio ratio-16x9">
+                            <iframe src="https://www.youtube.com/embed/OBb5cahss10?si=bUFEcI6Bp3_dckUa"
+                                title="YouTube video player" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="ratio ratio-16x9">
+                            <iframe src="https://www.youtube.com/embed/ugxxU0X6Aos?si=ZkjClgbNpu1HIYon"
+                                title="YouTube video player" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#youtubeCarousel"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#youtubeCarousel"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
         </section>
         <section class="serif" id="cicadapedia"><!--百科-->
             <section class="sectionPin">
@@ -351,12 +345,13 @@
                             <h2>蟬百科<br><span class="subtitle">揭開夏日鳴唱者的祕密</span>
                             </h2>
                         </article>
-                        <article style="display:flex" class="pt-5">
-                            <iframe width="100%" height="300"
-                                src="https://www.youtube.com/embed/1yjx7eqEKvY?si=6V7ib1Et8NbiUK70"
-                                title="YouTube video player" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        <article class="pt-5">
+                            <div class="ratio ratio-16x9">
+                                <iframe src="https://www.youtube.com/embed/1yjx7eqEKvY?si=6V7ib1Et8NbiUK70"
+                                    title="YouTube video player" frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                            </div>
                         </article>
                         <article>
                             <div>
@@ -412,19 +407,19 @@
                         <article class="title-slide">
                             <h3>台灣常見種類</h3>
                         </article>
-                        <article class="wide">
+                        <article>
                             <img src="i/pic5.jpg" class="img-fluid align-middle" alt="">
                         </article>
-                        <article class="wide">
+                        <article>
                             <img src="i/pic6.jpg" class="img-fluid align-middle" alt="">
                         </article>
-                        <article class="wide">
+                        <article>
                             <img src="i/pic7.jpg" class="img-fluid align-middle" alt="">
                         </article>
-                        <article class="wide">
+                        <article>
                             <img src="i/pic8.jpg" class="img-fluid align-middle" alt="">
                         </article>
-                        <article class="wide">
+                        <article>
                             <img src="i/pic9.jpg" class="img-fluid align-middle" alt="">
                         </article>
                     </div>
@@ -474,7 +469,7 @@
                                 <h4 class="fade-in-section">牠們不只是夏日的聲音，</h4>
                                 <h4 class="fade-in-section">從詩詞典故中的高潔隱喻，至玉器上的靈魂象徵；</h4>
                                 <h4 class="fade-in-section">從藥櫃裡的蟬蛻入方，至作為陪葬之物。</h4>
-                                <h3 class="fade-in-section">蟬跨越了自然與文化的邊界，也成為人類共同的記憶與精神遺產的一部分。</h3>
+                                <h4 class="fade-in-section">蟬跨越了自然與文化的邊界，也成為人類共同的記憶與精神遺產的一部分。</h4>
                             </div>
                         </article>
                         <article>
