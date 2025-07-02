@@ -272,14 +272,18 @@
 
     <header class="py-3 border-bottom sticky-top">
         <div class=" container-fluid">
-            <nav class="navbar" id="cicada-nav">
+            <nav class="navbar navbar-expand-lg" id="cicada-nav">
 
                 <a href="/"
                     class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
                     <svg class="bi me-2" id="top" width="40" height="32" aria-hidden="true">
                         <use xlink:href="#bootstrap"></use>
                     </svg> <span class="fs-4">蟬聲追追追</span> </a>
-                <div class="d-flex">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="nav nav-pills fw-bolder">
                         <li class="nav-item"><a href="#top" class="nav-link active" aria-current="page"><i
                                     class="bi bi-house"></i><span class="d-lg-none">Home</span></a></li>
@@ -338,10 +342,44 @@
             <audio id="cicada-audio" src="cicada.m4a" preload="auto"></audio>
         </section>
         <section class="text-center pb-5" id="whereiscicada"><!--主播-->
-            <iframe width="100%" height="800" src="https://www.youtube.com/embed/ATpQYIhJbVc?si=1ls_TW-FORcG9qef"
-                title="YouTube video player" frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div id="youTubeCarousel" class="carousel slide" data-bs-interval="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="ratio ratio-16x9">
+                            <iframe src="https://www.youtube.com/embed/ATpQYIhJbVc?si=1ls_TW-FORcG9qef"
+                                title="YouTube video player" frameborder="0"
+                                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="ratio ratio-16x9">
+                            <iframe src="https://www.youtube.com/embed/OBb5cahss10?si=C7IWgNRuKkecr52b"
+                                title="YouTube video player" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="ratio ratio-16x9">
+                            <iframe src="https://www.youtube.com/embed/ugxxU0X6Aos?si=AWoPHvGNfKbyzELt"
+                                title="YouTube video player" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#youTubeCarousel"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#youTubeCarousel"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
         </section>
         <section class="serif" id="cicadapedia"><!--百科-->
             <section class="sectionPin">
@@ -412,19 +450,19 @@
                         <article class="title-slide">
                             <h3>台灣常見種類</h3>
                         </article>
-                        <article class="wide">
+                        <article class="wide imgratio">
                             <img src="i/pic5.jpg" class="img-fluid align-middle" alt="">
                         </article>
-                        <article class="wide">
+                        <article class="wide imgratio">
                             <img src="i/pic6.jpg" class="img-fluid align-middle" alt="">
                         </article>
-                        <article class="wide">
+                        <article class="wide imgratio">
                             <img src="i/pic7.jpg" class="img-fluid align-middle" alt="">
                         </article>
-                        <article class="wide">
+                        <article class="wide imgratio">
                             <img src="i/pic8.jpg" class="img-fluid align-middle" alt="">
                         </article>
-                        <article class="wide">
+                        <article class="wide imgratio">
                             <img src="i/pic9.jpg" class="img-fluid align-middle" alt="">
                         </article>
                     </div>
@@ -469,54 +507,75 @@
                             <h2>蟬文化</h2>
                         </article>
                         <article>
-                            <div>
-                                <h4 class="fade-in-section">蟬絢爛的生命歷程，喚起了華人文化對於純潔、堅韌與新生的嚮往。</h4>
-                                <h4 class="fade-in-section">牠們不只是夏日的聲音，</h4>
-                                <h4 class="fade-in-section">從詩詞典故中的高潔隱喻，至玉器上的靈魂象徵；</h4>
-                                <h4 class="fade-in-section">從藥櫃裡的蟬蛻入方，至作為陪葬之物。</h4>
-                                <h3 class="fade-in-section">蟬跨越了自然與文化的邊界，也成為人類共同的記憶與精神遺產的一部分。</h3>
+                            <div class="fadein">
+                                <h4 class="fade-in-section" data-aos="fade-right">蟬絢爛的生命歷程，喚起了華人文化對於純潔、堅韌與新生的嚮往。</h4>
+                                <h4 class="fade-in-section" data-aos="fade-right">牠們不只是夏日的聲音，從詩詞典故中的高潔隱喻，至玉器上的靈魂象徵；</h4>
+                                <h4 class="fade-in-section" data-aos="fade-right">從藥櫃裡的蟬蛻入方，至作為陪葬之物。</h4>
+                                <h4 class="fade-in-section" data-aos="fade-right">蟬跨越了自然與文化的邊界，也成為人類共同的記憶與精神遺產的一部分。</h4>
                             </div>
                         </article>
                         <article>
-                            <div>
-                                <h3>「蟬君子」與華人文化</h3>
-                                <p>根據《史記·屈原列傳》「蟬蛻於濁穢，以浮游塵埃之外，不獲世之滋垢」，蟬成為「潔身自好」的象徵。從西漢開始，玉蟬不僅作為冕冠上的裝飾，也出現在陶俑、漆器、瓦當之中，展現了藝術與信仰的融合。
-                                </p>
-                                <img src="i/cicadaincolture-1.png" class="img-fluid mb-5" alt="">
-                                <p>漢代玉蟬除了喪葬用的唅蟬之外，也有專為貴族在世佩戴用的佩飾玉蟬。</p>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3>「蟬君子」與華人文化</h3>
+                                        <p>根據《史記·屈原列傳》「蟬蛻於濁穢，以浮游塵埃之外，不獲世之滋垢」，蟬成為「潔身自好」的象徵。從西漢開始，玉蟬不僅作為冕冠上的裝飾，也出現在陶俑、漆器、瓦當之中，展現了藝術與信仰的融合。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <img src="i/cicadaincolture-1.png" class="img-fluid mb-5" alt="">
+                                        <p>漢代玉蟬除了喪葬用的唅蟬之外，也有專為貴族在世佩戴用的佩飾玉蟬。</p>
+                                    </div>
+                                </div>
                             </div>
                         </article>
                         <article>
-                            <div>
-                                <img src="i/cicadaincolture-2.png" class="img-fluid mb-5" alt="">
-                                <p>古人將蟬形狀的玉放在亡者口中，象徵著靈魂脫殼、蛻變、重生的意思，所以在玉器文化中，有「清蟬玉」的製作與陪葬習俗，蟬紋象徵著冥界重生與尊貴的地位，顯示出古人對蟬所蘊含的價值，以及生命的潔淨與精神提升。
-                                </p>
-                                <cite class="right">【資料來源：漢唐詠蟬詩賦的體物寫志與人物典故】</cite>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col">
+                                        <img src="i/cicadaincolture-2.png" class="img-fluid mb-5" alt="">
+                                        <p>古人將蟬形狀的玉放在亡者口中，象徵著靈魂脫殼、蛻變、重生的意思，所以在玉器文化中，有「清蟬玉」的製作與陪葬習俗，蟬紋象徵著冥界重生與尊貴的地位，顯示出古人對蟬所蘊含的價值，以及生命的潔淨與精神提升。
+                                        </p>
+                                        <cite class="right">【資料來源：漢唐詠蟬詩賦的體物寫志與人物典故】</cite>
+                                    </div>
+                                </div>
                             </div>
                         </article>
                         <article>
-                            <div>
-                                <h3>蟬在語言裡的意涵</h3>
-                                <p>成語「金蟬脫殼」常用來形容巧妙脫身的手段；「噤若寒蟬」則描繪在威壓下不敢發聲的沉默狀態；而「蟪蛄不知春秋」出自《莊子》，用以比喻眼界狹窄、不知長遠的見識。這些成語典故背後，隱含著人對生命、環境與時間的觀察與體悟。
-                                </p>
-                                <figure>
-                                    <img src="i/cicadaincolture-3.png" class="img-fluid mb-3" alt="">
-                                    <figcaption class="text-center">清惲壽平寫生花卉　冊　風柳蟬聲
-                                    </figcaption>
-                                </figure>
-                                <cite>【資料來源：蟬百科】</cite>
+                            <div class="container">
+                                <div class="row">
+                                    <h3>蟬在語言裡的意涵</h3>
+                                    <p>成語「金蟬脫殼」常用來形容巧妙脫身的手段；「噤若寒蟬」則描繪在威壓下不敢發聲的沉默狀態；而「蟪蛄不知春秋」出自《莊子》，用以比喻眼界狹窄、不知長遠的見識。這些成語典故背後，隱含著人對生命、環境與時間的觀察與體悟。
+                                    </p>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <figure>
+                                            <img src="i/cicadaincolture-3.png" class="img-fluid mb-3" alt="">
+                                            <figcaption class="text-center">清惲壽平寫生花卉　冊　風柳蟬聲
+                                            </figcaption>
+                                        </figure>
+                                        <cite>【資料來源：蟬百科】</cite>
+                                    </div>
+                                </div>
                             </div>
                         </article>
                         <article>
-                            <div>
-                                <h3>蟬的食用與藥用價值</h3>
-                                <p>在生活中，蟬也是人類飲食與醫療的一部分。「紅脈熊蟬」被認為是傳統藥用「金蟬」的對應物。蟬蛹油炸後也會被人類食用，有「補腎壯陽」的說法；蛻下的外殼「蟬蛻」（又稱蟬衣），則長年被中醫用來退熱止癢、抗過敏、舒眠鎮靜。另外一種鮮為人知的，是蟬蛹被真菌寄生後稱為「蟬花」，可以被做為藥材，外形似花，與冬蟲夏草類似，可以用來補氣、抗疲勞與免疫調節。
-                                </p>
-                                <div class="clearfix">
-                                    <img src="i/cicadaincolture-4.png" class="mb-5 rounded float-start" alt=""
-                                        style="width:45%">
-                                    <img src="i/cicadaincolture-5.png" class="mb-5 rounded float-end" alt=""
-                                        style="width:45%">
+                            <div class="container">
+                                <div class="row">
+                                    <h3>蟬的食用與藥用價值</h3>
+                                    <p>在生活中，蟬也是人類飲食與醫療的一部分。「紅脈熊蟬」被認為是傳統藥用「金蟬」的對應物。蟬蛹油炸後也會被人類食用，有「補腎壯陽」的說法；蛻下的外殼「蟬蛻」（又稱蟬衣），則長年被中醫用來退熱止癢、抗過敏、舒眠鎮靜。另外一種鮮為人知的，是蟬蛹被真菌寄生後稱為「蟬花」，可以被做為藥材，外形似花，與冬蟲夏草類似，可以用來補氣、抗疲勞與免疫調節。
+                                    </p>
+                                </div>
+                                <div class="clearfix row">
+                                    <div class="col">
+                                        <img src="i/cicadaincolture-4.png" class="mb-5 rounded img-fluid" alt="">
+                                    </div>
+                                    <div class="col">
+                                        <img src="i/cicadaincolture-5.png" class="mb-5 rounded img-fluid" alt="">
+                                    </div>
                                 </div>
                                 <cite>pic via 新莊運動公園周邊</cite>
                                 <cite>【資料來源：當蟬聲響起】</cite>
