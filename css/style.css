@@ -103,15 +103,6 @@ header {
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-@media (max-width: 991.98px) {
-  /* Bootstrap's lg breakpoint for navbar-expand-lg */
-  header {
-    background: rgba(255, 255, 255, 1); /* 平板和手機版面完全不透明 */
-    -webkit-backdrop-filter: blur(0px);
-    backdrop-filter: blur(0px);
-  }
-}
-
 #slogan {
   position: relative;
   overflow: hidden; /* 隱藏超出範圍的影片內容 */
@@ -305,50 +296,50 @@ footer .thanks {
 
 /* Carousel Styles */
 .carousel-container {
-  width: 100%;
-  overflow: hidden;
-  position: relative;
-  padding: 20px 0; /* Add some vertical padding */
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    padding: 20px 0; /* Add some vertical padding */
 }
 
 .carousel-track {
-  display: flex;
-  transition: transform 0.1s linear; /* Smooth continuous scroll */
+    display: flex;
+    transition: transform 0.1s linear; /* Smooth continuous scroll */
 }
 
 .carousel-item-custom {
-  flex-shrink: 0;
-  width: 300px; /* Fixed width for each card */
-  margin: 0 10px; /* Space between cards */
-  cursor: pointer;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease-in-out;
+    flex-shrink: 0;
+    width: 300px; /* Fixed width for each card */
+    margin: 0 10px; /* Space between cards */
+    cursor: pointer;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease-in-out;
 }
 
 .carousel-item-custom:hover {
-  transform: translateY(-5px);
+    transform: translateY(-5px);
 }
 
 .carousel-item-custom .card-body {
-  padding: 15px;
+    padding: 15px;
 }
 
 .carousel-item-custom .card-title {
-  font-size: 1.1rem;
-  margin-bottom: 5px;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
 }
 
 .carousel-item-custom .card-subtitle {
-  font-size: 0.9rem;
+    font-size: 0.9rem;
 }
 
 .carousel-item-custom .card-text {
-  font-size: 0.85rem;
-  color: #555;
+    font-size: 0.85rem;
+    color: #555;
 }
 
 .carousel-item-custom .text-muted {
-  font-size: 0.75rem;
+    font-size: 0.75rem;
 }
