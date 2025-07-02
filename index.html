@@ -120,10 +120,6 @@
             background: #efefef;
         }
 
-        /*.pin-wrap>article>p {
-            font-size: 1.25rem;
-        }*/
-
         .pin-wrap>article h4 {
             margin: 25px 0;
         }
@@ -150,6 +146,12 @@
             max-width: 100%;
             height: auto;
             border-radius: 0.5rem;
+        }
+
+        .imgcontainer {
+            width: 100%;
+            object-fit: cover;
+            margin: 0 auto;
         }
 
         @media (max-width: 768px) {
@@ -194,6 +196,11 @@
                 /* Add space between articles */
             }
 
+            .pin-wrap>article>p {
+                word-break: break-all;
+                word-wrap: break-word;
+            }
+
             .pin-wrap>article.title-slide h2 {
                 font-size: 3rem;
                 /* Smaller font size for titles on mobile */
@@ -203,6 +210,17 @@
                 height: auto;
                 /* Let image height be natural */
                 max-width: 100%;
+            }
+
+            #cicadapedia .pin-wrap,
+            #cicadaincolture .pin-wrap {
+                display: block;
+                width: 100%;
+            }
+
+            #cicadapedia .pin-wrap>article,
+            #cicadaincolture .pin-wrap>article {
+                width: 100vw;
             }
         }
 
@@ -414,15 +432,18 @@
                                 <p>蟬的鳴叫主要出現在夏季，是因為牠們的成蟲通常在氣溫升高（25℃以上）、濕度偏高（60%以上）的時候才會活動。在台灣， 4 到 9
                                     月是蟬鳴最頻繁的季節，高砂熊蟬等物種甚至能延續到
                                     10 月。</p>
-                                <img src="i/pic1.png" class="img-fluid" alt="">
+                                <div class="imgcontainer">
+                                    <img src="i/pic1.png" class="img-fluid" alt="">
+                                </div>
                             </div>
                         </article>
                         <article>
                             <div>
                                 <h4>什麼時間叫？──依物種區分的鳴叫時段</h4>
                                 <p>不同的蟬會選擇一天中不同的時段鳴叫。這樣的時間分化有助於物種之間避免彼此干擾，也反映出牠們各自的生理節奏。根據鳴叫時間，可將蟬大致分為三種類型：</p>
-                                <img src="i/pic2.jpg" class="img-fluid mb-5" alt="">
-
+                                <div class="imgcontainer">
+                                    <img src="i/pic2.jpg" class="img-fluid mb-5" alt="">
+                                </div>
                                 <p>每種蟬在特定時段鳴叫，可以減少聲音重疊與資源競爭，讓多種蟬得以在同一棵樹、同一片林地中共存。然而，近年來受到<strong>氣候變遷、環境污染、都市擴張以及天敵改變</strong>等多重因素影響，蟬的鳴叫時間出現異常現象。
                                 </p>
                             </div>
@@ -441,7 +462,7 @@
                             <div>
                                 <div class="media-container" id="pic3-container"
                                     style="position: relative; cursor: pointer;">
-                                    <img src="i/pic3.png" class="img-fluid" alt="蟬的發聲構造">
+                                    <div class="container"><img src="i/pic3.png" class="img-fluid" alt="蟬的發聲構造"></div>
                                     <video src="i/pic4.mp4" class="img-fluid video-overlay" loop playsinline
                                         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: none;"></video>
                                 </div>
@@ -469,7 +490,7 @@
                 </div>
             </section>
         </section>
-        <section id="soundrecords">
+        <section id="soundrecords" class="pt-5 pb-5">
             <div class="container">
                 <h2 class="display-4 fw-bold text-center mb-4">蟬聲紀錄</h2>
                 <div class="carousel-container" style="overflow: hidden; white-space: nowrap; position: relative;">
