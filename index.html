@@ -99,6 +99,11 @@
             display: flex;
         }
 
+        .pin-wrap article p {
+            font-size: 1.2rem;
+            line-height: 1.75;
+        }
+
         .pin-wrap>article.wide {
             width: 100vw;
             text-align: center;
@@ -282,6 +287,26 @@
         #cicadaincolture article h4:nth-child(5) {
             animation-range: entry 40% cover 70%;
         }
+
+        #solution {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient-animation 15s ease infinite;
+        }
+
+        @keyframes gradient-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
     </style>
 </head>
 
@@ -294,27 +319,24 @@
 
                 <a href="/"
                     class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-                    <svg class="bi me-2" id="top" width="40" height="32" aria-hidden="true">
-                        <use xlink:href="#bootstrap"></use>
-                    </svg> <span class="fs-4">蟬聲追追追</span> </a>
+                    <span class="fs-4 fw-bold">蟬聲追追追</span> </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="nav nav-pills fw-bolder">
+                    <ul class="nav nav-pills fw-bolder ms-auto">
                         <li class="nav-item"><a href="#top" class="nav-link active" aria-current="page"><i
-                                    class="bi bi-house"></i><span class="d-lg-none">Home</span></a></li>
-                        <li class="nav-item"><a href="#chassing" class="nav-link">一起來找蟬</a></li>
+                                    class="bi bi-house"></i></a></li>
                         <li class="nav-item"><a href="#whereiscicada" class="nav-link">蟬去哪了</a></li>
                         <li class="nav-item"><a href="#cicadapedia" class="nav-link">蟬百科</a></li>
                         <li class="nav-item"><a href="#soundrecords" class="nav-link">蟬聲紀錄</a></li>
                         <li class="nav-item"><a href="#game" class="nav-link">蟬聲小遊戲</a></li>
                         <li class="nav-item"><a href="#cicadaincolture" class="nav-link">蟬文化</a></li>
-                        <li class="nav-item"><a href="#why" class="nav-link">為什麼</a></li>
+                        <li class="nav-item"><a href="#why" class="nav-link">提出的問題</a></li>
                         <li class="nav-item"><a href="#cause" class="nav-link">可能的原因</a></li>
                         <li class="nav-item"><a href="#solution" class="nav-link">解決方案</a></li>
-                        <li class="nav-item"><a href="#map-section" class="nav-link">蟬鳴/潛在空污地圖</a></li>
+                        <!--li class="nav-item"><a href="#map-section" class="nav-link">蟬鳴/潛在空污地圖</a></！li-->
                         <li class="nav-item"><a href="#letsupload" class="nav-link">一起追追追</a></li>
                     </ul>
                 </div>
@@ -569,6 +591,13 @@
                             小遊戲二<br>
                             聲聲不息<br>夏蟬戀習曲
                         </button>
+                        <button type="button" class="btn btn-primary btn-lg ms-3" data-bs-toggle="modal"
+                            data-bs-target="#gameModal3">
+                            小遊戲三<br>
+                            <br>
+                            知了嘒嘒
+                        </button>
+
                     </div>
                 </div>
             </div>
@@ -676,7 +705,7 @@
             </section>
         </section>
         <section id="why">
-            <h2 class="serif">我們的問題：</h2>
+            <h2 class="serif">我們提出的問題：</h2>
             <h3>為什麼</h3>
             <h3>蟬聲變少？</h3>
             <h3>到底是蟬變少？</h3>
@@ -708,21 +737,31 @@
                 </div>
             </div>
         </section>
-        <section id="solution" class="text-center bg-info">
+        <section id="map-section" class="mt-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-8">
+                        <div class="flourish-embed flourish-map" data-src="visualisation/23747494">
+                            <script src="https://public.flourish.studio/resources/embed.js"></script>
+                            <noscript><img src="https://public.flourish.studio/visualisation/23747494/thumbnail"
+                                    width="95%" alt="A Flourish data visualisation" style="border: none;">
+                            </noscript>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <p>李主播懷疑台北市的生態變化可能與台北的三根大煙囪(<strong>北投焚化廠</strong>、<strong>木柵焚化廠</strong>、<strong>內湖焚化廠</strong>)有關。因為李主播曾研究過落塵，焚化爐排出的煙囪落塵，其影響距離最遠可達25公里，且焚化爐的風向會影響落塵的方向，東南西北風都可能出現。
+                        </p>
+                        <p>雖然不確定這是否是蟬鳴消失的確切原因，但李主播認為焚化爐的影響是一種值得大眾關心的可能性。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solution" class="text-center">
             <div class="container pb-5 pt-5">
                 <h2>解決方案</h2>
                 <p class="fw-bold">這是一個全民科學計畫，透過李富城主播的疑問，進而促使這個行動倡議計畫：</p>
                 <h2>蟬聲追追追</h2>
-            </div>
-        </section>
-        <section id="map-section" class="mt-5">
-            <div class="container">
-                <div class="flourish-embed flourish-map" data-src="visualisation/23747494">
-                    <script src="https://public.flourish.studio/resources/embed.js"></script>
-                    <noscript><img src="https://public.flourish.studio/visualisation/23747494/thumbnail" width="80%"
-                            alt="A Flourish data visualisation" style="border: none;">
-                    </noscript>
-                </div>
             </div>
         </section>
         <section id="letsupload" class="text-center">
@@ -736,6 +775,14 @@
                 <button type="button" class="btn btn-info btn-lg" data-bs-toggle="modal"
                     data-bs-target="#recordingsListModal">
                     查看蟬聲紀錄 <i class="bi bi-list-ul"></i>
+                </button>
+                <button type="button" class="btn btn-primary btn-lg ms-3" data-bs-toggle="modal"
+                    data-bs-target="#gameModal3">
+                    知了嘒嘒
+                </button>
+                <button type="button" class="btn btn-primary btn-lg ms-3" data-bs-toggle="modal"
+                    data-bs-target="#gameModal3">
+                    知了嘒嘒
                 </button>
             </div>
         </section>
@@ -816,6 +863,52 @@
                 </div>
                 <div class="modal-body">
                     <iframe src="game2/index.html" style="width: 100%; height: 80vh; border: none;"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Modal 3 -->
+    <div class="modal fade" id="gameModal3" tabindex="-1" aria-labelledby="gameModal3Label" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="gameModal3Label">知了嘒嘒</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <iframe src="cicada-sound-game/index.html" style="width: 100%; height: 80vh; border: none;"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Modal 3 -->
+    <div class="modal fade" id="gameModal3" tabindex="-1" aria-labelledby="gameModal3Label" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="gameModal3Label">知了嘒嘒</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <iframe src="cicada-sound-game/index.html" style="width: 100%; height: 80vh; border: none;"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Modal 3 -->
+    <div class="modal fade" id="gameModal3" tabindex="-1" aria-labelledby="gameModal3Label" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="gameModal3Label">知了嘒嘒</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <iframe src="cicada-sound-game/index.html"
+                        style="width: 100%; height: 80vh; border: none;"></iframe>
                 </div>
             </div>
         </div>
@@ -1091,7 +1184,7 @@
                             const uploadedDate = data.uploadedAt ? data.uploadedAt.toDate().toLocaleString('zh-TW') : '未知時間';
                             listItem.innerHTML = `
                                 <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1">${icon} ${data.cicadaSpecies || '未知物種'}</h6>
+                                    <h6 class="mb-1">${icon} ${data.cicadaSpecies || '未知蟬類'}</h6>
                                     <small class="text-muted">${uploadedDate}</small>
                                 </div>
                                 <p class="mb-1">${data.county || ''} ${data.district || ''}</p>
@@ -1137,7 +1230,7 @@
 
             carouselItem.innerHTML = `
                 <div class="card-body">
-                    <h5 class="card-title">${iconHtml} ${data.cicadaSpecies || '未知物種'}</h5>
+                    <h5 class="card-title">${iconHtml} ${data.cicadaSpecies || '未知蟬類'}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">${data.county || ''} ${data.district || ''}</h6>
                     <p class="card-text small">${data.notes || '沒有備註'}</p>
                     <p class="card-text"><small class="text-muted">上傳時間: ${uploadedDate}</small></p>
@@ -1243,7 +1336,7 @@
                     uploadType, userId: currentUser.uid, location: new firebase.firestore.GeoPoint(lat, lng),
                     county: document.getElementById('county-select').value,
                     district: document.getElementById('district-select').value,
-                    cicadaSpecies: document.getElementById('cicada-species').value || "未知",
+                    cicadaSpecies: document.getElementById('cicada-species').value || "未知蟬類",
                     recordingTime: document.getElementById('recording-time').value,
                     weather: document.getElementById('weather').value,
                     notes: document.getElementById('notes').value,

@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知了嘒嘒 - Cicada Sound ID</title>
+    <style>
+        /* 基本樣式 */
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* 遊戲容器 */
+        #cicada-game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            background-image: url('images/forest-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+        }
+        
+        /* 標題區域 */
+        .cicada-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2a7d4f;
+        }
+        
+        /* 說明區域 */
+        .cicada-instruction {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 10px;
+            background-color: rgba(42, 125, 79, 0.1);
+            border-radius: 5px;
+        }
+        
+        /* 計分板 */
+        .cicada-scoreboard {
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+            margin-bottom: 20px;
+            background-color: rgba(42, 125, 79, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        .cicada-progress {
+            font-weight: bold;
+        }
+        
+        .cicada-score-display {
+            font-weight: bold;
+            color: #2a7d4f;
+        }
+        
+        /* 音檔選項區域 */
+        .cicada-sound-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        /* 單個音檔選項卡片 */
+        .cicada-sound-card {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .cicada-sound-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* 播放按鈕 */
+        .cicada-play-button {
+            background-color: #2a7d4f;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin-right: 15px;
+            transition: background-color 0.2s;
+        }
+        
+        .cicada-play-button:hover {
+            background-color: #1e5d3a;
+        }
+        
+        .cicada-play-button .icon {
+            font-size: 18px;
+        }
+        
+        .cicada-play-button.playing {
+            background-color: #d9534f;
+        }
+        
+        /* 勾選框與標籤 */
+        .cicada-sound-label {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            cursor: pointer;
+            flex-grow: 1;
+        }        
+        .cicada-radio {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+        }
+        
+        /* 按鈕區域 */
+        .cicada-actions {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .cicada-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.2s;
+        }
+        
+        .cicada-submit-button {
+            background-color: #2a7d4f;
+            color: white;
+        }
+        
+        .cicada-submit-button:hover {
+            background-color: #1e5d3a;
+        }
+        
+        .cicada-next-button {
+            background-color: #3498db;
+            color: white;
+            display: none;
+        }
+        
+        .cicada-next-button:hover {
+            background-color: #2980b9;
+        }
+        
+        /* 反饋區域 */
+        .cicada-feedback {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+        }
+        
+        .cicada-feedback.correct {
+            background-color: rgba(46, 204, 113, 0.2);
+            border: 1px solid #2ecc71;
+        }
+        
+        .cicada-feedback.incorrect {
+            background-color: rgba(231, 76, 60, 0.2);
+            border: 1px solid #e74c3c;
+        }
+        
+        /* 蟬種知識彈窗 */
+        .cicada-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+          .cicada-modal-content {
+            background-color: #fff;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 80%;
+            padding: 20px;
+            position: relative;
+            max-height: 80vh; /* 最大高度為視窗高度的80% */
+            overflow-y: auto; /* 增加垂直捲動條 */
+        }
+        
+        .cicada-modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #555;
+        }
+        
+        .cicada-species-image {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+          /* 結算畫面樣式 */
+        .cicada-result-content {
+            max-width: 600px;
+            max-height: 80vh; /* 最大高度為視窗高度的80% */
+            overflow-y: auto; /* 增加垂直捲動條 */
+            text-align: center;
+        }
+        
+        .cicada-final-score {
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .cicada-score-comment {
+            font-style: italic;
+            color: #555;
+        }
+        
+        .cicada-info-box {
+            background-color: rgba(42, 125, 79, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .cicada-action-buttons {
+            margin: 20px 0;
+        }
+        
+        .cicada-restart-button {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .cicada-restart-button:hover {
+            background-color: #2980b9;
+        }
+        
+        .cicada-share-button {
+            background-color: #2a7d4f;
+            color: white;
+        }
+        
+        .cicada-share-button:hover {
+            background-color: #1e5d3a;
+        }
+          /* 移除了繼續提示相關的樣式 */
+        
+        /* 分享相關樣式 */        .cicada-share-content {
+            max-width: 500px;
+            max-height: 80vh; /* 最大高度為視窗高度的80% */
+            overflow-y: auto; /* 增加垂直捲動條 */
+        }
+        
+        .cicada-screenshot-area {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .cicada-share-header {
+            border-bottom: 2px solid #2a7d4f;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .cicada-share-score {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        
+        .cicada-share-image {
+            margin: 15px 0;
+        }
+        
+        .cicada-share-date {
+            color: #777;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+        
+        .cicada-download-button {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .cicada-download-button:hover {
+            background-color: #c0392b;
+        }
+          /* 響應式設計 */
+        @media (max-width: 600px) {
+            .cicada-sound-options {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* 圖片授權標註 */
+        .image-attribution {
+            font-size: 11px;
+            color: #666;
+            text-align: center;
+            margin-top: 3px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <!-- 蟬鳴知多少遊戲 - 開始 -->
+    <div id="cicada-game-container">        <!-- 標題區 -->        <div class="cicada-title">
+            <h1>知了嘒嘒</h1>
+            <p>「嘒嘒」（ㄏㄨㄟˋ）是描述蟬鳴聲的狀聲詞</p>
+        </div>
+        
+        <!-- 說明區 -->
+        <div class="cicada-instruction">
+            <p>聆聽各種聲音，勾選你認為是蟬鳴的選項。挑戰自己辨識不同的蟬聲！</p>
+        </div>
+          <!-- 計分板區 -->
+        <div class="cicada-scoreboard">
+            <div class="cicada-progress">
+                題目: <span id="cicada-current-question">1</span> / 5
+            </div>
+            <div class="cicada-score-display">
+                分數: <span id="cicada-score">0</span> / 50
+            </div>
+        </div>
+        
+        <!-- 音檔選項區 -->
+        <div id="cicada-sound-options" class="cicada-sound-options">
+            <!-- 音檔選項將由 JavaScript 動態生成 -->
+        </div>
+        
+        <!-- 按鈕區 -->
+        <div class="cicada-actions">
+            <button id="cicada-submit" class="cicada-button cicada-submit-button">確認！</button>
+            <button id="cicada-next" class="cicada-button cicada-next-button">下一組聲音</button>
+        </div>
+        
+        <!-- 反饋區 -->
+        <div id="cicada-feedback" class="cicada-feedback">
+            <!-- 答題結果反饋將由 JavaScript 動態更新 -->
+        </div>
+    </div>
+      <!-- 蟬種知識彈窗 -->
+    <div id="cicada-modal" class="cicada-modal">
+        <div class="cicada-modal-content">
+            <span id="cicada-modal-close" class="cicada-modal-close">&times;</span>
+            <h2 id="cicada-species-name"></h2>
+            <img id="cicada-species-image" class="cicada-species-image" src="" alt="蟬的圖片">
+            <p id="cicada-species-description"></p>
+            <p id="cicada-image-attribution" class="image-attribution"></p>
+        </div>
+    </div>
+    
+    <!-- 遊戲結算彈窗 -->
+    <div id="cicada-result-modal" class="cicada-modal">
+        <div class="cicada-modal-content cicada-result-content">
+            <span id="cicada-result-close" class="cicada-modal-close">&times;</span>
+            <h2>遊戲結束！</h2>
+            <div class="cicada-final-score">
+                <h3>您的分數: <span id="cicada-final-score">0</span> / 50</h3>
+                <p id="cicada-score-comment"></p>
+            </div>            <div class="cicada-info-box">                <h3>台灣騷蟬</h3>
+                <img class="cicada-species-image" src="images/taiwan_noisy_cicada.jpg" alt="台灣騷蟬">
+                <p>台灣騷蟬鳴聲急促且具有節奏感，聲調變化豐富，是台灣夏季常見的蟬種，通常棲息在中低海拔地區。牠們身體較小，鳴叫聲具有獨特的頻率變化，能夠迅速辨識。</p>
+                <p id="result-image-attribution" class="image-attribution"></p>
+            </div><div class="cicada-action-buttons">
+                <button id="cicada-restart" class="cicada-button cicada-restart-button">再玩一次</button>
+                <button id="cicada-share" class="cicada-button cicada-share-button">分享結果</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 截圖彈窗 -->
+    <div id="cicada-share-modal" class="cicada-modal">
+        <div class="cicada-modal-content cicada-share-content">
+            <span id="cicada-share-close" class="cicada-modal-close">&times;</span>
+            <h2>分享您的成績</h2>
+            <div id="cicada-screenshot-area" class="cicada-screenshot-area">                <div class="cicada-share-header">
+                    <h3>知了嘒嘒 - 挑戰結果</h3>
+                </div>
+                <div class="cicada-share-score">
+                    <p>我在「知了嘒嘒」挑戰中獲得了 <span id="cicada-share-score">0</span> / 50 分！</p>
+                    <p id="cicada-share-comment"></p>
+                </div>                <div class="cicada-share-image">
+                    <img src="images/taiwan_noisy_cicada.jpg" alt="台灣騷蟬" style="max-width: 200px;">
+                    <p id="share-image-attribution" class="image-attribution"></p>
+                </div>
+                <div class="cicada-share-date">
+                    <p>挑戰日期: <span id="cicada-share-date"></span></p>
+                </div>
+            </div>
+            <div class="cicada-share-actions">
+                <button id="cicada-download" class="cicada-button cicada-download-button">下載分享圖</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript 代碼 -->
+    <script>        // 固定的10題遊戲題目
+        const gameQuestions = [
+            {
+                id: 'question1',
+                options: [
+                    {
+                        id: 'red_vein_bear_cicada_1',
+                        displayName: '聲音 A',
+                        filePath: 'audio/red_vein_bear_cicada.mp3',
+                        isCicada: true,
+                        cicadaSpecies: '紅脈熊蟬',
+                        cicadaImage: 'images/red_vein_bear_cicada.jpg',
+                        cicadaDescription: '紅脈熊蟬是台灣常見的蟬種，鳴聲高亢連續，強弱有變化，喜歡在樹冠層活動。'
+                    },
+                    {
+                        id: 'cricket_1',
+                        displayName: '聲音 B',
+                        filePath: 'audio/cricket.mp3',
+                        isCicada: false
+                    },
+                    {
+                        id: 'bird_chirping_1',
+                        displayName: '聲音 C',
+                        filePath: 'audio/bird_chirping.mp3',
+                        isCicada: false
+                    },
+                    {
+                        id: 'city_noise_1',
+                        displayName: '聲音 D',
+                        filePath: 'audio/city_noise_1.mp3',
+                        isCicada: false
+                    }
+                ]
+            },
+            {
+                id: 'question2',
+                options: [
+                    {
+                        id: 'bird_chirping_2',
+                        displayName: '聲音 A',
+                        filePath: 'audio/bird_chirping_2.mp3',
+                        isCicada: false
+                    },
+                    {                        id: 'taiwan_bear_cicada_2',
+                        displayName: '聲音 B',
+                        filePath: 'audio/taiwan_bear_cicada.mp3',
+                        isCicada: true,
+                        cicadaSpecies: '台灣熊蟬',
+                        cicadaImage: 'images/taiwan_bear_cicada.jpg',
+                        cicadaDescription: '台灣熊蟬是台灣體型最大的蟬之一，叫聲非常響亮且持久，通常在夏季的上午或下午鳴叫最為活躍。'
+                    },                    {
+                        id: 'katydid_2',
+                        displayName: '聲音 C',
+                        filePath: 'audio/katydid.mp3',
+                        isCicada: false
+                    },
+                    {
+                        id: 'city_noise_2',
+                        displayName: '聲音 D',
+                        filePath: 'audio/city_noise_2.mp3',
+                        isCicada: false
+                    }
+                ]
+            },
+            {
+                id: 'question3',
+                options: [
+                    {
+                        id: 'construction_noise_3',
+                        displayName: '聲音 A',
+                        filePath: 'audio/construction_noise.mp3',
+                        isCicada: false
+                    },
+                    {
+                        id: 'bird_chirping_3',
+                        displayName: '聲音 B',
+                        filePath: 'audio/bird_chirping_3.mp3',
+                        isCicada: false
+                    },
+                    {
+                        id: 'taiwan_noisy_cicada_3',
+                        displayName: '聲音 C',
+                        filePath: 'audio/taiwan_noisy_cicada.mp3',
+                        isCicada: true,
+                        cicadaSpecies: '台灣騷蟬',
+                        cicadaImage: 'images/taiwan_noisy_cicada.jpg',
+                        cicadaDescription: '台灣騷蟬鳴聲急促且具有節奏感，聲調變化豐富，是台灣夏季常見的蟬種，通常棲息在中低海拔地區。'
+                    },
+                    {
+                        id: 'cricket_3',
+                        displayName: '聲音 D',
+                        filePath: 'audio/cricket.mp3',
+                        isCicada: false
+                    }
+                ]
+            },            {
+                id: 'question4',
+                options: [
+                    {
+                        id: 'red_vein_bear_cicada_4',
+                        displayName: '聲音 A',
+                        filePath: 'audio/red_vein_bear_cicada.mp3',
+                        isCicada: true,
+                        cicadaSpecies: '紅脈熊蟬',
+                        cicadaImage: 'images/red_vein_bear_cicada.jpg',
+                        cicadaDescription: '紅脈熊蟬是台灣常見的蟬種，鳴聲高亢連續，強弱有變化，喜歡在樹冠層活動。'
+                    },
+                    {
+                        id: 'katydid_4',
+                        displayName: '聲音 B',
+                        filePath: 'audio/katydid.mp3',
+                        isCicada: false
+                    },
+                    {
+                        id: 'cricket_4',
+                        displayName: '聲音 C',
+                        filePath: 'audio/cricket.mp3',
+                        isCicada: false
+                    },
+                    {
+                        id: 'construction_noise_4',
+                        displayName: '聲音 D',
+                        filePath: 'audio/construction_noise.mp3',
+                        isCicada: false
+                    }
+                ]
+            },
+            {
+                id: 'question5',
+                options: [
+                    {
+                        id: 'bird_chirping_5',
+                        displayName: '聲音 A',
+                        filePath: 'audio/bird_chirping.mp3',
+                        isCicada: false
+                    },
+                    {
+                        id: 'cricket_5',
+                        displayName: '聲音 B',
+                        filePath: 'audio/cricket.mp3',
+                        isCicada: false
+                    },
+                    {                        id: 'taiwan_bear_cicada_5',
+                        displayName: '聲音 C',
+                        filePath: 'audio/taiwan_bear_cicada.mp3',
+                        isCicada: true,
+                        cicadaSpecies: '台灣熊蟬',
+                        cicadaImage: 'images/taiwan_bear_cicada.jpg',
+                        cicadaDescription: '台灣熊蟬是台灣體型最大的蟬之一，叫聲非常響亮且持久，通常在夏季的上午或下午鳴叫最為活躍。'
+                    },                    {
+                        id: 'city_noise_5',
+                        displayName: '聲音 D',
+                        filePath: 'audio/city_noise_1.mp3',
+                        isCicada: false
+                    }
+                ]
+            },
+            {                id: 'question6',
+                options: [
+                    {
+                        id: 'katydid_6',
+                        displayName: '聲音 A',
+                        filePath: 'audio/katydid.mp3',
+                        isCicada: false
+                    },
+                    {
+                        id: 'construction_noise_6',
+                        displayName: '聲音 B',
+                        filePath: 'audio/construction_noise.mp3',
+                        isCicada: false
+                    },
+                    {
+                        id: 'taiwan_noisy_cicada_6',
+                        displayName: '聲音 C',
+                        filePath: 'audio/taiwan_noisy_cicada.mp3',
+                        isCicada: true,
+                        cicadaSpecies: '台灣騷蟬',
+                        cicadaImage: 'images/taiwan_noisy_cicada.jpg',
+                        cicadaDescription: '台灣騷蟬鳴聲急促且具有節奏感，聲調變化豐富，是台灣夏季常見的蟬種，通常棲息在中低海拔地區。'
+                    },
+                    {
+                        id: 'bird_chirping_6',
+                        displayName: '聲音 D',
+                        filePath: 'audio/bird_chirping_2.mp3',
+                        isCicada: false
+                    }
+                ]
+            },
+            {                id: 'question7',
+                options: [
+                    {
+                        id: 'cricket_7',
+                        displayName: '聲音 A',
+                        filePath: 'audio/bird_chirping_2.mp3',
+                        isCicada: false
+                    },
+                    {                        id: 'red_vein_bear_cicada_7',
+                        displayName: '聲音 B',
+                        filePath: 'audio/red_vein_bear_cicada.mp3',
+                        isCicada: true,
+                        cicadaSpecies: '紅脈熊蟬',
+                        cicadaImage: 'images/red_vein_bear_cicada.jpg',
+                        cicadaDescription: '紅脈熊蟬是台灣常見的蟬種，鳴聲高亢連續，強弱有變化，喜歡在樹冠層活動。'
+                    },
+                    {
+                        id: 'cricket_7',
+                        displayName: '聲音 C',
+                        filePath: 'audio/cricket.mp3',
+                        isCicada: false
+                    },
+                    {
+                        id: 'bird_chirping_7',
+                        displayName: '聲音 D',
+                        filePath: 'audio/bird_chirping.mp3',
+                        isCicada: false
+                    }
+                ]
+            },
+            {
+                id: 'question8',
+                options: [
+                    {                        id: 'taiwan_bear_cicada_8',
+                        displayName: '聲音 A',
+                        filePath: 'audio/taiwan_bear_cicada.mp3',
+                        isCicada: true,
+                        cicadaSpecies: '台灣熊蟬',
+                        cicadaImage: 'images/taiwan_bear_cicada.jpg',
+                        cicadaDescription: '台灣熊蟬是台灣體型最大的蟬之一，叫聲非常響亮且持久，通常在夏季的上午或下午鳴叫最為活躍。'
+                    },
+                    {
+                        id: 'construction_noise_8',
+                        displayName: '聲音 B',
+                        filePath: 'audio/construction_noise.mp3',
+                        isCicada: false
+                    },
+                    {
+                        id: 'grasshopper_8',
+                        displayName: '聲音 C',
+                        filePath: 'audio/cricket.mp3',
+                        isCicada: false
+                    },
+                    {
+                        id: 'bird_chirping_8',
+                        displayName: '聲音 D',
+                        filePath: 'audio/bird_chirping.mp3',
+                        isCicada: false
+                    }
+                ]
+            },
+            {
+                id: 'question9',
+                options: [
+                    {
+                        id: 'grasshopper_9',
+                        displayName: '聲音 A',
+                        filePath: 'audio/bird_chirping.mp3',
+                        isCicada: false
+                    },
+                    {
+                        id: 'taiwan_bear_cicada_9',
+                        displayName: '聲音 B',
+                        filePath: 'audio/taiwan_bear_cicada.mp3',
+                        isCicada: true,
+                        cicadaSpecies: '台灣熊蟬',
+                        cicadaImage: 'images/taiwan_bear_cicada.jpg',
+                        cicadaDescription: '台灣熊蟬是台灣體型最大的蟬之一，叫聲非常響亮且持久，通常在夏季的上午或下午鳴叫最為活躍。'
+                    },
+                    {
+                        id: 'cricket_9',
+                        displayName: '聲音 C',
+                        filePath: 'audio/cricket.mp3',
+                        isCicada: false
+                    },
+                    {
+                        id: 'frog_9',
+                        displayName: '聲音 D',
+                        filePath: 'audio/frog.mp3',
+                        isCicada: false
+                    }
+                ]
+            },
+            {
+                id: 'question10',
+                options: [
+                    {
+                        id: 'cricket_10',
+                        displayName: '聲音 A',
+                        filePath: 'audio/cricket.mp3',
+                        isCicada: false
+                    },
+                    {
+                        id: 'frog_10',
+                        displayName: '聲音 B',
+                        filePath: 'audio/frog.mp3',
+                        isCicada: false
+                    },
+                    {
+                        id: 'bird_chirping_10',
+                        displayName: '聲音 C',
+                        filePath: 'audio/bird_chirping.mp3',
+                        isCicada: false
+                    },
+                    {
+                        id: 'black_cicada_10',                        displayName: '聲音 D',
+                        filePath: 'audio/taiwan_bear_cicada.mp3',
+                        isCicada: true,
+                        cicadaSpecies: '台灣熊蟬',
+                        cicadaImage: 'images/taiwan_bear_cicada.jpg',
+                        cicadaDescription: '台灣熊蟬是台灣體型最大的蟬之一，叫聲非常響亮且持久，通常在夏季的上午或下午鳴叫最為活躍。'
+                    }
+                ]
+            }
+        ];
+        
+        // 當前回合的音檔
+        let currentRoundSounds = [];
+        
+    // 當前播放的音檔
+    let currentlyPlaying = null;
+    
+    // 遊戲分數和正確答案追踪
+    let score = 0;
+    let currentQuestion = 0;
+      // 用於追踪玩家正確識別的蟬種
+    let identifiedCicadas = {
+        "紅脈熊蟬": 0,
+        "台灣熊蟬": 0,
+        "台灣騷蟬": 0
+    };
+      // 洗牌算法
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }        // 建立一個全局變數來存儲當前的遊戲題目
+        let currentGameQuestions = [];
+        
+        // 遊戲初始化
+        function initGame() {
+            // 重置遊戲狀態
+            score = 0;
+            currentQuestion = 0;
+            
+            // 隨機選取5道題目並確保每題有至少一個蟬鳴
+            let selectedQuestions = [];
+            
+            // 從原題庫中選出5題
+            // 將題目洗牌後取前5題
+            let shuffledQuestions = shuffleArray([...gameQuestions]);
+            selectedQuestions = shuffledQuestions.slice(0, 5);
+              // 確保每題只有一個蟬鳴選項
+            selectedQuestions.forEach((question, index) => {
+                // 找出所有蟬鳴選項
+                const cicadaOptions = question.options.filter(option => option.isCicada);
+                const nonCicadaOptions = question.options.filter(option => !option.isCicada);
+                
+                // 如果沒有蟬鳴選項，添加一個
+                if (cicadaOptions.length === 0) {
+                    // 從其他題目中找一個蟬鳴選項添加
+                    for (let i = 0; i < gameQuestions.length; i++) {
+                        const cicadaOption = gameQuestions[i].options.find(option => option.isCicada);
+                        if (cicadaOption) {
+                            // 添加此蟬鳴選項替換一個非蟬鳴選項
+                            if (nonCicadaOptions.length > 0) {
+                                const nonCicadaIndex = Math.floor(Math.random() * question.options.length);
+                                question.options[nonCicadaIndex] = {...cicadaOption};
+                                break;
+                            }
+                        }
+                    }
+                }
+                // 如果有多個蟬鳴選項，只保留一個
+                else if (cicadaOptions.length > 1) {
+                    // 隨機選擇一個蟬鳴選項保留
+                    const keepCicadaIndex = Math.floor(Math.random() * cicadaOptions.length);
+                    
+                    // 將其他蟬鳴選項替換為非蟬鳴選項
+                    question.options.forEach((option, idx) => {
+                        if (option.isCicada) {
+                            if (cicadaOptions.indexOf(option) !== keepCicadaIndex) {
+                                // 用一個非蟬鳴的音效替換
+                                const nonCicadaSounds = ['audio/bird_chirping.mp3', 'audio/cricket.mp3', 
+                                                        'audio/city_noise_1.mp3', 'audio/construction_noise.mp3'];
+                                const randomSound = nonCicadaSounds[Math.floor(Math.random() * nonCicadaSounds.length)];
+                                question.options[idx] = {
+                                    id: `non_cicada_${idx}_${index}`,
+                                    displayName: option.displayName,
+                                    filePath: randomSound,
+                                    isCicada: false
+                                };
+                            }
+                        }
+                    });
+                }
+                
+                // 隨機打亂各題的選項順序
+                question.options = shuffleArray([...question.options]);
+            });
+            
+            // 更新當前遊戲題庫為選好的5題
+            currentGameQuestions = selectedQuestions;
+            
+            console.log("初始化遊戲，題目數量：", currentGameQuestions.length);
+            
+            // 載入第一題
+            loadQuestion();
+        }
+          // 載入當前問題
+        function loadQuestion() {
+            console.log("載入問題 #", currentQuestion + 1, "共", currentGameQuestions.length, "題");
+            
+            // 檢查是否已完成所有問題
+            if (currentQuestion >= currentGameQuestions.length) {
+                showResultScreen();
+                return;
+            }
+            
+            // 重置UI元素
+            document.getElementById('cicada-sound-options').innerHTML = '';
+            document.getElementById('cicada-submit').style.display = 'inline-block';
+            document.getElementById('cicada-next').style.display = 'none';
+            document.getElementById('cicada-feedback').style.display = 'none';
+            
+            // 獲取當前問題的選項
+            if (currentGameQuestions[currentQuestion] && currentGameQuestions[currentQuestion].options) {
+                currentRoundSounds = currentGameQuestions[currentQuestion].options;
+                
+                // 動態生成音檔選項
+                createSoundOptions();
+                
+                // 更新計分板
+                updateScoreboard();
+            } else {
+                console.error("錯誤：當前問題或選項未定義", currentQuestion, currentGameQuestions);
+            }
+        }
+          // 動態創建音檔選項
+        function createSoundOptions() {
+            const container = document.getElementById('cicada-sound-options');
+            
+            if (!currentRoundSounds || currentRoundSounds.length === 0) {
+                console.error("錯誤：沒有音檔選項可顯示");
+                return;
+            }
+            
+            console.log("創建音檔選項，數量：", currentRoundSounds.length);
+            
+            currentRoundSounds.forEach(sound => {
+                // 創建音檔卡片
+                const card = document.createElement('div');
+                card.className = 'cicada-sound-card';
+                card.dataset.soundId = sound.id;
+                
+                // 創建播放按鈕
+                const playButton = document.createElement('button');
+                playButton.className = 'cicada-play-button';
+                playButton.innerHTML = '<span class="icon">▶</span>';
+                playButton.onclick = () => togglePlaySound(sound.filePath, playButton);
+                  // 創建單選框和標籤
+                const label = document.createElement('label');
+                label.className = 'cicada-sound-label';
+                
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = 'cicadaOption'; // 使用同一個名稱使其成為同一組單選
+                radio.className = 'cicada-radio';
+                radio.dataset.soundId = sound.id;
+                
+                const labelText = document.createTextNode(sound.displayName);
+                  label.appendChild(radio);
+                label.appendChild(labelText);
+                
+                // 組合元素
+                card.appendChild(playButton);
+                card.appendChild(label);
+                container.appendChild(card);
+            });
+        }
+        
+        // 播放/暫停音檔
+        function togglePlaySound(soundPath, button) {
+            // 如果有正在播放的音檔，停止它
+            if (currentlyPlaying) {
+                currentlyPlaying.pause();
+                currentlyPlaying.currentTime = 0;
+                
+                // 重設所有播放按鈕
+                document.querySelectorAll('.cicada-play-button').forEach(btn => {
+                    btn.innerHTML = '<span class="icon">▶</span>';
+                    btn.classList.remove('playing');
+                });
+            }
+            
+            // 創建新的音檔播放實例
+            const audio = new Audio(soundPath);
+            
+            // 播放新音檔
+            audio.play();
+            button.innerHTML = '<span class="icon">⏸</span>';
+            button.classList.add('playing');
+            currentlyPlaying = audio;
+            
+            // 音檔播放結束事件
+            audio.onended = () => {
+                button.innerHTML = '<span class="icon">▶</span>';
+                button.classList.remove('playing');
+                currentlyPlaying = null;
+            };
+        }
+          // 提交答案
+        function submitAnswer() {            // 檢查是否選擇了一個選項
+            const hasSelection = Array.from(document.querySelectorAll('.cicada-radio')).some(radio => radio.checked);
+            
+            if (!hasSelection) {
+                alert('請選擇一個你認為是蟬鳴的選項！');
+                return;
+            }
+            
+            // 禁用提交按鈕
+            document.getElementById('cicada-submit').style.display = 'none';
+            document.getElementById('cicada-next').style.display = 'inline-block';
+              // 禁用所有單選按鈕
+            document.querySelectorAll('.cicada-radio').forEach(radio => {
+                radio.disabled = true;
+            });
+            
+            // 停止正在播放的音檔
+            if (currentlyPlaying) {
+                currentlyPlaying.pause();
+                currentlyPlaying = null;
+            }
+            
+            // 檢查答案
+            checkAnswers();
+        }
+        
+        // 檢查答案
+        function checkAnswers() {
+            const feedbackElement = document.getElementById('cicada-feedback');
+            let isAllCorrect = true;
+            let cicadaFound = false;
+              // 檢查是否選擇了正確的選項
+            currentRoundSounds.forEach(sound => {
+                const radio = document.querySelector(`.cicada-radio[data-sound-id="${sound.id}"]`);
+                const isChecked = radio.checked;
+                
+                // 標記正確/錯誤
+                const card = document.querySelector(`.cicada-sound-card[data-sound-id="${sound.id}"]`);
+                
+                if (sound.isCicada) {
+                    // 如果是蟬聲，應該被選中
+                    if (isChecked) {
+                        card.style.border = '2px solid #2ecc71'; // 正確
+                        cicadaFound = true;
+                    } else {
+                        card.style.border = '';
+                    }
+                } else {
+                    // 如果不是蟬聲，不應被選中
+                    if (isChecked) {
+                        card.style.border = '2px solid #e74c3c'; // 錯誤
+                        isAllCorrect = false;
+                    } else {
+                        card.style.border = '';
+                    }
+                }
+            });
+            
+            // 更新反饋區域
+            feedbackElement.style.display = 'block';
+            
+            if (isAllCorrect) {
+                feedbackElement.className = 'cicada-feedback correct';
+                feedbackElement.innerHTML = '<h3>恭喜！你答對了！</h3><p>蟬的叫聲通常比較連續而且高亢，節奏特殊。</p>';
+                score += 10; // 每題10分                // 如果答對，且找到了蟬鳴
+                if (cicadaFound) {                    // 找出被選中的蟬種
+                    const selectedCicadas = currentRoundSounds.filter(sound => 
+                        sound.isCicada && document.querySelector(`.cicada-radio[data-sound-id="${sound.id}"]`).checked
+                    );
+                    
+                    if (selectedCicadas.length > 0) {
+                        // 累加玩家識別的蟬種
+                        selectedCicadas.forEach(cicada => {
+                            if (identifiedCicadas.hasOwnProperty(cicada.cicadaSpecies)) {
+                                identifiedCicadas[cicada.cicadaSpecies]++;
+                            }
+                        });                        // 隨機選一個蟬種顯示
+                        const cicadaToShow = selectedCicadas[Math.floor(Math.random() * selectedCicadas.length)];
+                        
+                        // 顯示資訊後，自動進入下一題
+                        setTimeout(() => {
+                            showCicadaInfo(cicadaToShow);
+                        }, 800); // 給使用者一些時間查看答對的反饋
+                    }
+                }
+            } else {
+                feedbackElement.className = 'cicada-feedback incorrect';
+                
+                // 找出正確的蟬鳴選項
+                const correctCicadaOptions = currentRoundSounds
+                    .filter(sound => sound.isCicada)
+                    .map(sound => sound.displayName)
+                    .join('、');
+                
+                feedbackElement.innerHTML = `
+                    <h3>差一點點！</h3>
+                    <p>蟬的叫聲通常具有連續、高亢的特點，節奏較為規則。這些聲音中，${correctCicadaOptions} 才是蟬鳴喔。</p>
+                `;
+                // 答錯不加分
+            }
+            
+            // 更新計分板
+            updateScoreboard();
+            
+            // 更新題目計數
+            currentQuestion++;
+            
+            // 如果是最後一題，更改按鈕文字
+            if (currentQuestion >= gameQuestions.length) {
+                document.getElementById('cicada-next').textContent = '查看結果';
+            }
+        }          // 顯示蟬種資訊彈窗
+        function showCicadaInfo(cicada) {
+            const modal = document.getElementById('cicada-modal');
+            const speciesName = document.getElementById('cicada-species-name');
+            const speciesImage = document.getElementById('cicada-species-image');
+            const speciesDesc = document.getElementById('cicada-species-description');
+            const attributionElement = document.getElementById('cicada-image-attribution');
+
+        // 設置彈窗內容
+        speciesName.textContent = cicada.cicadaSpecies;
+                speciesImage.src = cicada.cicadaImage;
+                speciesImage.alt = cicada.cicadaSpecies;
+                speciesDesc.textContent = cicada.cicadaDescription;
+
+            // 設置圖片授權標註
+            if (cicada.cicadaImage.includes('red_vein_bear_cicada.jpg')) {
+                attributionElement.textContent = '圖片作者:吳士緯 CC BY-NC 4.0 International';
+            } else if (cicada.cicadaImage.includes('taiwan_noisy_cicada.jpg')) {
+                attributionElement.textContent = '圖片作者:詹凱翔 CC BY-NC 4.0 International';
+            } else {
+                attributionElement.textContent = '';
+            }
+            // 顯示彈窗
+            modal.style.display = 'flex';
+            
+            // 3秒後自動關閉彈窗並進入下一題
+            setTimeout(() => {
+                modal.style.display = 'none';
+                loadQuestion(); // 自動載入下一題
+            }, 3000);
+        }
+        
+        // 更新計分板
+        function updateScoreboard() {
+            document.getElementById('cicada-score').textContent = score;
+            document.getElementById('cicada-current-question').textContent = currentQuestion + 1;
+        }
+          // 下一回合或顯示結果
+        function nextRound() {
+            if (currentQuestion >= currentGameQuestions.length) {
+                showResultScreen();
+            } else {
+                loadQuestion();
+            }
+        }          // 顯示結算畫面
+        function showResultScreen() {
+            // 更新最終分數
+            document.getElementById('cicada-final-score').textContent = score;
+            
+            // 根據分數給予評語
+            const commentElement = document.getElementById('cicada-score-comment');
+            if (score >= 45) {
+                commentElement.textContent = '太厲害了！你對蟬鳴有著專業級的辨識能力！';
+            } else if (score >= 35) {
+                commentElement.textContent = '很棒！你對蟬鳴的辨識能力相當優秀！';
+            } else if (score >= 25) {
+                commentElement.textContent = '做得好！你對蟬鳴有一定的辨識能力。';
+            } else if (score >= 15) {
+                commentElement.textContent = '還不錯！繼續練習，你會更熟悉蟬鳴的特色。';
+            } else {
+                commentElement.textContent = '這些蟬聲確實不太容易辨別，不妨再挑戰一次吧！';
+            }
+            
+            // 找出玩家最常識別正確的蟬種
+            let maxCount = 0;
+            let mostIdentifiedCicada = "台灣騷蟬"; // 預設值
+            
+            for (const [cicadaName, count] of Object.entries(identifiedCicadas)) {
+                console.log(`玩家識別 ${cicadaName}: ${count} 次`);
+                if (count > maxCount) {
+                    maxCount = count;
+                    mostIdentifiedCicada = cicadaName;
+                }
+            }
+            
+            // 更新結算畫面顯示的蟬種
+            const cicadaInfoTitle = document.querySelector('.cicada-info-box h3');
+            const cicadaInfoImage = document.querySelector('.cicada-info-box img');
+            const cicadaInfoDesc = document.querySelector('.cicada-info-box p');
+            const resultAttributionElement = document.getElementById('result-image-attribution');
+    
+            // 根據最常識別的蟬種設置內容
+           cicadaInfoTitle.textContent = mostIdentifiedCicada;
+      
+            if (mostIdentifiedCicada === "紅脈熊蟬") {
+                cicadaInfoImage.src = 'images/red_vein_bear_cicada.jpg';
+                cicadaInfoImage.alt = '紅脈熊蟬';
+                cicadaInfoDesc.textContent = '紅脈熊蟬是台灣常見的蟬種，鳴聲高亢連續，強弱有變化，喜歡在樹冠層活動。';
+                resultAttributionElement.textContent = '圖片作者:吳士緯 CC BY-NC 4.0 International';
+            } else if (mostIdentifiedCicada === "台灣熊蟬") {
+                cicadaInfoImage.src = 'images/taiwan_bear_cicada.jpg';
+                cicadaInfoImage.alt = '台灣熊蟬';
+                cicadaInfoDesc.textContent = '台灣熊蟬是台灣體型最大的蟬之一，叫聲非常響亮且持久，通常在夏季的上午或下午鳴叫最為活躍。';
+                resultAttributionElement.textContent = '';
+            } else {
+                cicadaInfoImage.src = 'images/taiwan_noisy_cicada.jpg';
+                cicadaInfoImage.alt = '台灣騷蟬';
+                cicadaInfoDesc.textContent = '台灣騷蟬鳴聲急促且具有節奏感，聲調變化豐富，是台灣夏季常見的蟬種，通常棲息在中低海拔地區。牠們身體較小，鳴叫聲具有獨特的頻率變化，能夠迅速辨識。';
+                resultAttributionElement.textContent = '圖片作者:詹凱翔 CC BY-NC 4.0 International';
+            }
+            
+            // 更新分享畫面的蟬種圖片
+            const shareImg = document.querySelector('.cicada-share-image img');
+            const shareAttributionElement = document.getElementById('share-image-attribution');
+            shareImg.src = cicadaInfoImage.src;
+            shareImg.alt = cicadaInfoImage.alt;
+            shareAttributionElement.textContent = resultAttributionElement.textContent;
+            
+            // 顯示結算彈窗
+            document.getElementById('cicada-result-modal').style.display = 'flex';
+        }// 重新開始遊戲
+        function restartGame() {
+            console.log("重新開始遊戲");
+            // 關閉結算彈窗
+            document.getElementById('cicada-result-modal').style.display = 'none';
+            
+            // 清空舊的音檔選項
+            document.getElementById('cicada-sound-options').innerHTML = '';
+            document.getElementById('cicada-feedback').style.display = 'none';
+            
+            // 重置分數和題目計數
+            score = 0;
+            currentQuestion = 0;
+              // 重置蟬種識別計數
+            identifiedCicadas = {
+                "紅脈熊蟬": 0,
+                "台灣熊蟬": 0,
+                "台灣騷蟬": 0
+            };
+            
+            // 如果有正在播放的音檔，停止它
+            if (currentlyPlaying) {
+                currentlyPlaying.pause();
+                currentlyPlaying = null;
+            }
+            
+            // 初始化遊戲，重新選擇題目
+            initGame();
+        }
+          // 顯示分享畫面
+        function showShareScreen() {
+            // 更新分享畫面上的分數和評語
+            document.getElementById('cicada-share-score').textContent = score;
+            document.getElementById('cicada-share-comment').textContent = document.getElementById('cicada-score-comment').textContent;
+            
+            // 設置日期
+            const today = new Date();
+            const dateString = today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate();
+            document.getElementById('cicada-share-date').textContent = dateString;
+            
+            // 確保分享畫面使用的蟬圖片與結果畫面一致
+            const resultImg = document.querySelector('.cicada-info-box img');
+            document.querySelector('.cicada-share-image img').src = resultImg.src;
+            document.querySelector('.cicada-share-image img').alt = resultImg.alt;
+            
+            // 顯示分享彈窗
+            document.getElementById('cicada-share-modal').style.display = 'flex';
+        }
+        
+        // 下載分享圖片
+        function downloadShareImage() {
+            // 使用 html2canvas 庫將截圖區域轉換為圖片
+            html2canvas(document.getElementById('cicada-screenshot-area')).then(canvas => {
+                // 創建一個用於下載的鏈接
+                const link = document.createElement('a');
+                link.download = '知了嘒嘒-挑戰結果.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+        
+        // 綁定事件
+        document.getElementById('cicada-submit').addEventListener('click', submitAnswer);
+        document.getElementById('cicada-next').addEventListener('click', nextRound);
+        document.getElementById('cicada-modal-close').addEventListener('click', () => {
+            document.getElementById('cicada-modal').style.display = 'none';
+        });
+        document.getElementById('cicada-result-close').addEventListener('click', () => {
+            document.getElementById('cicada-result-modal').style.display = 'none';
+        });
+        document.getElementById('cicada-restart').addEventListener('click', restartGame);
+        document.getElementById('cicada-share').addEventListener('click', showShareScreen);
+        document.getElementById('cicada-share-close').addEventListener('click', () => {
+            document.getElementById('cicada-share-modal').style.display = 'none';
+        });
+        document.getElementById('cicada-download').addEventListener('click', downloadShareImage);
+        
+        // 首次初始化遊戲
+        window.addEventListener('DOMContentLoaded', () => {
+            // 載入 html2canvas 庫，用於生成分享圖片
+            const script = document.createElement('script');
+            script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+            script.onload = initGame; // 載入完成後初始化遊戲
+            document.head.appendChild(script);
+        });
+    </script>
+    <!-- 蟬鳴知多少遊戲 - 結束 -->
+</body>
+</html>
