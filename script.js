@@ -527,6 +527,75 @@ const districtSelect = document.getElementById("district-select");
 // SECTION 2: FUNCTION DEFINITIONS
 // =================================================================
 
+let players = [];
+
+function onYouTubeIframeAPIReady() {
+  const carouselElement = document.getElementById('youTubeCarousel');
+  if (!carouselElement) {
+    console.error("Carousel element not found.");
+    return;
+  }
+
+  const carouselItems = carouselElement.querySelectorAll('.carousel-item');
+  carouselItems.forEach((item, index) => {
+    const playerDiv = item.querySelector(`#youtube-player-${index}`);
+    if (playerDiv) {
+      const videoId = playerDiv.dataset.videoId;
+      if (videoId) {
+        players[index] = new YT.Player(playerDiv.id, {
+          videoId: videoId,
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      } else {
+        console.error(`Video ID not found for playerDiv: ${playerDiv.id}`);
+      }
+    }
+  });
+
+  const carousel = new bootstrap.Carousel(carouselElement, {
+    interval: false
+  });
+
+  carouselElement.addEventListener('slide.bs.carousel', function (event) {
+    const prevActiveIndex = event.from;
+    const nextActiveIndex = event.to;
+
+    // Stop the previously active video
+    if (players[prevActiveIndex] && typeof players[prevActiveIndex].pauseVideo === 'function') {
+      players[prevActiveIndex].pauseVideo();
+    }
+
+    // Play the newly active video
+    if (players[nextActiveIndex] && typeof players[nextActiveIndex].playVideo === 'function') {
+      players[nextActiveIndex].playVideo();
+    }
+  });
+}
+
+function onPlayerReady(event) {
+  // You can add any specific actions when the player is ready
+}
+
+function onPlayerStateChange(event) {
+  const player = event.target;
+  const carouselItem = player.getIframe().closest('.carousel-item');
+  const caption = carouselItem ? carouselItem.querySelector('.carousel-video-caption') : null;
+
+  if (!caption) {
+    console.warn("Caption element not found for the current video.");
+    return;
+  }
+
+  if (event.data === YT.PlayerState.PLAYING) {
+    caption.classList.add('fade-out');
+  } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+    caption.classList.remove('fade-out');
+  }
+}
+
 function initMap() {
   const defaultLocation = { lat: 25.0479, lng: 121.5171 };
   map = new google.maps.Map(document.getElementById("map"), {
