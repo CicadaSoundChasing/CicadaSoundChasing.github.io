@@ -410,3 +410,375 @@ footer .thanks {
   padding: 12px 18px;
   border-radius: 6px;
 }
+@keyframes move {
+  to {
+    /* Move horizontally so that right edge is aligned against the viewport */
+    transform: translateX(calc(-100% + 100vw));
+  }
+}
+
+.sectionPin {
+  /* Stretch it out, so that we create room for the horizontal scroll animation */
+  height: 500vh;
+  /* Adjusted for 5 slides */
+  overflow: visible;
+  /* To make position sticky work … */
+
+  view-timeline-name: --section-pin-tl;
+  view-timeline-axis: block;
+}
+
+.pin-wrap-sticky {
+  /* Stick to Top */
+  height: 100vh;
+  width: 100vw;
+  position: sticky;
+  top: 70px;
+
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+.pin-wrap {
+  height: 100vh;
+  /* 5 articles * 100vw */
+  display: flex;
+  align-items: center;
+  /* No gap or padding for seamless scroll */
+
+  /* Hook animation */
+  will-change: transform;
+  animation: linear move forwards;
+
+  /* Link animation to view-timeline */
+  animation-timeline: --section-pin-tl;
+  animation-range: contain 0% contain 100%;
+}
+
+.pin-wrap > article {
+  width: 50vw;
+  flex-shrink: 0;
+  height: 100vh;
+  /* Full viewport height */
+  overflow-y: auto;
+  /* For long content */
+  padding: 3rem;
+  /* Give content some space */
+  /*background: rgba(255, 255, 255, 0.9);*/
+  backdrop-filter: blur(10px);
+  /* No border-radius for seamless edges */
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  /* Add a subtle separator */
+  align-items: center;
+  display: flex;
+}
+
+.pin-wrap article p {
+  font-size: 1.2rem;
+  line-height: 1.75;
+}
+
+.pin-wrap > article.wide {
+  width: 100vw;
+  text-align: center;
+}
+
+.pin-wrap > article.wide > img {
+  height: 100%;
+}
+
+.pin-wrap > article:nth-child(odd) {
+  background: #ffe7d5;
+}
+
+.pin-wrap > article:nth-child(even) {
+  background: #ebf6e8;
+}
+
+.pin-wrap > article:first-child {
+  background: #efefef;
+}
+
+.pin-wrap > article h4 {
+  margin: 25px 0;
+}
+
+.pin-wrap > article:last-child {
+  border-right: none;
+}
+
+.pin-wrap > article.title-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.pin-wrap > article.title-slide h2 {
+  font-size: 5rem;
+  font-weight: bold;
+}
+
+.pin-wrap > article img,
+.pin-wrap > article video {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.imgcontainer {
+  width: 100%;
+  object-fit: cover;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .sectionPin {
+    height: auto;
+    /* Remove fixed height */
+    overflow: auto;
+    /* Reset overflow */
+    view-timeline-name: none;
+    /* Disable animation timeline */
+  }
+
+  .pin-wrap-sticky {
+    position: static;
+    /* Remove sticky positioning */
+    height: auto;
+  }
+
+  .pin-wrap {
+    animation: none;
+    /* Disable horizontal scroll animation */
+    display: block;
+    /* Stack articles vertically */
+    width: 100%;
+    height: auto;
+  }
+
+  .pin-wrap > article {
+    width: 100%;
+    /* Full width for each article */
+    height: auto;
+    /* Auto height based on content */
+    min-height: 50vh;
+    /* Give some minimum height */
+    padding: 2rem 1rem;
+    /* Adjust padding for smaller screens */
+    border-right: none;
+    /* Remove right border */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    /* Add bottom border */
+    margin-bottom: 1rem;
+    /* Add space between articles */
+  }
+
+  .pin-wrap > article > p {
+    word-break: break-all;
+    word-wrap: break-word;
+  }
+
+  .pin-wrap > article.title-slide h2 {
+    font-size: 3rem;
+    /* Smaller font size for titles on mobile */
+  }
+
+  .pin-wrap > article.wide > img {
+    height: auto;
+    /* Let image height be natural */
+    max-width: 100%;
+  }
+
+  #cicadapedia .pin-wrap,
+  #cicadaincolture .pin-wrap {
+    display: block;
+    width: 100%;
+  }
+
+  #cicadapedia .pin-wrap > article,
+  #cicadaincolture .pin-wrap > article {
+    width: 100vw;
+  }
+}
+
+#cicadapedia .pin-wrap {
+  width: 1270vw;
+}
+
+#cicadaincolture .pin-wrap {
+  width: 400vw;
+}
+
+/* Scroll-linked fade-in for cicadaincolture */
+#cicadaincolture {
+  view-timeline-name: --cicada-culture-timeline;
+  view-timeline-axis: block;
+}
+
+#cicadaincolture article {
+  display: flex;
+  line-height: 2;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#cicadaincolture article span {
+  opacity: 0;
+  animation: fade-in-up forwards;
+  animation-timeline: --cicada-culture-timeline;
+  animation-range: entry 0% cover 30%;
+  /* Adjust range as needed */
+}
+
+#cicadaincolture article h4:nth-child(1) {
+  animation-range: entry 0% cover 30%;
+}
+
+#cicadaincolture article h4:nth-child(2) {
+  animation-range: entry 10% cover 40%;
+}
+
+#cicadaincolture article h4:nth-child(3) {
+  animation-range: entry 20% cover 50%;
+}
+
+#cicadaincolture article h4:nth-child(4) {
+  animation-range: entry 30% cover 60%;
+}
+
+#cicadaincolture article h4:nth-child(5) {
+  animation-range: entry 40% cover 70%;
+}
+
+#solution {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradient-animation 15s ease infinite;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.carousel-video-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(33, 33, 33, 0.75);
+  color: #eee;
+  padding: 1.75rem 1rem;
+  height: 200px;
+  width: 50%;
+  text-align: left;
+  line-height: 2;
+  font-size: 1.2rem;
+  opacity: 1;
+  transition: opacity 2s ease-in-out;
+}
+
+.carousel-video-caption.fade-out {
+  opacity: 0;
+}
+
+.carousel-caption-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+}
+
+.article-display-flex {
+  display: flex;
+}
+
+.media-container-styles {
+  position: relative;
+  cursor: pointer;
+}
+
+.video-overlay-styles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.is-hidden {
+  display: none;
+}
+
+.carousel-container-styles {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+
+.carousel-track-styles {
+  display: inline-block;
+}
+
+.carousel-item-custom-styles {
+  display: inline-block;
+  width: 300px;
+  vertical-align: top;
+}
+
+.media-element-full-width {
+  width: 100%;
+}
+
+.video-display-block {
+  display: block;
+}
+
+.video-display-none {
+  display: none;
+}
+
+.iframe-full-width {
+  width: 100%;
+}
+
+.iframe-height-300 {
+  height: 300px;
+}
+
+.iframe-height-80vh {
+  height: 80vh;
+}
+
+.iframe-no-border {
+  border: none;
+}
+
+.noscript-width-95 {
+  width: 95%;
+}
+
+.noscript-no-border {
+  border: none;
+}
