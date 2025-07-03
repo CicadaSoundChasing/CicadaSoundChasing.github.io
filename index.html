@@ -307,6 +307,27 @@
                 background-position: 0% 50%;
             }
         }
+
+        .carousel-video-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(33, 33, 33, 0.75);
+            color: #eee;
+            padding: 1rem;
+            height: 200px;
+            width: 50%;
+            text-align: left;
+            line-height: 2;
+            font-size: 1.2rem;
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .carousel-video-caption.fade-out {
+            opacity: 0;
+        }
     </style>
 </head>
 
@@ -391,6 +412,10 @@
                                 allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                 referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                         </div>
+                        <div class="carousel-video-caption">
+                            <p>氣象專家李富城主播從2016年開始觀察到，台北市區（包括內湖、雙溪）的蜜蜂產蜜量大幅減少，同時蟬鳴聲也幾乎消失。他回憶起2014年養蜂時，蜂蜜豐盛且蟬鳴此起彼落，夏天時聲音非常響亮。這讓李主播感到異常與擔憂生態變化，並認為蟬的生態變化值得關注。
+                            </p>
+                        </div>
                     </div>
                     <div class="carousel-item">
                         <div class="ratio ratio-16x9">
@@ -399,6 +424,10 @@
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                 referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                         </div>
+                        <div class="carousel-video-caption">
+                            <p>李主播推測蟬鳴消失可能與蟬的生命週期有關，若蟬不鳴叫則無法吸引雌蟬產卵，進而影響世代繁衍。且即使有蟬卵孵化，但如果幼蟲棲息的樹木和土壤受到污染，它們也可能無法存活，所以也開始懷疑土壤對整個生態環境的變化。李主播認為這可能與台灣嚴重的酸雨（尤其台北地區）有關。
+                            </p>
+                        </div>
                     </div>
                     <div class="carousel-item">
                         <div class="ratio ratio-16x9">
@@ -406,6 +435,10 @@
                                 title="YouTube video player" frameborder="0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                 referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        </div>
+                        <div class="carousel-video-caption">
+                            <p>李主播呼籲大眾多加留意身邊的生態變化，也值得所有學者或專家去重視，因為環境上的變化不僅影響人類，更會影響這些微小的動物，甚至是人類，若是任何一個物種在我們這一代消失，都將難以向後代交代，生態的變化最終也將會影響人類的未來。
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -1475,6 +1508,25 @@
 
             // Initial fetch for carousel when DOM is ready
             fetchAndDisplayRecordings();
+
+            const youTubeCarousel = document.getElementById('youTubeCarousel');
+            if (youTubeCarousel) {
+                youTubeCarousel.addEventListener('slide.bs.carousel', function (event) {
+                    const activeItem = event.relatedTarget;
+                    const caption = activeItem.querySelector('.carousel-video-caption');
+                    if (caption) {
+                        caption.classList.remove('fade-out');
+                    }
+
+                    const previousItem = event.from ? youTubeCarousel.querySelectorAll('.carousel-item')[event.from] : null;
+                    if (previousItem) {
+                        const previousCaption = previousItem.querySelector('.carousel-video-caption');
+                        if (previousCaption) {
+                            previousCaption.classList.add('fade-out');
+                        }
+                    }
+                });
+            }
         });
 
         function initMap() {
