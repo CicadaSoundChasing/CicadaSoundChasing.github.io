@@ -698,6 +698,24 @@ footer .thanks {
   transition: opacity 2s ease-in-out;
 }
 
+@media (max-width: 768px) {
+  .carousel-video-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(33, 33, 33, 0.75);
+  color: #eee;
+  padding: 1.75rem 1rem;
+  height: 200px;
+  width: 50%;
+  text-align: left;
+  line-height: 2;
+  font-size: 1.2rem;
+  opacity: 1;
+  transition: opacity 2s ease-in-out;
+}
+
 .carousel-video-caption.fade-out {
   opacity: 0;
 }
