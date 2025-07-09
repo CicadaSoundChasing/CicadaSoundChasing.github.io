@@ -1,74 +1,81 @@
-# 嘒嘒知音 (Soundscape Detective)
+# 蟬鳴知多少 (Cicada Sound ID) 遊戲
 
-一個有關辨識蟬鳴與自然聲景的互動遊戲
+這是一個互動式的聲音辨識遊戲，旨在幫助玩家辨別蟬鳴聲與其他環境音。遊戲包含10道題目，每題答對得10分，最後會顯示總分和評語，並可以分享成績。
 
-## 遊戲概述
+## 遊戲結構
 
-「嘒嘒知音」是一個音軌辨識遊戲，玩家需要聆聽混合的音軌，並辨識出其中包含的聲音。遊戲旨在讓玩家體驗蟬所處的複雜聲音環境，了解辨識蟬鳴的挑戰，並間接感受噪音污染對自然聲景的影響。
-
-## 檔案結構
-
+### 文件結構
 ```
-soundMix/
-├── audio/                  - 存放音訊檔案
-│   ├── mix1.mp3            - 第一關混合音軌
-│   ├── mix2.mp3            - 第二關混合音軌
-│   ├── mix3.mp3            - 第三關混合音軌
-│   ├── mix4.mp3            - 第四關混合音軌
-│   └── mix5.mp3            - 第五關混合音軌
-├── css/                    - 樣式檔案
-│   ├── style.css           - 主要樣式
-│   └── animation.css       - 動畫效果
-├── images/                 - 圖片資源
-│   ├── background.jpg      - 背景圖片
-│   ├── cicada1.jpg         - 台灣熊蟬圖片
-│   ├── cicada2.jpg         - 紅脈熊蟬圖片
-│   └── cicada3.jpg         - 台灣騷蟬圖片
-├── js/                     - JavaScript檔案
-│   ├── game.js             - 主要遊戲邏輯
-│   └── game-data.js        - 遊戲資料設定
-├── soundMix-game.html      - 完整遊戲頁面（包含頭部和完整結構）
-└── soundMix-game-body-only.html - 僅包含遊戲主體的HTML（可嵌入其他網頁）
+cicada-game/
+│
+├── audio/               # 音頻文件存放目錄
+│   ├── taiwan_bear_cicada.mp3    # 台灣熊蟬聲音
+│   ├── black_cicada.mp3          # 黑蟬聲音
+│   ├── highsand_cicada.mp3       # 高砂熊蟬聲音
+│   ├── cricket.mp3               # 蟋蟀聲音
+│   ├── bird_chirping.mp3         # 鳥鳴聲音
+│   ├── construction_noise.mp3    # 施工噪音
+│   ├── frog.mp3                  # 蛙鳴聲音
+│   └── grasshopper.mp3           # 螽斯聲音
+│
+├── images/              # 圖片文件存放目錄
+│   ├── taiwan_bear_cicada.jpg    # 台灣熊蟬圖片
+│   ├── black_cicada.jpg          # 黑蟬圖片
+│   ├── highsand_cicada.jpg       # 高砂熊蟬圖片
+│   └── forest-bg.jpg             # 背景圖片
+│
+├── cicada-game.html     # 完整的 HTML 文件
+└── cicada-game-body-only.html  # 只有 body 部分的 HTML 文件
 ```
 
-## 使用說明
+## 如何使用
 
-1. 完整獨立使用：
-   - 直接開啟 `soundMix-game.html` 即可執行完整遊戲
+### 1. 完整版
+直接在瀏覽器中打開 `cicada-game.html` 文件即可開始遊戲。
 
-2. 嵌入至現有網頁：
-   - 複製 `soundMix-game-body-only.html` 中的內容到您的網頁中
-   - 確保引入CSS和JavaScript檔案：
-     ```html
-     <link rel="stylesheet" href="path/to/soundMix/css/style.css">
-     <link rel="stylesheet" href="path/to/soundMix/css/animation.css">
-     <script src="path/to/soundMix/js/game-data.js"></script>
-     <script src="path/to/soundMix/js/game.js"></script>
-     ```
+### 2. 集成到現有網頁
+如果您想將這個遊戲集成到現有的網頁中，只需將 `cicada-game-body-only.html` 中的內容複製到您的 HTML 文件的 `<body>` 部分即可。
 
-## 自訂音訊和圖片
+確保您也複製了 `audio` 和 `images` 文件夾到您的網站目錄，並正確設置路徑。
 
-1. 替換音訊檔：
-   - 將您準備好的混合音軌放入 `audio/` 資料夾
-   - 在 `js/game-data.js` 中更新音軌路徑
+## 自定義
 
-2. 替換圖片：
-   - 將蟬種或其他相關圖片放入 `images/` 資料夾
-   - 在 `js/game-data.js` 中更新圖片路徑（如需顯示）
+### 添加/替換音檔
 
-## 遊戲調整
+1. 將您的音頻文件放入 `audio` 文件夾中
+2. 在 JavaScript 代碼中的 `soundLibrary` 數組中修改或添加新條目：
 
-可以在 `js/game-data.js` 中調整以下設定：
-1. 各關卡的問題和選項
-2. 正確答案設定
-3. 計分規則（蟬種相關選項得分為一般選項的1.5倍）
-4. 反饋文字
+```javascript
+{
+    id: '唯一ID',
+    displayName: '顯示名稱',
+    filePath: 'audio/您的音頻文件.mp3',
+    isCicada: true/false,  // 是否為蟬聲
+    cicadaSpecies: '蟬的種類名稱',  // 如果是蟬聲
+    cicadaImage: 'images/您的圖片.jpg',  // 如果是蟬聲
+    cicadaDescription: '關於這種蟬的描述'  // 如果是蟬聲
+}
+```
 
-## 遊戲特色
+### 修改遊戲選項
 
-1. **互動式選項**：點擊選項即可選取，無需勾選框
-2. **實時得分顯示**：遊戲進行過程中可隨時查看當前得分
-3. **錯誤扣分機制**：選錯選項會扣分，增加遊戲難度
-4. **結果分享功能**：遊戲結束後可下載結果或複製到剪貼簿分享
-5. **動態視覺反饋**：正確選項顯示為綠色，錯誤選項為紅色
-6. **隨時重置功能**：右下角常駐「重新答題」按鈕，玩家可隨時重新開始遊戲
+- 要修改每回合顯示的音頻數量，請調整 `selectRoundSounds()` 函數中的邏輯
+- 要修改視覺樣式，請調整 CSS 樣式
+
+## 遊戲特性
+
+1. 固定10題挑戰，每題10分
+2. 即時音頻播放控制
+3. 交互式界面
+4. 答題後的反饋
+5. 正確答案的知識擴展彈窗
+6. 結算畫面和分數評語
+7. 成績分享功能（可下載結果圖片）
+8. 引導用戶繼續瀏覽網頁內容
+9. 響應式設計
+
+## 技術要求
+
+- 現代網絡瀏覽器（支持 HTML5 Audio）
+- JavaScript 啟用
+- 無需網絡連接（本地運行）
