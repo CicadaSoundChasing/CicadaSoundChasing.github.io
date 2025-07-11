@@ -94,10 +94,10 @@
                         <p class="display-4 fw-bold">而忘記了</p>
                     </div>
                 </div>
-                <button id="volume-toggle" class="btn btn-dark btn-lg ms-2" title="切換聲音">
-                    <i class="bi bi-volume-mute-fill"></i>
-                </button>
             </div>
+            <button id="volume-toggle" class="btn btn-dark btn-lg" title="切換聲音">
+                <i class="bi bi-volume-mute-fill"></i>
+            </button>
         </section>
         <section id="chassing">
             <div class="container">
@@ -166,12 +166,14 @@
                             <h2>蟬百科<br><span class="subtitle">揭開夏日鳴唱者的祕密</span>
                             </h2>
                         </article>
-                        <article class="pt-5 article-display-flex">
-                            <iframe class="iframe-full-width iframe-height-300 iframe-no-border"
-                                src="https://www.youtube.com/embed/1yjx7eqEKvY?si=6V7ib1Et8NbiUK70"
-                                title="YouTube video player"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        <article>
+                            <div>
+                                <iframe width="560" height="315"
+                                    src="https://www.youtube.com/embed/1yjx7eqEKvY?si=1sffg4yPpkcCAkQa"
+                                    title="YouTube video player" frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                            </div>
                         </article>
                         <article>
                             <div>
@@ -201,7 +203,7 @@
                                 <h4>什麼時間叫？──依物種區分的鳴叫時段</h4>
                                 <p>不同的蟬會選擇一天中不同的時段鳴叫。這樣的時間分化有助於物種之間避免彼此干擾，也反映出牠們各自的生理節奏。根據鳴叫時間，可將蟬大致分為三種類型：</p>
                                 <div class="imgcontainer">
-                                    <img src="i/pic2.jpg" class="img-fluid mb-5" alt="">
+                                    <img src="i/pic2.jpg" class="img-fluid mb-2" alt="">
                                 </div>
                                 <p>每種蟬在特定時段鳴叫，可以減少聲音重疊與資源競爭，讓多種蟬得以在同一棵樹、同一片林地中共存。然而，近年來受到<strong>氣候變遷、環境污染、都市擴張以及天敵改變</strong>等多重因素影響，蟬的鳴叫時間出現異常現象。
                                 </p>
@@ -222,7 +224,7 @@
                                 <div class="media-container media-container-styles" id="pic3-container">
                                     <div class="container"><img src="i/pic3.png" class="img-fluid" alt="蟬的發聲構造"></div>
                                     <video src="i/pic4.mp4"
-                                        class="img-fluid video-overlay video-overlay-styles is-hidden" loop
+                                        class="img-fluid video-overlay video-overlay-styles" loop
                                         playsinline></video>
                                 </div>
                             </div>
@@ -576,7 +578,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <iframe src="soundMix/soundMix-game.html"
+                    <iframe src="soundMix/index.html"
                         class="iframe-full-width iframe-height-80vh iframe-no-border"></iframe>
                 </div>
             </div>

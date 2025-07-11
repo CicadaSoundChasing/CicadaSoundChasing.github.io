@@ -582,12 +582,10 @@ function onPlayerReady(event) {
 function onPlayerStateChange(event) {
   const player = event.target;
   const carouselItem = player.getIframe().closest('.carousel-item');
-  const caption = carouselItem ? carouselItem.querySelector('.carousel-video-caption') : null;
+  if (!carouselItem) return;
 
-  if (!caption) {
-    console.warn("Caption element not found for the current video.");
-    return;
-  }
+  const caption = carouselItem.querySelector('.carousel-video-caption');
+  if (!caption) return;
 
   if (event.data === YT.PlayerState.PLAYING) {
     caption.classList.add('fade-out');
@@ -704,38 +702,34 @@ function showAlert(message, type = "info") {
 }
 
 async function fetchAndDisplayRecordings() {
-  const listContainer = document.getElementById("recordings-list");
+  const listContainer = document.getElementById("recordings-list"); // This is for the modal list, not the carousel
   const loadingSpinner = document.getElementById("loading-spinner");
   loadingSpinner.style.display = "block";
-  listContainer.innerHTML = "";
+  listContainer.innerHTML = ""; // Clear existing content in modal list
+
   try {
     const recordingsRef = db.collection("recordings");
-    const query = recordingsRef.orderBy("uploadedAt", "desc").limit(20);
+    const query = recordingsRef.orderBy("uploadedAt", "desc").limit(20); // Fetch up to 20 records
     const snapshot = await query.get();
+    const recordsData = [];
+
     if (snapshot.empty) {
       listContainer.innerHTML = '<p class="text-muted text-center">目前沒有任何紀錄。</p>';
+      // Also clear carousel if no records
+      const carouselTrack = document.querySelector("#soundrecords .carousel-track");
+      if (carouselTrack) {
+        carouselTrack.innerHTML = '';
+      }
     } else {
       snapshot.forEach((doc) => {
-        const data = doc.data();
-        const listItem = document.createElement("a");
-        listItem.href = "#";
-        listItem.className = "list-group-item list-group-item-action";
-        const icon = data.uploadType === "video" ? '<i class="bi bi-camera-video-fill text-danger me-3"></i>' : '<i class="bi bi-music-note-beamed text-primary me-3"></i>';
-        const uploadedDate = data.uploadedAt ? data.uploadedAt.toDate().toLocaleString("zh-TW") : "未知時間";
-        listItem.innerHTML = `
-                    <div class="d-flex w-100 justify-content-between">
-                        <h6 class="mb-1">${icon} ${data.cicadaSpecies || "未知物種"}</h6>
-                        <small class="text-muted">${uploadedDate}</small>
-                    </div>
-                    <p class="mb-1">${data.county || ""} ${data.district || ""}</p>
-                    <small class="text-muted">${data.notes || "沒有備註"}</small>
-                `;
-        listItem.dataset.url = data.fileURL;
-        listItem.dataset.title = data.fileName;
-        listItem.dataset.type = data.uploadType;
-        listItem.addEventListener("click", handleRecordClick);
-        listContainer.appendChild(listItem);
+        recordsData.push(doc.data());
       });
+
+      // Populate the modal list
+      populateRecordingsListModal(recordsData, listContainer);
+
+      // Populate and start the carousel
+      populateSoundRecordsCarousel(recordsData);
     }
   } catch (error) {
     console.error("Error fetching recordings:", error);
@@ -743,6 +737,158 @@ async function fetchAndDisplayRecordings() {
   } finally {
     loadingSpinner.style.display = "none";
   }
+}
+
+function populateRecordingsListModal(recordsData, listContainer) {
+  listContainer.innerHTML = ""; // Clear previous items
+  recordsData.forEach((data) => {
+    const listItem = document.createElement("a");
+    listItem.href = "#";
+    listItem.className = "list-group-item list-group-item-action";
+    const icon =
+      data.uploadType === "video"
+        ? '<i class="bi bi-camera-video-fill text-danger me-3"></i>'
+        : '<i class="bi bi-music-note-beamed text-primary me-3"></i>';
+    const uploadedDate = data.uploadedAt
+      ? data.uploadedAt.toDate().toLocaleString("zh-TW")
+      : "未知時間";
+    listItem.innerHTML = `
+      <div class="d-flex w-100 justify-content-between">
+        <h6 class="mb-1">${icon} ${data.cicadaSpecies || "未知物種"}</h6>
+        <small class="text-muted">${uploadedDate}</small>
+      </div>
+      <p class="mb-1">${data.county || ""} ${data.district || ""}</p>
+      <small class="text-muted">${data.notes || "沒有備註"}</small>
+    `;
+    listItem.dataset.url = data.fileURL;
+    listItem.dataset.title = data.fileName;
+    listItem.dataset.type = data.uploadType;
+    listItem.addEventListener("click", handleRecordClick);
+    listContainer.appendChild(listItem);
+  });
+}
+
+function populateSoundRecordsCarousel(recordsData) {
+  const carouselTrack = document.querySelector("#soundrecords .carousel-track");
+  if (!carouselTrack) return;
+
+  carouselTrack.innerHTML = ""; // Clear existing items
+
+  // Duplicate content for infinite scroll effect
+  const itemsToDisplay =
+    recordsData.length > 0
+      ? recordsData
+      : [
+          // Fallback dummy data if no records
+          {
+            cicadaSpecies: "範例蟬種",
+            county: "台北市",
+            district: "大安區",
+            uploadedAt: new Date(),
+            fileURL: "cicada.m4a",
+            fileName: "範例音檔",
+            uploadType: "audio",
+          },
+          {
+            cicadaSpecies: "另一種蟬",
+            county: "新北市",
+            district: "板橋區",
+            uploadedAt: new Date(),
+            fileURL: "cicada.m4a",
+            fileName: "範例音檔",
+            uploadType: "audio",
+          },
+          {
+            cicadaSpecies: "第三種蟬",
+            county: "台中市",
+            district: "西屯區",
+            uploadedAt: new Date(),
+            fileURL: "cicada.m4a",
+            fileName: "範例音檔",
+            uploadType: "audio",
+          },
+          {
+            cicadaSpecies: "第四種蟬",
+            county: "台南市",
+            district: "中西區",
+            uploadedAt: new Date(),
+            fileURL: "cicada.m4a",
+            fileName: "範例音檔",
+            uploadType: "audio",
+          },
+          {
+            cicadaSpecies: "第五種蟬",
+            county: "高雄市",
+            district: "左營區",
+            uploadedAt: new Date(),
+            fileURL: "cicada.m4a",
+            fileName: "範例音檔",
+            uploadType: "audio",
+          },
+        ];
+
+  // Ensure enough items for infinite scroll (at least twice the visible amount)
+  const duplicatedItems = [...itemsToDisplay, ...itemsToDisplay];
+
+  duplicatedItems.forEach((data) => {
+    const carouselItem = document.createElement("div");
+    carouselItem.className = "carousel-item-custom"; // Use the custom class
+    const icon =
+      data.uploadType === "video"
+        ? '<i class="bi bi-camera-video-fill text-danger"></i>'
+        : '<i class="bi bi-music-note-beamed text-primary"></i>';
+    const uploadedDate = data.uploadedAt
+      ? data.uploadedAt.toLocaleDateString("zh-TW")
+      : "未知日期";
+
+    carouselItem.innerHTML = `
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">${icon} ${
+      data.cicadaSpecies || "未知物種"
+    }</h5>
+          <h6 class="card-subtitle mb-2 text-muted">${data.county || ""} ${
+      data.district || ""
+    }</h6>
+          <p class="card-text"><small class="text-muted">${uploadedDate}</small></p>
+          <button class="btn btn-sm btn-outline-primary play-carousel-item" data-url="${
+            data.fileURL
+          }" data-title="${data.fileName}" data-type="${
+      data.uploadType
+    }">播放</button>
+        </div>
+      </div>
+    `;
+    carouselTrack.appendChild(carouselItem);
+  });
+
+  // Add event listeners for play buttons in carousel
+  carouselTrack.querySelectorAll(".play-carousel-item").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      const url = event.target.dataset.url;
+      const title = event.target.dataset.title;
+      const type = event.target.dataset.type;
+      handleRecordClick({ currentTarget: { dataset: { url, title, type } } }); // Reuse existing modal handler
+    });
+  });
+
+  // Start animation after populating
+  startCarouselAnimation();
+}
+
+function startCarouselAnimation() {
+  const carouselTrack = document.querySelector("#soundrecords .carousel-track");
+  if (!carouselTrack) return;
+
+  // Reset animation if already running
+  carouselTrack.style.animation = "none";
+  carouselTrack.offsetHeight; // Trigger reflow
+  carouselTrack.style.animation = null;
+
+  const trackWidth = carouselTrack.scrollWidth / 2; // Assuming content is duplicated once
+  const animationDuration = trackWidth / 50; // Adjust speed as needed (e.g., 50px/sec)
+
+  carouselTrack.style.animation = `scroll-left ${animationDuration}s linear infinite`;
 }
 
 function handleRecordClick(event) {
@@ -797,89 +943,171 @@ function animateWhySection() {
 }
 
 // =================================================================
-// SECTION 3: EVENT LISTENERS
+// SECTION 3: EVENT LISTENERS & DOM READY
 // =================================================================
 
-countySelect.addEventListener("change", updateDistricts);
+document.addEventListener("DOMContentLoaded", () => {
+  // Initialize animations and data fetching
+  animateWhySection();
+  fetchAndDisplayRecordings();
 
-uploadForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  if (!currentUser) {
-    showAlert("使用者驗證失敗，無法上傳。請重新整理頁面再試一次。", "warning");
-    return;
-  }
-  const submitBtn = document.getElementById("submit-btn");
-  const spinner = document.getElementById("submit-spinner");
-  const buttonText = document.querySelector(".button-text");
-  submitBtn.disabled = true;
-  spinner.style.display = "inline-block";
-  buttonText.textContent = " 上傳中...";
-  try {
-    const inputFile = document.getElementById("cicada-file").files[0];
-    const lat = parseFloat(document.getElementById("latitude").value);
-    const lng = parseFloat(document.getElementById("longitude").value);
-    if (!inputFile) throw new Error("請選擇一個要上傳的檔案。");
-    if (isNaN(lat) || isNaN(lng)) throw new Error("無法獲取有效的地理位置，請嘗試在地圖上拖動圖釘。");
-    let uploadType = "";
-    let storagePath = "";
-    if (inputFile.type.startsWith("audio/")) {
-      uploadType = "audio";
-      storagePath = "cicada-sounds/";
-    } else if (inputFile.type.startsWith("video/")) {
-      uploadType = "video";
-      storagePath = "cicada-videos/";
-    } else {
-      throw new Error("不支援的檔案類型。請上傳音訊或影片檔。");
+  // Setup form-related event listeners
+  countySelect.addEventListener("change", updateDistricts);
+  uploadForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!currentUser) {
+      showAlert(
+        "使用者驗證失敗，無法上傳。請重新整理頁面再試一次。",
+        "warning"
+      );
+      return;
     }
-    const timestamp = Date.now();
-    const uniqueFileName = `${currentUser.uid}_${timestamp}_${inputFile.name}`;
-    const fullStoragePath = `${storagePath}${uniqueFileName}`;
-    const storageRef = storage.ref(fullStoragePath);
-    const uploadTask = await storageRef.put(inputFile);
-    const downloadURL = await uploadTask.ref.getDownloadURL();
-    const recordingData = {
-      uploadType,
-      userId: currentUser.uid,
-      location: new firebase.firestore.GeoPoint(lat, lng),
-      county: document.getElementById("county-select").value,
-      district: document.getElementById("district-select").value,
-      cicadaSpecies: document.getElementById("cicada-species").value || "未知",
-      recordingTime: document.getElementById("recording-time").value,
-      weather: document.getElementById("weather").value,
-      notes: document.getElementById("notes").value,
-      fileURL: downloadURL,
-      fileName: inputFile.name,
-      fileSize: inputFile.size,
-      fileType: inputFile.type,
-      uploadedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    };
-    await db.collection("recordings").add(recordingData);
-    showAlert("上傳成功！感謝您的貢獻。", "success");
-    uploadForm.reset();
-    updateDistricts();
-    fetchAndDisplayRecordings();
-  } catch (error) {
-    console.error("Upload failed:", error);
-    showAlert(`上傳失敗: ${error.message}`, "danger");
-  } finally {
-    submitBtn.disabled = false;
-    spinner.style.display = "none";
-    buttonText.textContent = " 上傳紀錄";
-  }
-});
-
-const mediaModalEl = document.getElementById("media-modal");
-if (mediaModalEl) {
-  mediaModalEl.addEventListener("hidden.bs.modal", function () {
-    const modalBody = document.getElementById("media-modal-body");
-    const mediaElement = modalBody.querySelector("video, audio");
-    if (mediaElement) {
-      mediaElement.pause();
-      mediaElement.src = "";
-      modalBody.innerHTML = "";
+    const submitBtn = document.getElementById("submit-btn");
+    const spinner = document.getElementById("submit-spinner");
+    const buttonText = document.querySelector(".button-text");
+    submitBtn.disabled = true;
+    spinner.style.display = "inline-block";
+    buttonText.textContent = " 上傳中...";
+    try {
+      const inputFile = document.getElementById("cicada-file").files[0];
+      const lat = parseFloat(document.getElementById("latitude").value);
+      const lng = parseFloat(document.getElementById("longitude").value);
+      if (!inputFile) throw new Error("請選擇一個要上傳的檔案。");
+      if (isNaN(lat) || isNaN(lng))
+        throw new Error(
+          "無法獲取有效的地理位置，請嘗試在地圖上拖動圖釘。"
+        );
+      let uploadType = "";
+      let storagePath = "";
+      if (inputFile.type.startsWith("audio/")) {
+        uploadType = "audio";
+        storagePath = "cicada-sounds/";
+      } else if (inputFile.type.startsWith("video/")) {
+        uploadType = "video";
+        storagePath = "cicada-videos/";
+      } else {
+        throw new Error("不支援的檔案類型。請上傳音訊或影片檔。");
+      }
+      const timestamp = Date.now();
+      const uniqueFileName = `${currentUser.uid}_${timestamp}_${inputFile.name}`;
+      const fullStoragePath = `${storagePath}${uniqueFileName}`;
+      const storageRef = storage.ref(fullStoragePath);
+      const uploadTask = await storageRef.put(inputFile);
+      const downloadURL = await uploadTask.ref.getDownloadURL();
+      const recordingData = {
+        uploadType,
+        userId: currentUser.uid,
+        location: new firebase.firestore.GeoPoint(lat, lng),
+        county: document.getElementById("county-select").value,
+        district: document.getElementById("district-select").value,
+        cicadaSpecies:
+          document.getElementById("cicada-species").value || "未知",
+        recordingTime: document.getElementById("recording-time").value,
+        weather: document.getElementById("weather").value,
+        notes: document.getElementById("notes").value,
+        fileURL: downloadURL,
+        fileName: inputFile.name,
+        fileSize: inputFile.size,
+        fileType: inputFile.type,
+        uploadedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      };
+      await db.collection("recordings").add(recordingData);
+      showAlert("上傳成功！感謝您的貢獻。", "success");
+      uploadForm.reset();
+      updateDistricts();
+      fetchAndDisplayRecordings();
+    } catch (error) {
+      console.error("Upload failed:", error);
+      showAlert(`上傳失敗: ${error.message}`, "danger");
+    } finally {
+      submitBtn.disabled = false;
+      spinner.style.display = "none";
+      buttonText.textContent = " 上傳紀錄";
     }
   });
-}
 
-// Call the animation function when the DOM is fully loaded
-document.addEventListener("DOMContentLoaded", animateWhySection);
+  const mediaModalEl = document.getElementById("media-modal");
+  if (mediaModalEl) {
+    mediaModalEl.addEventListener("hidden.bs.modal", function () {
+      const modalBody = document.getElementById("media-modal-body");
+      const mediaElement = modalBody.querySelector("video, audio");
+      if (mediaElement) {
+        mediaElement.pause();
+        mediaElement.src = "";
+        modalBody.innerHTML = "";
+      }
+    });
+  }
+
+  // Text carousel logic
+  const textItems = document.querySelectorAll(".text-carousel-item");
+  let currentItem = 0;
+  function showNextItem() {
+    if (textItems.length === 0) return;
+    textItems[currentItem].classList.remove("active");
+    currentItem = (currentItem + 1) % textItems.length;
+    textItems[currentItem].classList.add("active");
+  }
+  if (textItems.length > 0) {
+    textItems[currentItem].classList.add("active");
+    setInterval(showNextItem, 3000);
+  }
+
+  // Volume toggle logic
+  const volumeToggle = document.getElementById("volume-toggle");
+  const bgVideo = document.getElementById("bg-video");
+  if (volumeToggle && bgVideo) {
+    const volumeIcon = volumeToggle.querySelector("i");
+    volumeToggle.addEventListener("click", () => {
+      if (bgVideo.muted) {
+        bgVideo.muted = false;
+        volumeIcon.classList.remove("bi-volume-mute-fill");
+        volumeIcon.classList.add("bi-volume-up-fill");
+      } else {
+        bgVideo.muted = true;
+        volumeIcon.classList.remove("bi-volume-up-fill");
+        volumeIcon.classList.add("bi-volume-mute-fill");
+      }
+    });
+  }
+
+  // Chassing section hover audio logic
+  const chassingSection = document.getElementById("chassing");
+  const cicadaAudio = document.getElementById("cicada-audio");
+  if (chassingSection && cicadaAudio) {
+    chassingSection.addEventListener("mouseenter", () => {
+      cicadaAudio.play();
+    });
+    chassingSection.addEventListener("mouseleave", () => {
+      cicadaAudio.pause();
+      cicadaAudio.currentTime = 0;
+    });
+  }
+
+  // Cicadapedia article hover audio logic
+  const cicadapediaArticle4 = document.querySelector(
+    "#cicadapedia .pin-wrap > article:nth-child(4)"
+  );
+  if (cicadapediaArticle4 && cicadaAudio) {
+    cicadapediaArticle4.addEventListener("mouseenter", () => {
+      cicadaAudio.play();
+    });
+    cicadapediaArticle4.addEventListener("mouseleave", () => {
+      cicadaAudio.pause();
+      cicadaAudio.currentTime = 0;
+    });
+  }
+
+  // Cicadapedia article hover video overlay logic
+  const pic3Container = document.getElementById("pic3-container");
+  if (pic3Container) {
+    const video = pic3Container.querySelector("video");
+    if (video) {
+      pic3Container.addEventListener("mouseenter", () => video.play());
+      pic3Container.addEventListener("mouseleave", () => {
+        video.pause();
+        video.currentTime = 0;
+      });
+    }
+  }
+});

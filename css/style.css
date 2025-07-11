@@ -10,29 +10,28 @@ body {
   background: url(../i/cicada.png) no-repeat center center !important;
 }
 
-/* 建議將此 CSS 移至 css/style.css 檔案中 */
+/* Text Carousel Styles */
 #text-carousel {
-  /* 設定最小高度以防止內容跳動，您可能需要根據內容微調此數值 */
-  min-height: 180px;
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  min-height: 180px; /* Prevents content jumping */
+  width: 100%;
 }
 
 .text-carousel-item {
   opacity: 0;
   position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  text-align: center;
   transition: opacity 1.2s ease-in-out;
-  pointer-events: none;
-  /* 隱藏時不可互動 */
+  pointer-events: none; /* Hidden items are not interactive */
 }
 
 .text-carousel-item.active {
   opacity: 1;
-  position: relative;
-  /* 顯示時恢復排版 */
-  pointer-events: auto;
+  pointer-events: auto; /* Visible item is interactive */
 }
 
 .pedia {
@@ -130,6 +129,13 @@ header {
   text-align: center;
   min-height: 100vh; /* 維持全螢幕高度 */
   background: transparent; /* 讓背景透明，影片才能顯示 */
+}
+
+#volume-toggle {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 2;
 }
 
 /* 為影片加上半透明遮罩 */
@@ -319,9 +325,28 @@ footer .thanks {
   padding: 20px 0; /* Add some vertical padding */
 }
 
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%); /* Scroll half the width to create infinite loop */
+  }
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%); /* Scroll half the width to create infinite loop */
+  }
+}
+
 .carousel-track {
   display: flex;
-  transition: transform 0.1s linear; /* Smooth continuous scroll */
+  white-space: nowrap; /* Prevent items from wrapping */
+  animation: scroll-left linear infinite; /* Apply animation */
 }
 
 .carousel-item-custom {
@@ -333,6 +358,8 @@ footer .thanks {
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease-in-out;
+  display: inline-block; /* Ensure items are in a row */
+  vertical-align: top;
 }
 
 .carousel-item-custom:hover {
@@ -469,9 +496,10 @@ footer .thanks {
   /* No border-radius for seamless edges */
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   /* Add a subtle separator */
-  align-items: center;
+  align-items: flex-start;
   display: flex;
 }
+
 
 .pin-wrap article p {
   font-size: 1.2rem;
@@ -530,6 +558,29 @@ footer .thanks {
   width: 100%;
   object-fit: cover;
   margin: 0 auto;
+}
+
+#cicadapedia .pin-wrap > article:nth-child(5) .imgcontainer img {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+#cicadapedia .pin-wrap > article:nth-child(4):hover + article:nth-child(5) .imgcontainer img {
+  opacity: 1;
+}
+
+@media (orientation: portrait) {
+  #chassing .container,
+  #whereiscicada .carousel-video-caption {
+    display: none;
+  }
+}
+
+@media (max-width: 767.98px) {
+  #chassing .container,
+  #whereiscicada .carousel-video-caption {
+    display: none;
+  }
 }
 
 @media (max-width: 768px) {
@@ -696,29 +747,21 @@ footer .thanks {
   line-height: 2;
   font-size: 1.2rem;
   opacity: 1;
-  transition: opacity 2s ease-in-out;
-}
-
-@media (max-width: 768px) {
-  .carousel-video-caption {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(33, 33, 33, 0.75);
-  color: #eee;
-  padding: 1.75rem 1rem;
-  height: 200px;
-  width: 50%;
-  text-align: left;
-  line-height: 2;
-  font-size: 1.2rem;
-  opacity: 1;
-  transition: opacity 2s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
+  pointer-events: all;
 }
 
 .carousel-video-caption.fade-out {
   opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .carousel-video-caption {
+    width: 100%;
+    height: auto;
+    font-size: 1rem;
+  }
 }
 
 .carousel-caption-close-btn {
@@ -744,6 +787,12 @@ footer .thanks {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.media-container-styles:hover .video-overlay-styles {
+  opacity: 0.7;
 }
 
 .is-hidden {
