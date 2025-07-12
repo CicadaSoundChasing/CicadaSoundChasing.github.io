@@ -536,7 +536,13 @@ function onYouTubeIframeAPIReady() {
     return;
   }
 
+  const whereIsCicadaSection = document.getElementById('whereiscicada');
+  whereIsCicadaSection.classList.add('loading');
+
   const carouselItems = carouselElement.querySelectorAll('.carousel-item');
+  let playersReady = 0;
+  const totalPlayers = carouselItems.length;
+
   carouselItems.forEach((item, index) => {
     const playerDiv = item.querySelector(`#youtube-player-${index}`);
     if (playerDiv) {
@@ -545,7 +551,17 @@ function onYouTubeIframeAPIReady() {
         players[index] = new YT.Player(playerDiv.id, {
           videoId: videoId,
           events: {
-            'onReady': onPlayerReady,
+            'onReady': () => {
+              playersReady++;
+              if (playersReady === totalPlayers) {
+                const skeleton = whereIsCicadaSection.querySelector('.skeleton');
+                if (skeleton) {
+                  skeleton.style.opacity = 0;
+                  setTimeout(() => skeleton.remove(), 500);
+                }
+                whereIsCicadaSection.classList.remove('loading');
+              }
+            },
             'onStateChange': onPlayerStateChange
           }
         });
@@ -951,6 +967,21 @@ document.addEventListener("DOMContentLoaded", () => {
   animateWhySection();
   fetchAndDisplayRecordings();
 
+  // Slogan video loading
+  const sloganSection = document.getElementById('slogan');
+  const bgVideo = document.getElementById('bg-video');
+  sloganSection.classList.add('loading');
+
+  bgVideo.addEventListener('canplay', () => {
+      const skeleton = sloganSection.querySelector('.skeleton');
+      if (skeleton) {
+          skeleton.style.opacity = 0;
+          setTimeout(() => skeleton.remove(), 500);
+      }
+      sloganSection.classList.remove('loading');
+  });
+
+
   // Setup form-related event listeners
   countySelect.addEventListener("change", updateDistricts);
   uploadForm.addEventListener("submit", async (e) => {
@@ -1055,7 +1086,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Volume toggle logic
   const volumeToggle = document.getElementById("volume-toggle");
-  const bgVideo = document.getElementById("bg-video");
   if (volumeToggle && bgVideo) {
     const volumeIcon = volumeToggle.querySelector("i");
     volumeToggle.addEventListener("click", () => {
