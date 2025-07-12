@@ -725,7 +725,7 @@ async function fetchAndDisplayRecordings() {
 
   try {
     const recordingsRef = db.collection("recordings");
-    const query = recordingsRef.orderBy("uploadedAt", "desc").limit(20); // Fetch up to 20 records
+    const query = recordingsRef.limit(20); // Fetch up to 20 records
     const snapshot = await query.get();
     const recordsData = [];
 
@@ -748,8 +748,8 @@ async function fetchAndDisplayRecordings() {
       populateSoundRecordsCarousel(recordsData);
     }
   } catch (error) {
-    console.error("Error fetching recordings:", error);
-    listContainer.innerHTML = '<p class="text-danger text-center">載入紀錄時發生錯誤。請檢查 Firestore 索引設定。</p>';
+    console.error("詳細錯誤回報 (Detailed Error Report):", error);
+    listContainer.innerHTML = '<p class="text-danger text-center">載入紀錄時發生錯誤。請檢查 Firestore 索引或安全規則設定。</p>';
   } finally {
     loadingSpinner.style.display = "none";
   }
@@ -770,7 +770,7 @@ function populateRecordingsListModal(recordsData, listContainer) {
       : "未知時間";
     listItem.innerHTML = `
       <div class="d-flex w-100 justify-content-between">
-        <h6 class="mb-1">${icon} ${data.cicadaSpecies || "未知物種"}</h6>
+        <h6 class="mb-1">${icon} ${data.cicadaSpecies || "未知蟬種類"}</h6>
         <small class="text-muted">${uploadedDate}</small>
       </div>
       <p class="mb-1">${data.county || ""} ${data.district || ""}</p>
@@ -797,49 +797,7 @@ function populateSoundRecordsCarousel(recordsData) {
       : [
           // Fallback dummy data if no records
           {
-            cicadaSpecies: "範例蟬種",
-            county: "台北市",
-            district: "大安區",
-            uploadedAt: new Date(),
-            fileURL: "cicada.m4a",
-            fileName: "範例音檔",
-            uploadType: "audio",
-          },
-          {
-            cicadaSpecies: "另一種蟬",
-            county: "新北市",
-            district: "板橋區",
-            uploadedAt: new Date(),
-            fileURL: "cicada.m4a",
-            fileName: "範例音檔",
-            uploadType: "audio",
-          },
-          {
-            cicadaSpecies: "第三種蟬",
-            county: "台中市",
-            district: "西屯區",
-            uploadedAt: new Date(),
-            fileURL: "cicada.m4a",
-            fileName: "範例音檔",
-            uploadType: "audio",
-          },
-          {
-            cicadaSpecies: "第四種蟬",
-            county: "台南市",
-            district: "中西區",
-            uploadedAt: new Date(),
-            fileURL: "cicada.m4a",
-            fileName: "範例音檔",
-            uploadType: "audio",
-          },
-          {
-            cicadaSpecies: "第五種蟬",
-            county: "高雄市",
-            district: "左營區",
-            uploadedAt: new Date(),
-            fileURL: "cicada.m4a",
-            fileName: "範例音檔",
-            uploadType: "audio",
+            cicadaSpecies: "未知",
           },
         ];
 
@@ -853,15 +811,15 @@ function populateSoundRecordsCarousel(recordsData) {
       data.uploadType === "video"
         ? '<i class="bi bi-camera-video-fill text-danger"></i>'
         : '<i class="bi bi-music-note-beamed text-primary"></i>';
-    const uploadedDate = data.uploadedAt
-      ? data.uploadedAt.toLocaleDateString("zh-TW")
+    const uploadedDate = data.uploadedAt && data.uploadedAt.toDate
+      ? data.uploadedAt.toDate().toLocaleDateString("zh-TW")
       : "未知日期";
 
     carouselItem.innerHTML = `
       <div class="card h-100">
         <div class="card-body">
           <h5 class="card-title">${icon} ${
-      data.cicadaSpecies || "未知物種"
+      data.cicadaSpecies || "未知蟬種類"
     }</h5>
           <h6 class="card-subtitle mb-2 text-muted">${data.county || ""} ${
       data.district || ""
